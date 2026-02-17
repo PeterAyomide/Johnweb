@@ -1,0 +1,1142 @@
+"use client";
+
+import { useState, useEffect, useRef, useCallback } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+
+type Theme = "dark" | "light";
+
+/* ══════════════════════════════════════════════════════
+   GLOBAL STYLES — purple palette
+══════════════════════════════════════════════════════ */
+const G = ({ t }: { t: Theme }) => {
+  const d = t === "dark";
+  return (
+    <style>{`
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+      *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+      :root {
+        --p1:#7c3aed;   /* violet-600  */
+        --p2:#8b5cf6;   /* violet-500  */
+        --p3:#a78bfa;   /* violet-400  */
+        --p4:#c4b5fd;   /* violet-300  */
+        --p5:#ede9fe;   /* violet-100  */
+
+        --bg:       ${d ? "#0b0813" : "#faf8ff"};
+        --bg2:      ${d ? "#120e1f" : "#ffffff"};
+        --bg3:      ${d ? "#1a1330" : "#f3eeff"};
+        --fg:       ${d ? "#ede9fe" : "#1e1033"};
+        --fg2:      ${d ? "rgba(237,233,254,0.58)" : "rgba(30,16,51,0.6)"};
+        --fg3:      ${d ? "rgba(237,233,254,0.3)"  : "rgba(30,16,51,0.32)"};
+        --border:   ${d ? "rgba(139,92,246,0.22)"  : "rgba(124,58,237,0.2)"};
+        --card:     ${d ? "rgba(255,255,255,0.04)"  : "rgba(255,255,255,0.9)"};
+        --card-sh:  ${d ? "0 8px 40px rgba(0,0,0,0.45)" : "0 8px 40px rgba(124,58,237,0.10)"};
+        --nav-bg:   ${d ? "rgba(11,8,19,0.92)"      : "rgba(250,248,255,0.92)"};
+        --glow:     ${d ? "rgba(139,92,246,0.18)"   : "rgba(139,92,246,0.12)"};
+      }
+      html{scroll-behavior:smooth;}
+      body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--fg);overflow-x:hidden;transition:background .4s,color .4s;}
+      ::-webkit-scrollbar{width:4px;}
+      ::-webkit-scrollbar-thumb{background:var(--p2);border-radius:4px;}
+      ::-webkit-scrollbar-track{background:transparent;}
+      ::selection{background:var(--p2);color:#fff;}
+      button{font-family:'DM Sans',sans-serif;}
+      img{max-width:100%;display:block;}
+    `}</style>
+  );
+};
+
+/* ══════════════════════════════════════════════════════ NOISE */
+const Noise = () => (
+  <div style={{ position:"fixed",inset:0,zIndex:9998,pointerEvents:"none",opacity:.022,
+    backgroundImage:`url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+    backgroundRepeat:"repeat",backgroundSize:"160px"}} />
+);
+
+/* ══════════════════════════════════════════════════════ SCROLL TOP */
+const ScrollTop = () => {
+  const [v, setV] = useState(false);
+  useEffect(() => {
+    const fn = () => setV(window.scrollY > 500);
+    window.addEventListener("scroll", fn);
+    return () => window.removeEventListener("scroll", fn);
+  }, []);
+  return (
+    <AnimatePresence>
+      {v && (
+        <motion.button
+          initial={{ opacity:0, scale:.7, y:20 }} animate={{ opacity:1, scale:1, y:0 }}
+          exit={{ opacity:0, scale:.7, y:20 }} transition={{ duration:.28 }}
+          whileHover={{ scale:1.12 }} whileTap={{ scale:.9 }}
+          onClick={() => window.scrollTo({ top:0, behavior:"smooth" })}
+          style={{ position:"fixed",bottom:"2rem",right:"2rem",zIndex:900,
+            width:48,height:48,borderRadius:"50%",
+            background:"linear-gradient(135deg,var(--p1),var(--p2))",
+            border:"none",cursor:"pointer",display:"flex",
+            alignItems:"center",justifyContent:"center",
+            boxShadow:"0 4px 24px rgba(139,92,246,.5)",color:"#fff",fontSize:"1.1rem" }}
+          aria-label="Scroll to top">↑</motion.button>
+      )}
+    </AnimatePresence>
+  );
+};
+
+/* ══════════════════════════════════════════════════════ CAROUSEL HOOK */
+function useCarousel(len: number) {
+  const [idx, setIdx] = useState(0);
+  const prev = () => setIdx(i => Math.max(0, i - 1));
+  const next = () => setIdx(i => Math.min(len - 1, i + 1));
+  const go = (i: number) => setIdx(i);
+  return { idx, prev, next, go };
+}
+
+/* ══════════════════════════════════════════════════════ CAROUSEL SHELL */
+const CarouselShell = ({
+  count, idx, prev, next, go, children,
+}: {
+  count: number; idx: number; prev: () => void; next: () => void;
+  go: (i: number) => void; children: React.ReactNode;
+}) => (
+  <div>
+    <div style={{ overflow:"hidden" }}>
+      <div style={{ display:"flex", transition:"transform .45s cubic-bezier(.34,1.2,.64,1)",
+        transform:`translateX(-${idx * 100}%)` }}>
+        {children}
+      </div>
+    </div>
+    <div style={{ display:"flex", justifyContent:"center", gap:".5rem", marginTop:"1.4rem" }}>
+      {Array.from({ length: count }).map((_, i) => (
+        <button key={i} onClick={() => go(i)} style={{
+          width:8,height:8,borderRadius:"50%",border:"1.5px solid var(--p2)",
+          background:i === idx ? "var(--p2)" : "transparent",cursor:"pointer",padding:0,
+          transition:"background .2s"}} aria-label={`Go to ${i+1}`} />
+      ))}
+    </div>
+    <div style={{ display:"flex",justifyContent:"center",gap:".75rem",marginTop:".8rem" }}>
+      {[{ label:"←", fn:prev }, { label:"→", fn:next }].map(({ label, fn }) => (
+        <button key={label} onClick={fn} style={{
+          width:40,height:40,borderRadius:"50%",background:"var(--card)",
+          border:"1.5px solid var(--border)",color:"var(--fg)",cursor:"pointer",
+          fontSize:"1rem",display:"flex",alignItems:"center",justifyContent:"center",
+          transition:"border-color .2s,color .2s"}}
+          onMouseEnter={e=>{(e.currentTarget as HTMLButtonElement).style.borderColor="var(--p2)";(e.currentTarget as HTMLButtonElement).style.color="var(--p2)";}}
+          onMouseLeave={e=>{(e.currentTarget as HTMLButtonElement).style.borderColor="var(--border)";(e.currentTarget as HTMLButtonElement).style.color="var(--fg)";}}>
+          {label}
+        </button>
+      ))}
+    </div>
+  </div>
+);
+
+/* ══════════════════════════════════════════════════════ NAVBAR */
+const NAV_LINKS = ["About","Services","Portfolio","Clients","Contact"];
+
+const Navbar = ({ t, toggle }: { t: Theme; toggle: () => void }) => {
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("Home");
+  const d = t === "dark";
+
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", fn);
+    return () => window.removeEventListener("scroll", fn);
+  }, []);
+
+  const go = (l: string) => {
+    setOpen(false); setActive(l);
+    if (l === "Home") { window.scrollTo({ top:0, behavior:"smooth" }); return; }
+    document.getElementById(l.toLowerCase())?.scrollIntoView({ behavior:"smooth" });
+  };
+
+  return (
+    <>
+      <style>{`
+        .nav{position:fixed;top:0;left:0;right:0;z-index:800;display:flex;align-items:center;
+          justify-content:space-between;padding:0 3rem;height:68px;transition:all .4s;
+          border-bottom:1px solid ${scrolled ? "var(--border)" : "transparent"};
+          background:${scrolled ? "var(--nav-bg)" : "transparent"};
+          backdrop-filter:${scrolled ? "blur(24px)" : "none"};}
+        .nav-logo{font-family:'Playfair Display',serif;font-weight:900;font-size:1.15rem;
+          letter-spacing:-.02em;color:var(--fg);text-decoration:none;
+          display:flex;align-items:center;gap:.5rem;cursor:pointer;background:none;border:none;}
+        .nav-logo em{font-style:italic;color:var(--p2);}
+        .nav-pulse{width:7px;height:7px;border-radius:50%;background:var(--p2);
+          box-shadow:0 0 10px var(--p2);animation:npulse 2.5s ease-in-out infinite;}
+        @keyframes npulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
+        .nav-links{display:flex;align-items:center;gap:.25rem;list-style:none;}
+        .nav-btn{padding:.4rem .95rem;border-radius:4px;font-size:.81rem;font-weight:500;
+          letter-spacing:.06em;text-transform:uppercase;background:none;border:none;cursor:pointer;
+          color:var(--fg2);transition:color .2s;position:relative;}
+        .nav-btn:hover{color:var(--fg);}
+        .nav-btn.act{color:var(--fg);}
+        .nav-btn.act::after{content:'';display:block;height:2px;background:var(--p2);border-radius:1px;margin-top:2px;}
+        .nav-right{display:flex;align-items:center;gap:.8rem;}
+        .theme-tog{width:48px;height:26px;border-radius:99px;border:1.5px solid var(--border);
+          background:${d?"rgba(139,92,246,.2)":"rgba(139,92,246,.1)"};cursor:pointer;
+          position:relative;transition:background .35s;flex-shrink:0;}
+        .theme-knob{position:absolute;top:3px;width:18px;height:18px;border-radius:50%;
+          transition:left .3s cubic-bezier(.34,1.56,.64,1);
+          left:${d?"26px":"3px"};background:var(--p2);
+          display:flex;align-items:center;justify-content:center;font-size:10px;line-height:1;}
+        .nav-cta{padding:.48rem 1.3rem;border-radius:4px;
+          border:1.5px solid var(--p2);background:transparent;color:var(--p2);
+          font-size:.81rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+          cursor:pointer;transition:background .2s,color .2s;}
+        .nav-cta:hover{background:var(--p2);color:#fff;}
+        .ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;}
+        .ham-bar{width:22px;height:1.5px;background:var(--fg);transition:all .3s;border-radius:1px;}
+        .mob-nav{position:fixed;top:68px;left:0;right:0;z-index:799;
+          background:var(--nav-bg);backdrop-filter:blur(24px);
+          border-bottom:1px solid var(--border);padding:1.5rem 2rem;
+          display:flex;flex-direction:column;gap:.4rem;}
+        .mob-lnk{padding:.8rem .5rem;border:none;background:none;font-size:.95rem;font-weight:500;
+          color:var(--fg2);text-align:left;cursor:pointer;
+          border-bottom:1px solid var(--border);transition:color .2s;}
+        .mob-lnk:hover{color:var(--p2);}
+        @media(max-width:720px){.nav{padding:0 1.25rem;}.nav-links,.nav-cta{display:none;}.ham{display:flex;}}
+      `}</style>
+
+      <nav className="nav">
+        <button className="nav-logo" onClick={() => go("Home")}>
+          <span className="nav-pulse"/> John <em>Adegboye</em>
+        </button>
+        <ul className="nav-links">
+          {["Home",...NAV_LINKS].map(l => (
+            <li key={l}><button className={`nav-btn ${active===l?"act":""}`} onClick={()=>go(l)}>{l}</button></li>
+          ))}
+        </ul>
+        <div className="nav-right">
+          <button className="theme-tog" onClick={toggle} aria-label="Toggle theme">
+            <span className="theme-knob">{d?"🌙":"☀️"}</span>
+          </button>
+          <button className="nav-cta">Work With Me</button>
+          <button className="ham" onClick={()=>setOpen(!open)}>
+            <span className="ham-bar" style={{transform:open?"rotate(45deg) translateY(6.5px)":"none"}}/>
+            <span className="ham-bar" style={{opacity:open?0:1}}/>
+            <span className="ham-bar" style={{transform:open?"rotate(-45deg) translateY(-6.5px)":"none"}}/>
+          </button>
+        </div>
+      </nav>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div className="mob-nav"
+            initial={{opacity:0,y:-12}} animate={{opacity:1,y:0}}
+            exit={{opacity:0,y:-12}} transition={{duration:.2}}>
+            {["Home",...NAV_LINKS].map(l => (
+              <button key={l} className="mob-lnk" onClick={()=>go(l)}>{l}</button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+};
+
+/* ══════════════════════════════════════════════════════ TYPEWRITER */
+const useTypewriter = (words: string[], speed=85, pause=2000) => {
+  const [display, setDisplay] = useState("");
+  const [idx, setIdx] = useState(0);
+  const [del, setDel] = useState(false);
+  useEffect(() => {
+    const cur = words[idx];
+    const t = setTimeout(() => {
+      if (!del && display===cur){setDel(true);return;}
+      if (del && display===""){setDel(false);setIdx(i=>(i+1)%words.length);return;}
+      setDisplay(del ? cur.slice(0,display.length-1) : cur.slice(0,display.length+1));
+    }, !del&&display===cur ? pause : del ? speed/2 : speed);
+    return ()=>clearTimeout(t);
+  },[display,del,idx,words,speed,pause]);
+  return display;
+};
+
+/* ══════════════════════════════════════════════════════ HERO */
+const ROLES = ["Copywriter.","Sales Strategist.","Email Marketer.","Conversion Architect."];
+
+const Hero = ({ t }: { t: Theme }) => {
+  const role = useTypewriter(ROLES);
+  const d = t === "dark";
+  const e = [.22,1,.36,1] as any;
+
+  return (
+    <>
+      <style>{`
+        .hero{min-height:100vh;position:relative;display:flex;align-items:center;
+          padding:100px 3rem 5rem;overflow:hidden;}
+        .hero-glow{position:absolute;width:720px;height:720px;border-radius:50%;
+          background:radial-gradient(circle,var(--glow) 0%,transparent 65%);
+          right:-120px;top:50%;transform:translateY(-50%);pointer-events:none;}
+        .hero-glow2{position:absolute;width:420px;height:420px;border-radius:50%;
+          background:radial-gradient(circle,rgba(139,92,246,.06) 0%,transparent 65%);
+          left:-80px;bottom:10%;pointer-events:none;}
+        .hero-in{max-width:1100px;width:100%;margin:0 auto;
+          display:grid;grid-template-columns:1.1fr .9fr;gap:4rem;align-items:center;
+          position:relative;z-index:1;}
+        .h-eyebrow{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;
+          color:var(--p3);font-weight:500;margin-bottom:1.5rem;
+          display:flex;align-items:center;gap:.7rem;}
+        .h-line{height:1px;width:40px;background:linear-gradient(90deg,var(--p2),var(--p3));}
+        .h-rule{width:0;height:1px;
+          background:linear-gradient(90deg,transparent,var(--p2),transparent);
+          margin-bottom:3rem;animation:rule-x 1.4s .3s ease forwards;}
+        @keyframes rule-x{to{width:220px}}
+        .h-name{font-family:'Playfair Display',serif;font-weight:900;
+          font-size:clamp(3rem,6.5vw,6rem);line-height:.94;letter-spacing:-.035em;
+          color:var(--fg);margin-bottom:.6rem;}
+        .h-name em{font-style:italic;
+          background:linear-gradient(135deg,var(--p2),var(--p3));
+          -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+          background-clip:text;display:block;}
+        .h-tag{font-size:clamp(.85rem,1.8vw,1.05rem);color:var(--fg2);
+          font-weight:300;margin-bottom:2.2rem;line-height:1.65;}
+        .tw-wrap{display:inline-flex;align-items:center;
+          font-family:'Playfair Display',serif;
+          font-size:clamp(1.3rem,3vw,2.2rem);font-weight:700;
+          color:var(--fg);margin-bottom:2.8rem;min-height:2.8rem;letter-spacing:-.02em;}
+        .tw-cur{display:inline-block;width:2.5px;height:.9em;
+          background:var(--p2);margin-left:4px;border-radius:1px;
+          animation:blink 1s step-end infinite;vertical-align:middle;}
+        @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+        .h-btns{display:flex;gap:1rem;flex-wrap:wrap;}
+        .btn-vio{padding:.85rem 2rem;border-radius:4px;
+          background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;
+          border:none;cursor:pointer;font-size:.88rem;font-weight:700;
+          letter-spacing:.07em;text-transform:uppercase;
+          box-shadow:0 4px 28px rgba(139,92,246,.4);
+          transition:transform .2s,box-shadow .2s;}
+        .btn-vio:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(139,92,246,.55);}
+        .btn-ghost{padding:.85rem 2rem;border-radius:4px;background:transparent;
+          border:1.5px solid var(--border);color:var(--fg2);
+          font-size:.88rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+          cursor:pointer;transition:border-color .2s,color .2s;}
+        .btn-ghost:hover{border-color:var(--p2);color:var(--p2);}
+        /* image stage */
+        .img-stage{position:relative;display:flex;justify-content:center;align-items:flex-end;}
+        .img-frame{width:320px;height:400px;border-radius:180px 180px 40px 40px;
+          background:${d?"linear-gradient(160deg,rgba(139,92,246,.15) 0%,rgba(11,8,19,.8) 100%)":"linear-gradient(160deg,rgba(196,181,253,.3) 0%,rgba(250,248,255,.6) 100%)"};
+          border:1.5px solid var(--border);position:relative;overflow:hidden;
+          box-shadow:var(--card-sh);display:flex;align-items:center;justify-content:center;}
+        .img-placeholder{display:flex;flex-direction:column;align-items:center;
+          justify-content:center;gap:1rem;padding:2rem;text-align:center;height:100%;}
+        .ph-icon{width:88px;height:88px;border-radius:50%;
+          background:linear-gradient(135deg,var(--p1),var(--p3));
+          display:flex;align-items:center;justify-content:center;font-size:2.5rem;
+          box-shadow:0 8px 32px rgba(139,92,246,.4);}
+        .ph-txt{font-size:.76rem;color:var(--fg3);letter-spacing:.08em;
+          text-transform:uppercase;font-weight:500;line-height:1.6;}
+        .img-bdg{position:absolute;bottom:1.5rem;left:-2rem;
+          background:var(--card);backdrop-filter:blur(16px);
+          border:1px solid var(--border);border-radius:10px;
+          padding:.8rem 1.1rem;min-width:155px;box-shadow:var(--card-sh);
+          animation:fa 4s ease-in-out infinite;}
+        .img-bdg2{position:absolute;top:2.5rem;right:-1.5rem;
+          background:var(--card);backdrop-filter:blur(16px);
+          border:1px solid var(--border);border-radius:10px;
+          padding:.7rem 1rem;min-width:125px;box-shadow:var(--card-sh);
+          animation:fb 5s ease-in-out .5s infinite;}
+        @keyframes fa{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        @keyframes fb{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+        .bdg-num{font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:900;
+          background:linear-gradient(135deg,var(--p2),var(--p3));
+          -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+          background-clip:text;line-height:1;}
+        .bdg-lbl{font-size:.68rem;color:var(--fg2);font-weight:500;
+          letter-spacing:.06em;text-transform:uppercase;margin-top:2px;}
+        .bdg-stars{color:#a78bfa;font-size:.73rem;letter-spacing:1px;margin-bottom:3px;}
+        @media(max-width:860px){
+          .hero{padding:90px 1.5rem 4rem;}
+          .hero-in{grid-template-columns:1fr;gap:3rem;}
+          .img-stage{order:-1;}
+          .img-frame{width:240px;height:300px;}
+          .img-bdg{left:-.5rem;}
+          .img-bdg2{right:-.5rem;}
+        }
+      `}</style>
+
+      <section className="hero" id="home">
+        <div className="hero-glow"/><div className="hero-glow2"/>
+        <div className="hero-in">
+          <div>
+            <div className="h-rule"/>
+            <motion.p className="h-eyebrow" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:.25}}>
+              <span className="h-line"/> Here I am
+            </motion.p>
+            <motion.h1 className="h-name" initial={{opacity:0,y:32}} animate={{opacity:1,y:0}}
+              transition={{duration:.85,delay:.45,ease:e}}>
+              John<em>Adegboye</em>
+            </motion.h1>
+            <motion.p className="h-tag" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}}
+              transition={{duration:.7,delay:.65,ease:e}}>
+              Words that sell. Strategies that scale. Emails that convert.
+            </motion.p>
+            <motion.div className="tw-wrap" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:.9}}>
+              {role}<span className="tw-cur"/>
+            </motion.div>
+            <motion.div className="h-btns" initial={{opacity:0,y:18}} animate={{opacity:1,y:0}}
+              transition={{duration:.65,delay:1.1,ease:e}}>
+              <button className="btn-vio">See My Work ↗</button>
+              <button className="btn-ghost">Let's Talk</button>
+            </motion.div>
+          </div>
+
+          <motion.div className="img-stage" initial={{opacity:0,scale:.92}}
+            animate={{opacity:1,scale:1}} transition={{duration:.85,delay:.55,ease:e}}>
+            <div className="img-frame">
+              <div className="img-placeholder">
+                <div className="ph-icon">✍️</div>
+                <p className="ph-txt">Your photo<br/>goes here</p>
+              </div>
+            </div>
+            <div className="img-bdg">
+              <div className="bdg-stars">★★★★★</div>
+              <div className="bdg-num">100%</div>
+              <div className="bdg-lbl">Client Satisfaction</div>
+            </div>
+            <div className="img-bdg2">
+              <div className="bdg-num">50+</div>
+              <div className="bdg-lbl">Clients Served</div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    </>
+  );
+};
+
+/* ══════════════════════════════════════════════════════ METRICS (4 cards) */
+const useCounter = (target: number, dur=2000, active=false) => {
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    if (!active) return;
+    let s=0; const step=target/(dur/16);
+    const id=setInterval(()=>{ s=Math.min(s+step,target); setN(Math.floor(s)); if(s>=target)clearInterval(id); },16);
+    return ()=>clearInterval(id);
+  },[target,dur,active]);
+  return n;
+};
+
+const METRICS = [
+  { target:100, suffix:"%", label:"Client Satisfaction", icon:"⭐", sub:"Every client. Every time." },
+  { target:50,  suffix:"+", label:"Clients Served",      icon:"🤝", sub:"Across niches & industries" },
+  { target:300, suffix:"+", label:"Emails Crafted",      icon:"✉️", sub:"Copy, design & strategy" },
+  { target:5,   suffix:"x", label:"Avg Revenue ROI",     icon:"📈", sub:"Per campaign average" },
+];
+
+const MetricCard = ({ m, active, idx }: { m:typeof METRICS[0]; active:boolean; idx:number }) => {
+  const count = useCounter(m.target, 2200, active);
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once:true, margin:"-60px" });
+
+  return (
+    <motion.div ref={ref}
+      initial={{opacity:0,y:28}} animate={inView?{opacity:1,y:0}:{}}
+      transition={{duration:.6,delay:idx*.1,ease:[.22,1,.36,1]}}
+      style={{padding:"2rem 1.5rem",border:"1px solid var(--border)",borderRadius:8,
+        background:"var(--card)",backdropFilter:"blur(12px)",textAlign:"center",
+        transition:"border-color .3s,box-shadow .3s,transform .3s",cursor:"default"}}
+      whileHover={{y:-6,boxShadow:"0 16px 40px rgba(139,92,246,.2)"}}
+      onMouseEnter={e=>{(e.currentTarget as HTMLDivElement).style.borderColor="rgba(139,92,246,.55)";}}
+      onMouseLeave={e=>{(e.currentTarget as HTMLDivElement).style.borderColor="var(--border)";}}>
+      <div style={{fontSize:"1.8rem",marginBottom:".6rem"}}>{m.icon}</div>
+      <div style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(2.2rem,4vw,3rem)",
+        fontWeight:900,lineHeight:1,
+        background:"linear-gradient(135deg,var(--p2),var(--p3))",
+        WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",
+        backgroundClip:"text"}}>
+        {count}{m.suffix}
+      </div>
+      <div style={{fontSize:".78rem",letterSpacing:".12em",textTransform:"uppercase",
+        color:"var(--fg2)",fontWeight:600,marginTop:".45rem"}}>{m.label}</div>
+      <div style={{fontSize:".72rem",color:"var(--fg3)",marginTop:".25rem",fontWeight:300}}>
+        {m.sub}
+      </div>
+    </motion.div>
+  );
+};
+
+const MetricsSection = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once:true, margin:"-60px" });
+  const [isMob, setIsMob] = useState(false);
+  const car = useCarousel(METRICS.length);
+
+  useEffect(() => {
+    const fn = ()=>setIsMob(window.innerWidth<640);
+    fn(); window.addEventListener("resize",fn);
+    return ()=>window.removeEventListener("resize",fn);
+  },[]);
+
+  return (
+    <section ref={ref} style={{borderTop:"1px solid var(--border)",padding:"5rem 0"}}>
+      <div style={{maxWidth:1100,margin:"0 auto",padding:"0 3rem"}}>
+        <motion.div initial={{opacity:0,y:20}} animate={inView?{opacity:1,y:0}:{}}
+          transition={{duration:.7}} style={{textAlign:"center",marginBottom:"3.5rem"}}>
+          <p style={{fontSize:".7rem",letterSpacing:".28em",textTransform:"uppercase",
+            color:"var(--p3)",fontWeight:500,marginBottom:".7rem"}}>By the Numbers</p>
+          <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(2rem,4vw,3rem)",
+            fontWeight:900,color:"var(--fg)",letterSpacing:"-.025em"}}>Results That Speak</h2>
+        </motion.div>
+
+        {isMob ? (
+          <CarouselShell count={METRICS.length} idx={car.idx} prev={car.prev} next={car.next} go={car.go}>
+            {METRICS.map((m,i)=>(
+              <div key={m.label} style={{flex:"0 0 100%",paddingRight:".5rem"}}>
+                <MetricCard m={m} active={inView} idx={0}/>
+              </div>
+            ))}
+          </CarouselShell>
+        ) : (
+          <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"1.2rem"}}>
+            {METRICS.map((m,i)=><MetricCard key={m.label} m={m} active={inView} idx={i}/>)}
+          </div>
+        )}
+      </div>
+      <style>{`@media(max-width:640px){section > div{padding:0 1.5rem!important;}}`}</style>
+    </section>
+  );
+};
+
+/* ══════════════════════════════════════════════════════ ABOUT */
+const About = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once:true, margin:"-80px" });
+  const e = [.22,1,.36,1] as any;
+  return (
+    <section id="about" style={{borderTop:"1px solid var(--border)"}}>
+      <div ref={ref} style={{maxWidth:1100,margin:"0 auto",padding:"7rem 3rem",
+        display:"grid",gridTemplateColumns:"1fr 1.6fr",gap:"5rem",alignItems:"start"}}>
+        <motion.div initial={{opacity:0,x:-28}} animate={inView?{opacity:1,x:0}:{}}
+          transition={{duration:.75,ease:e}}>
+          <p style={{fontSize:".68rem",letterSpacing:".28em",textTransform:"uppercase",
+            color:"var(--p3)",fontWeight:500,marginBottom:"1rem"}}>Philosophy</p>
+          <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(2rem,4vw,3rem)",
+            fontWeight:900,lineHeight:1.1,letterSpacing:"-.025em",color:"var(--fg)"}}>
+            Strategy <em style={{fontStyle:"italic",
+              background:"linear-gradient(135deg,var(--p2),var(--p3))",
+              WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",
+              backgroundClip:"text"}}>first.</em><br/>Always.
+          </h2>
+          <div style={{display:"flex",gap:"2.2rem",marginTop:"2.5rem",flexWrap:"wrap"}}>
+            {[["∞","Email Strategies"],["100%","Conversion Focus"],["0","Shortcuts"]].map(([n,l])=>(
+              <div key={l}>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:"2rem",fontWeight:900,
+                  background:"linear-gradient(135deg,var(--p2),var(--p3))",
+                  WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",
+                  backgroundClip:"text",lineHeight:1}}>{n}</div>
+                <div style={{fontSize:".7rem",letterSpacing:".1em",textTransform:"uppercase",
+                  color:"var(--fg3)",fontWeight:500,marginTop:3}}>{l}</div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+        <motion.div initial={{opacity:0,x:28}} animate={inView?{opacity:1,x:0}:{}}
+          transition={{duration:.75,delay:.15,ease:e}}>
+          {[
+            `In my experience with clients, I've seen how a brand <strong>literally doesn't just want an Email Designer, or just a copywriter.</strong> Visual appeal alone won't sponsor conversion.`,
+            `While I excel in designing <strong>visually appealing emails that are conversion, brand, and aesthetically focused</strong> — and writing copy that takes ten steps ahead of the prospect's objections — I've also built a deep database of strategies from the finest email agencies on LinkedIn.`,
+            `These strategies put me in a position where I can see the <strong>behavioral tendencies and objections of prospects.</strong> Rooted in strategy first — all to the end that we <strong>slice through resistance and bring the prospect to conversion.</strong>`,
+          ].map((txt,i)=>(
+            <p key={i} style={{fontSize:".94rem",lineHeight:1.88,color:"var(--fg2)",fontWeight:300,
+              marginBottom:i<2?"1.2rem":0}}
+              dangerouslySetInnerHTML={{__html:txt.replace(/<strong>(.*?)<\/strong>/g,
+                `<strong style="color:var(--fg);font-weight:600">$1</strong>`)}}/>
+          ))}
+        </motion.div>
+      </div>
+      <style>{`@media(max-width:780px){#about>div{grid-template-columns:1fr!important;gap:2rem!important;padding:5rem 1.5rem!important;}}`}</style>
+    </section>
+  );
+};
+
+/* ══════════════════════════════════════════════════════ MARQUEE */
+const TICKER=["Email Copy","Sales Funnels","Welcome Series","Retention Flows","Ecommerce Strategy","A/B Testing","Pop-Up Design","Email Templates","Conversion Architecture","Behavioural Copywriting"];
+const Marquee = () => (
+  <>
+    <style>{`.mq{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1.2rem 0;overflow:hidden;position:relative;}
+      .mq::before,.mq::after{content:'';position:absolute;top:0;bottom:0;z-index:2;width:80px;background:linear-gradient(90deg,var(--bg),transparent);}
+      .mq::after{right:0;background:linear-gradient(270deg,var(--bg),transparent);}
+      .mq-tr{display:flex;animation:tck 30s linear infinite;width:max-content;}
+      @keyframes tck{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+      .mq-it{display:flex;align-items:center;gap:1.4rem;padding:0 2rem;white-space:nowrap;
+        font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--fg3);}
+      .mq-d{width:4px;height:4px;border-radius:50%;background:var(--p2);flex-shrink:0;}`}
+    </style>
+    <div className="mq">
+      <div className="mq-tr">
+        {[...TICKER,...TICKER].map((t,i)=>(<div className="mq-it" key={i}><span className="mq-d"/>{t}</div>))}
+      </div>
+    </div>
+  </>
+);
+
+/* ══════════════════════════════════════════════════════
+   FLIP CARD — hover triggers flip, click also toggles
+══════════════════════════════════════════════════════ */
+const SERVICES = [
+  { num:"01", icon:"✍️", title:"Ecommerce Copy", sub:"The Persuasion",
+    front:"Copy that takes ten steps ahead of every objection. Research-first, conversion-last.",
+    back:"I run feedback campaigns and A/B testing before writing a word — mapping every block in the prospect's mental real estate. The result: copy loaded with converting power at every sentence.",
+    tag:"Copy · Research · A/B Testing" },
+  { num:"02", icon:"⚔️", title:"Email Strategies", sub:"The Blade That Slices Through",
+    front:"Strategy is the core. Not discounts. Not guesswork.",
+    back:"Welcome series, abandoned cart, post-purchase flows — built with an unapologetic focus on conversion. I've studied the finest email agencies and distilled their strategies into battle-tested playbooks.",
+    tag:"Flows · Welcome Series · Retention" },
+  { num:"03", icon:"🎨", title:"Email Design & Pop-Ups", sub:"Subconscious Cues",
+    front:"The right balance between visually appealing, on-brand, and high-converting.",
+    back:"Legible text. Clear contrast. Bold CTAs. Sharp imagery. Logical product layouts. An optimised footer. Every pixel earns its place — because every element impacts conversion.",
+    tag:"Design · UX · Conversion" },
+  { num:"04", icon:"⚡", title:"Email Templates", sub:"The Speed",
+    front:"A curated bank of 10+ ready-to-deploy templates for fast turnarounds.",
+    back:"Speed is a competitive advantage. I've built the infrastructure to move fast without moving careless — premium output in record time, every time.",
+    tag:"Templates · Speed · Scale" },
+];
+
+const FlipCard = ({ s, delay=0 }: { s:typeof SERVICES[0]; delay?:number }) => {
+  const [flipped, setFlipped] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once:true, margin:"-50px" });
+
+  return (
+    <>
+      <style>{`
+        .fc-wrap{perspective:1000px;cursor:pointer;min-height:290px;}
+        .fc-inner{width:100%;min-height:290px;position:relative;transform-style:preserve-3d;
+          transition:transform .7s cubic-bezier(.34,1.1,.64,1);}
+        .fc-inner.flipped{transform:rotateY(180deg);}
+        .fc-face{position:absolute;inset:0;backface-visibility:hidden;
+          -webkit-backface-visibility:hidden;border:1px solid var(--border);
+          border-radius:10px;background:var(--card);backdrop-filter:blur(12px);
+          padding:2.2rem;display:flex;flex-direction:column;
+          transition:border-color .3s,box-shadow .3s;overflow:hidden;}
+        .fc-face.back{transform:rotateY(180deg);
+          background:linear-gradient(145deg,var(--bg3),var(--bg));}
+        .fc-wrap:hover .fc-face,.fc-wrap:focus .fc-face{
+          border-color:rgba(139,92,246,.5);
+          box-shadow:0 12px 40px rgba(139,92,246,.18);}
+        .fc-glow{position:absolute;inset:0;border-radius:10px;
+          background:radial-gradient(ellipse at 0% 0%,rgba(139,92,246,.08),transparent 60%);
+          opacity:0;transition:opacity .4s;}
+        .fc-wrap:hover .fc-glow{opacity:1;}
+        .fc-num{font-family:'Playfair Display',serif;font-size:3.8rem;font-weight:900;
+          color:rgba(139,92,246,.1);line-height:1;position:absolute;
+          top:1.2rem;right:1.8rem;pointer-events:none;}
+        .fc-icon{font-size:1.5rem;margin-bottom:.7rem;}
+        .fc-sub{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;
+          color:var(--p3);font-weight:500;margin-bottom:.45rem;}
+        .fc-title{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;
+          color:var(--fg);line-height:1.2;margin-bottom:.9rem;}
+        .fc-body{font-size:.87rem;line-height:1.8;color:var(--fg2);font-weight:300;flex:1;}
+        .fc-tag{display:inline-block;padding:.22rem .65rem;margin-top:1rem;
+          border:1px solid rgba(139,92,246,.28);border-radius:3px;font-size:.63rem;
+          letter-spacing:.12em;text-transform:uppercase;color:var(--p3);font-weight:500;}
+        .fc-hint{font-size:.68rem;color:var(--fg3);margin-top:auto;padding-top:.9rem;
+          letter-spacing:.04em;}
+        .fc-back-lbl{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;
+          color:var(--p3);font-weight:500;margin-bottom:.9rem;}
+        /* purple top accent bar */
+        .fc-accent{position:absolute;top:0;left:0;right:0;height:2px;
+          background:linear-gradient(90deg,var(--p1),var(--p3),transparent);
+          border-radius:10px 10px 0 0;}
+      `}</style>
+
+      <motion.div className="fc-wrap" ref={ref}
+        initial={{opacity:0,y:32}}
+        animate={inView?{opacity:1,y:0}:{}}
+        transition={{duration:.6,delay,ease:[.22,1,.36,1]}}
+        onHoverStart={()=>setFlipped(true)}
+        onHoverEnd={()=>setFlipped(false)}
+        onClick={()=>setFlipped(f=>!f)}
+        role="button" tabIndex={0}
+        onKeyDown={e=>e.key==="Enter"&&setFlipped(f=>!f)}>
+        <div className={`fc-inner ${flipped?"flipped":""}`}>
+          {/* FRONT */}
+          <div className="fc-face front">
+            <div className="fc-accent"/>
+            <div className="fc-glow"/>
+            <span className="fc-num">{s.num}</span>
+            <div className="fc-icon">{s.icon}</div>
+            <p className="fc-sub">{s.sub}</p>
+            <h3 className="fc-title">{s.title}</h3>
+            <p className="fc-body">{s.front}</p>
+            <span className="fc-tag">{s.tag}</span>
+            <p className="fc-hint">↻ Hover or tap to reveal</p>
+          </div>
+          {/* BACK */}
+          <div className="fc-face back">
+            <div className="fc-accent"/>
+            <p className="fc-back-lbl">The Full Story</p>
+            <h3 className="fc-title">{s.title}</h3>
+            <p className="fc-body">{s.back}</p>
+            <p className="fc-hint">↻ Hover away to flip back</p>
+          </div>
+        </div>
+      </motion.div>
+    </>
+  );
+};
+
+const Services = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once:true, margin:"-60px" });
+  const [isMob, setIsMob] = useState(false);
+  const car = useCarousel(SERVICES.length);
+
+  useEffect(()=>{
+    const fn=()=>setIsMob(window.innerWidth<640);
+    fn(); window.addEventListener("resize",fn);
+    return ()=>window.removeEventListener("resize",fn);
+  },[]);
+
+  return (
+    <>
+      <style>{`
+        #services{border-top:1px solid var(--border);}
+        .svc-in{max-width:1100px;margin:0 auto;padding:7rem 3rem;}
+        .svc-hdr{display:flex;align-items:flex-end;justify-content:space-between;
+          margin-bottom:3.5rem;flex-wrap:wrap;gap:1.2rem;}
+        .svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.4rem;}
+        @media(max-width:640px){.svc-in{padding:5rem 1.5rem;}}
+      `}</style>
+
+      <section id="services">
+        <div className="svc-in" ref={ref}>
+          <div className="svc-hdr">
+            <div>
+              <motion.p style={{fontSize:".68rem",letterSpacing:".28em",textTransform:"uppercase",
+                color:"var(--p3)",fontWeight:500,marginBottom:".7rem"}}
+                initial={{opacity:0}} animate={inView?{opacity:1}:{}}>What I Do</motion.p>
+              <motion.h2 style={{fontFamily:"'Playfair Display',serif",
+                fontSize:"clamp(2rem,4vw,3rem)",fontWeight:900,lineHeight:1.1,
+                letterSpacing:"-.025em",color:"var(--fg)"}}
+                initial={{opacity:0,y:20}} animate={inView?{opacity:1,y:0}:{}}
+                transition={{delay:.1}}>The Full Arsenal</motion.h2>
+            </div>
+            <motion.p style={{fontSize:".86rem",lineHeight:1.7,color:"var(--fg2)",
+              maxWidth:280,fontWeight:300}}
+              initial={{opacity:0}} animate={inView?{opacity:1}:{}} transition={{delay:.2}}>
+              Hover or tap each card to reveal the full story.
+            </motion.p>
+          </div>
+
+          {isMob ? (
+            <CarouselShell count={SERVICES.length} idx={car.idx} prev={car.prev} next={car.next} go={car.go}>
+              {SERVICES.map(s=>(
+                <div key={s.num} style={{flex:"0 0 100%",paddingRight:".5rem"}}>
+                  <FlipCard s={s} delay={0}/>
+                </div>
+              ))}
+            </CarouselShell>
+          ) : (
+            <div className="svc-grid">
+              {SERVICES.map((s,i)=><FlipCard key={s.num} s={s} delay={i*.08}/>)}
+            </div>
+          )}
+        </div>
+      </section>
+    </>
+  );
+};
+
+/* ══════════════════════════════════════════════════════ PORTFOLIO */
+const PORTFOLIO = [
+  { id:"p1", cat:"Email Design",    title:"Welcome Flow — Fashion Brand",
+    desc:"3-email welcome series with 42% open rate and 18% CTR in the first 30 days.",
+    tags:["Welcome Flow","Fashion","Klaviyo"], result:"42% Open Rate", icon:"✉️" },
+  { id:"p2", cat:"Ecommerce Copy",  title:"Cart Recovery Sequence",
+    desc:"4-step abandoned cart flow with behavioural copy triggers. Recovered 28% of abandoned carts.",
+    tags:["Cart Recovery","Copy","A/B Tested"], result:"28% Recovery", icon:"🛒" },
+  { id:"p3", cat:"Email Strategy",  title:"Cappuccino Commerce — Full Strategy",
+    desc:"Led complete email strategy as lead strategist. Welcome, post-purchase, winback.",
+    tags:["Strategy","Agency","Full Funnel"], result:"Lead Strategist", icon:"☕" },
+  { id:"p4", cat:"Pop-Up Design",   title:"Exit-Intent Pop-Up Series",
+    desc:"6 conversion-optimised pop-up forms across different niches. Avg 11% conv. rate.",
+    tags:["Pop-Up","Design","CRO"], result:"11% Conv. Rate", icon:"🪟" },
+  { id:"p5", cat:"Email Templates", title:"Template Bank — 10 Designs",
+    desc:"10 premium reusable templates: fashion, wellness, SaaS, coaching.",
+    tags:["Templates","Multi-niche","Reusable"], result:"10 Templates", icon:"📐" },
+  { id:"p6", cat:"Sales Copy",      title:"Launch Sequence — Info Product",
+    desc:"7-email launch sequence for a digital product. Generated $14k in 5 days.",
+    tags:["Launch","Sales Copy","Info Product"], result:"$14k in 5 days", icon:"💰" },
+];
+
+const PF_FILTERS = ["All","Email Design","Email Strategy","Ecommerce Copy","Pop-Up Design","Sales Copy","Email Templates"];
+
+const PortfolioCard = ({ p, idx }: { p:typeof PORTFOLIO[0]; idx:number }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once:true, margin:"-40px" });
+  return (
+    <motion.div ref={ref}
+      initial={{opacity:0,y:28}} animate={inView?{opacity:1,y:0}:{}}
+      transition={{duration:.6,delay:idx*.08,ease:[.22,1,.36,1]}}
+      whileHover={{y:-6,boxShadow:"0 16px 48px rgba(139,92,246,.18)"}}
+      style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",
+        background:"var(--card)",backdropFilter:"blur(12px)",cursor:"pointer",
+        transition:"border-color .3s"}}
+      onMouseEnter={e=>(e.currentTarget as HTMLDivElement).style.borderColor="rgba(139,92,246,.5)"}
+      onMouseLeave={e=>(e.currentTarget as HTMLDivElement).style.borderColor="var(--border)"}>
+      {/* Preview */}
+      <div style={{height:170,background:`linear-gradient(135deg,rgba(139,92,246,.12) 0%,var(--bg3) 100%)`,
+        display:"flex",alignItems:"center",justifyContent:"center",
+        borderBottom:"1px solid var(--border)",position:"relative"}}>
+        <div style={{fontSize:"2.8rem",opacity:.75}}>{p.icon}</div>
+        <div style={{position:"absolute",top:"1rem",left:"1rem",
+          padding:".22rem .65rem",borderRadius:4,
+          background:"rgba(139,92,246,.15)",border:"1px solid rgba(139,92,246,.3)",
+          fontSize:".63rem",letterSpacing:".1em",textTransform:"uppercase",
+          color:"var(--p3)",fontWeight:600}}>{p.cat}</div>
+        <div style={{position:"absolute",top:"1rem",right:"1rem",
+          padding:".22rem .65rem",borderRadius:4,
+          background:"rgba(139,92,246,.2)",border:"1px solid rgba(139,92,246,.35)",
+          fontSize:".7rem",color:"var(--p4)",fontWeight:700}}>{p.result}</div>
+      </div>
+      <div style={{padding:"1.3rem"}}>
+        <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:"1.05rem",fontWeight:700,
+          color:"var(--fg)",marginBottom:".55rem",lineHeight:1.3}}>{p.title}</h3>
+        <p style={{fontSize:".83rem",lineHeight:1.72,color:"var(--fg2)",fontWeight:300,
+          marginBottom:".9rem"}}>{p.desc}</p>
+        <div style={{display:"flex",gap:".4rem",flexWrap:"wrap"}}>
+          {p.tags.map(tg=>(
+            <span key={tg} style={{padding:".18rem .55rem",borderRadius:3,
+              background:"rgba(139,92,246,.08)",border:"1px solid rgba(139,92,246,.2)",
+              fontSize:".62rem",letterSpacing:".07em",textTransform:"uppercase",
+              color:"var(--fg2)",fontWeight:500}}>{tg}</span>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const Portfolio = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once:true, margin:"-60px" });
+  const [filter, setFilter] = useState("All");
+  const [isMob, setIsMob] = useState(false);
+  const car = useCarousel(PORTFOLIO.length);
+
+  useEffect(()=>{
+    const fn=()=>setIsMob(window.innerWidth<640);
+    fn(); window.addEventListener("resize",fn);
+    return ()=>window.removeEventListener("resize",fn);
+  },[]);
+
+  const filtered = filter==="All" ? PORTFOLIO : PORTFOLIO.filter(p=>p.cat===filter);
+
+  return (
+    <>
+      <style>{`
+        #portfolio{border-top:1px solid var(--border);}
+        .pf-in{max-width:1100px;margin:0 auto;padding:7rem 3rem;}
+        .pf-filters{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:2.8rem;}
+        .pf-fb{padding:.3rem .85rem;border-radius:99px;font-size:.73rem;letter-spacing:.06em;
+          text-transform:uppercase;font-weight:600;cursor:pointer;
+          border:1.5px solid var(--border);background:transparent;color:var(--fg2);
+          transition:all .2s;}
+        .pf-fb:hover{border-color:var(--p2);color:var(--p2);}
+        .pf-fb.on{background:linear-gradient(135deg,var(--p1),var(--p2));
+          border-color:transparent;color:#fff;}
+        .pf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.4rem;}
+        @media(max-width:640px){.pf-in{padding:5rem 1.5rem;}}
+      `}</style>
+
+      <section id="portfolio">
+        <div className="pf-in" ref={ref}>
+          <motion.p style={{fontSize:".68rem",letterSpacing:".28em",textTransform:"uppercase",
+            color:"var(--p3)",fontWeight:500,marginBottom:".7rem"}}
+            initial={{opacity:0}} animate={inView?{opacity:1}:{}}>Selected Work</motion.p>
+          <motion.h2 style={{fontFamily:"'Playfair Display',serif",
+            fontSize:"clamp(2rem,4vw,3rem)",fontWeight:900,lineHeight:1.1,
+            letterSpacing:"-.025em",color:"var(--fg)",marginBottom:"2.2rem"}}
+            initial={{opacity:0,y:20}} animate={inView?{opacity:1,y:0}:{}} transition={{delay:.1}}>
+            Portfolio
+          </motion.h2>
+
+          <div className="pf-filters">
+            {PF_FILTERS.map(f=>(
+              <button key={f} className={`pf-fb ${filter===f?"on":""}`}
+                onClick={()=>setFilter(f)}>{f}</button>
+            ))}
+          </div>
+
+          {isMob ? (
+            <CarouselShell count={filtered.length} idx={Math.min(car.idx,filtered.length-1)}
+              prev={car.prev} next={car.next} go={car.go}>
+              {filtered.map(p=>(
+                <div key={p.id} style={{flex:"0 0 100%",paddingRight:".5rem"}}>
+                  <PortfolioCard p={p} idx={0}/>
+                </div>
+              ))}
+            </CarouselShell>
+          ) : (
+            <AnimatePresence mode="wait">
+              <motion.div key={filter} className="pf-grid"
+                initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}
+                transition={{duration:.28}}>
+                {filtered.map((p,i)=><PortfolioCard key={p.id} p={p} idx={i}/>)}
+              </motion.div>
+            </AnimatePresence>
+          )}
+        </div>
+      </section>
+    </>
+  );
+};
+
+/* ══════════════════════════════════════════════════════ CLIENTS */
+const CLIENTS = [
+  { name:"Cappuccino Commerce", role:"Lead Email Strategist", type:"Agency", icon:"☕",
+    scope:"Set up the full email strategy and designed the welcome series for this email agency. Led strategy before any design or copy was written.",
+    result:"Full welcome flow with measurable lift in engagement" },
+  { name:"Ecommerce Fashion Client", role:"Email Designer & Copywriter", type:"Ecommerce", icon:"👗",
+    scope:"Designed on-brand email sequences with conversion-focused copy. Ran feedback campaigns and A/B tests before writing a single word.",
+    result:"42% average open rate on welcome series" },
+  { name:"Info Product Creator", role:"Launch Copywriter", type:"Info Product", icon:"📚",
+    scope:"Wrote the full 7-email launch sequence for a digital product. Research-first approach — understood audience belief barriers before writing word one.",
+    result:"$14,000 generated in 5 days" },
+  { name:"Wellness Brand", role:"Email Strategist & Designer", type:"Wellness", icon:"🌿",
+    scope:"Built the complete retention flow suite: post-purchase, winback, and VIP sequences. Designed all email templates with brand aesthetics.",
+    result:"28% cart recovery rate" },
+  { name:"One-Off Pop-Up Clients", role:"Pop-Up Form Designer", type:"CRO", icon:"🪟",
+    scope:"Designed exit-intent and embedded pop-up forms for various clients across different niches. Each optimised for maximum conversion.",
+    result:"11% average conversion rate" },
+  { name:"SaaS Client", role:"Onboarding Email Copywriter", type:"SaaS", icon:"💻",
+    scope:"Wrote a 5-step onboarding sequence that guided new users to their 'aha moment' within the first 7 days.",
+    result:"35% improvement in feature adoption" },
+];
+
+const ClientCard = ({ c, idx }: { c:typeof CLIENTS[0]; idx:number }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once:true, margin:"-40px" });
+  const [open, setOpen] = useState(false);
+
+  return (
+    <motion.div ref={ref}
+      initial={{opacity:0,y:28}} animate={inView?{opacity:1,y:0}:{}}
+      transition={{duration:.6,delay:idx*.08,ease:[.22,1,.36,1]}}
+      style={{border:"1px solid var(--border)",borderRadius:10,background:"var(--card)",
+        overflow:"hidden",transition:"border-color .3s"}}
+      onMouseEnter={e=>(e.currentTarget as HTMLDivElement).style.borderColor="rgba(139,92,246,.45)"}
+      onMouseLeave={e=>(e.currentTarget as HTMLDivElement).style.borderColor="var(--border)"}>
+      {/* Purple accent top bar */}
+      <div style={{height:3,background:"linear-gradient(90deg,var(--p1),var(--p3),transparent)"}}/>
+      <div style={{padding:"1.5rem 1.5rem 1rem",display:"flex",gap:"1rem",alignItems:"flex-start"}}>
+        <div style={{width:46,height:46,borderRadius:10,flexShrink:0,
+          background:"linear-gradient(135deg,rgba(139,92,246,.2),rgba(139,92,246,.05))",
+          border:"1px solid var(--border)",display:"flex",alignItems:"center",
+          justifyContent:"center",fontSize:"1.3rem"}}>{c.icon}</div>
+        <div style={{flex:1}}>
+          <div style={{display:"flex",alignItems:"center",gap:".55rem",marginBottom:".2rem",flexWrap:"wrap"}}>
+            <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:"1rem",fontWeight:700,
+              color:"var(--fg)"}}>{c.name}</h3>
+            <span style={{padding:".16rem .5rem",borderRadius:3,
+              background:"rgba(139,92,246,.12)",border:"1px solid rgba(139,92,246,.25)",
+              fontSize:".61rem",letterSpacing:".1em",textTransform:"uppercase",
+              color:"var(--p3)",fontWeight:600}}>{c.type}</span>
+          </div>
+          <p style={{fontSize:".76rem",color:"var(--p3)",fontWeight:500}}>{c.role}</p>
+        </div>
+      </div>
+
+      <div style={{padding:"0 1.5rem .5rem",overflow:"hidden"}}>
+        <AnimatePresence>
+          {open && (
+            <motion.p initial={{height:0,opacity:0}} animate={{height:"auto",opacity:1}}
+              exit={{height:0,opacity:0}} transition={{duration:.3}}
+              style={{fontSize:".83rem",lineHeight:1.78,color:"var(--fg2)",fontWeight:300,paddingBottom:".6rem"}}>
+              {c.scope}
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <div style={{padding:".75rem 1.5rem 1.3rem",display:"flex",
+        alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:".6rem"}}>
+        <div style={{display:"flex",alignItems:"center",gap:".45rem"}}>
+          <div style={{width:6,height:6,borderRadius:"50%",
+            background:"var(--p2)",boxShadow:"0 0 8px var(--p2)"}}/>
+          <span style={{fontSize:".78rem",color:"var(--fg)",fontWeight:600}}>{c.result}</span>
+        </div>
+        <button onClick={()=>setOpen(o=>!o)} style={{
+          fontSize:".7rem",letterSpacing:".1em",textTransform:"uppercase",
+          color:"var(--p3)",background:"none",border:"none",cursor:"pointer",
+          fontWeight:600,display:"flex",alignItems:"center",gap:".3rem",padding:0}}>
+          {open?"Hide ↑":"Details ↓"}
+        </button>
+      </div>
+    </motion.div>
+  );
+};
+
+const Clients = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once:true, margin:"-60px" });
+  const [isMob, setIsMob] = useState(false);
+  const car = useCarousel(CLIENTS.length);
+
+  useEffect(()=>{
+    const fn=()=>setIsMob(window.innerWidth<640);
+    fn(); window.addEventListener("resize",fn);
+    return ()=>window.removeEventListener("resize",fn);
+  },[]);
+
+  return (
+    <>
+      <style>{`
+        #clients{border-top:1px solid var(--border);}
+        .cl-in{max-width:1100px;margin:0 auto;padding:7rem 3rem;}
+        .cl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.3rem;}
+        @media(max-width:640px){.cl-in{padding:5rem 1.5rem;}}
+      `}</style>
+
+      <section id="clients">
+        <div className="cl-in" ref={ref}>
+          <motion.p style={{fontSize:".68rem",letterSpacing:".28em",textTransform:"uppercase",
+            color:"var(--p3)",fontWeight:500,marginBottom:".7rem"}}
+            initial={{opacity:0}} animate={inView?{opacity:1}:{}}>Previous Work</motion.p>
+          <motion.h2 style={{fontFamily:"'Playfair Display',serif",
+            fontSize:"clamp(2rem,4vw,3rem)",fontWeight:900,lineHeight:1.1,
+            letterSpacing:"-.025em",color:"var(--fg)",marginBottom:".6rem"}}
+            initial={{opacity:0,y:20}} animate={inView?{opacity:1,y:0}:{}} transition={{delay:.1}}>
+            Clients & Jobs Done
+          </motion.h2>
+          <motion.p style={{fontSize:".88rem",color:"var(--fg2)",fontWeight:300,
+            maxWidth:480,lineHeight:1.7,marginBottom:"2.5rem"}}
+            initial={{opacity:0}} animate={inView?{opacity:1}:{}} transition={{delay:.2}}>
+            Real work. Real clients. Real results. Click "Details" to see full scope.
+          </motion.p>
+
+          {isMob ? (
+            <CarouselShell count={CLIENTS.length} idx={car.idx} prev={car.prev} next={car.next} go={car.go}>
+              {CLIENTS.map(c=>(
+                <div key={c.name} style={{flex:"0 0 100%",paddingRight:".5rem"}}>
+                  <ClientCard c={c} idx={0}/>
+                </div>
+              ))}
+            </CarouselShell>
+          ) : (
+            <div className="cl-grid">
+              {CLIENTS.map((c,i)=><ClientCard key={c.name} c={c} idx={i}/>)}
+            </div>
+          )}
+        </div>
+      </section>
+    </>
+  );
+};
+
+/* ══════════════════════════════════════════════════════ CTA + FOOTER */
+const CTA = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once:true, margin:"-60px" });
+  const e = [.22,1,.36,1] as any;
+
+  return (
+    <>
+      <style>{`
+        #contact{border-top:1px solid var(--border);}
+        .cta-in{padding:8rem 3rem 6rem;text-align:center;
+          position:relative;overflow:hidden;max-width:800px;margin:0 auto;}
+        .cta-glow{position:absolute;width:600px;height:600px;border-radius:50%;
+          background:radial-gradient(circle,rgba(139,92,246,.1),transparent 65%);
+          top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+        .cta-h2{font-family:'Playfair Display',serif;
+          font-size:clamp(2.4rem,6vw,5rem);font-weight:900;
+          line-height:1.02;letter-spacing:-.03em;color:var(--fg);margin-bottom:1.3rem;}
+        .cta-h2 em{font-style:italic;
+          background:linear-gradient(135deg,var(--p2),var(--p3));
+          -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+          background-clip:text;}
+        .cta-sub{font-size:1rem;line-height:1.78;color:var(--fg2);font-weight:300;
+          max-width:440px;margin:0 auto 3rem;}
+        .cta-row{display:flex;align-items:center;justify-content:center;
+          gap:.75rem;flex-wrap:wrap;}
+        .cta-inp{padding:.85rem 1.4rem;border:1.5px solid var(--border);border-radius:4px;
+          background:var(--bg2);color:var(--fg);font-family:'DM Sans',sans-serif;
+          font-size:.9rem;outline:none;width:280px;transition:border-color .2s;}
+        .cta-inp::placeholder{color:var(--fg3);}
+        .cta-inp:focus{border-color:var(--p2);}
+        .cta-btn{padding:.85rem 1.8rem;
+          background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;
+          border:none;border-radius:4px;cursor:pointer;
+          font-size:.88rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+          box-shadow:0 4px 24px rgba(139,92,246,.35);
+          transition:transform .2s,box-shadow .2s;}
+        .cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(139,92,246,.5);}
+        .footer{border-top:1px solid var(--border);padding:2rem 3rem;
+          display:flex;align-items:center;justify-content:space-between;
+          flex-wrap:wrap;gap:1rem;max-width:1100px;margin:0 auto;}
+        .f-copy{font-size:.74rem;color:var(--fg3);letter-spacing:.05em;}
+        .f-links{display:flex;gap:1.5rem;}
+        .f-lnk{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+          color:var(--fg3);cursor:pointer;border:none;background:none;
+          font-weight:500;transition:color .2s;}
+        .f-lnk:hover{color:var(--p2);}
+        @media(max-width:600px){
+          .cta-in{padding:5rem 1.5rem 4rem;}
+          .footer{flex-direction:column;align-items:flex-start;padding:2rem 1.5rem;}
+        }
+      `}</style>
+
+      <section id="contact">
+        <div className="cta-in" ref={ref}>
+          <div className="cta-glow"/>
+          <motion.p style={{fontSize:".68rem",letterSpacing:".28em",textTransform:"uppercase",
+            color:"var(--p3)",fontWeight:500,marginBottom:"1.3rem"}}
+            initial={{opacity:0}} animate={inView?{opacity:1}:{}}>Ready to Convert</motion.p>
+          <motion.h2 className="cta-h2"
+            initial={{opacity:0,y:24}} animate={inView?{opacity:1,y:0}:{}}
+            transition={{duration:.75,delay:.1,ease:e}}>
+            Let's build something<br/><em>unstoppable.</em>
+          </motion.h2>
+          <motion.p className="cta-sub"
+            initial={{opacity:0,y:18}} animate={inView?{opacity:1,y:0}:{}}
+            transition={{duration:.65,delay:.2}}>
+            If your brand is ready to stop leaving money in the inbox and start
+            engineering real conversions — let's talk.
+          </motion.p>
+          <motion.div className="cta-row"
+            initial={{opacity:0,y:18}} animate={inView?{opacity:1,y:0}:{}}
+            transition={{duration:.65,delay:.3}}>
+            <input className="cta-inp" type="email" placeholder="your@email.com"/>
+            <button className="cta-btn">Get in Touch</button>
+          </motion.div>
+        </div>
+        <footer>
+          <div className="footer">
+            <p className="f-copy">© 2025 John Adegboye. All rights reserved.</p>
+            <div className="f-links">
+              {["LinkedIn","Twitter / X","Email"].map(l=>(
+                <button key={l} className="f-lnk">{l}</button>
+              ))}
+            </div>
+          </div>
+        </footer>
+      </section>
+    </>
+  );
+};
+
+/* ══════════════════════════════════════════════════════ ROOT */
+export default function Home() {
+  const [theme, setTheme] = useState<Theme>("dark");
+  const toggle = () => setTheme(t => t==="dark" ? "light" : "dark");
+
+  return (
+    <>
+      <G t={theme}/>
+      <Noise/>
+      <Navbar t={theme} toggle={toggle}/>
+      <main>
+        <Hero t={theme}/>
+        <MetricsSection/>
+        <About/>
+        <Marquee/>
+        <Services/>
+        <Portfolio/>
+        <Clients/>
+        <CTA/>
+      </main>
+      <ScrollTop/>
+    </>
+  );
+}
