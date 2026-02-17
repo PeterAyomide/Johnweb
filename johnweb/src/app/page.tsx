@@ -41,6 +41,17 @@ const G = ({ t }: { t: Theme }) => {
       ::selection{background:var(--p2);color:#fff;}
       button{font-family:'DM Sans',sans-serif;}
       img{max-width:100%;display:block;}
+
+      /* ── Global section rhythm ── */
+      .sec{ border-top:1px solid var(--border); padding:8rem 0; }
+      .sec-in{ max-width:1100px; margin:0 auto; padding:0 3.5rem; }
+      .sec-label{ font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;
+        color:var(--p3);font-weight:500;margin-bottom:.9rem; }
+      .sec-heading{ font-family:'Playfair Display',serif;
+        font-size:clamp(2rem,4vw,3rem);font-weight:900;line-height:1.1;
+        letter-spacing:-.025em;color:var(--fg); }
+      @media(max-width:860px){ .sec{ padding:6rem 0; } }
+      @media(max-width:640px){ .sec{ padding:4.5rem 0; } .sec-in{ padding:0 1.4rem; } }
     `}</style>
   );
 };
@@ -85,47 +96,120 @@ function useCarousel(len: number) {
   const [idx, setIdx] = useState(0);
   const prev = () => setIdx(i => Math.max(0, i - 1));
   const next = () => setIdx(i => Math.min(len - 1, i + 1));
-  const go = (i: number) => setIdx(i);
+  const go   = (i: number) => setIdx(i);
   return { idx, prev, next, go };
 }
 
-/* ══════════════════════════════════════════════════════ CAROUSEL SHELL */
+/* ══════════════════════════════════════════════════════
+   CAROUSEL SHELL — touch/mouse drag + glowing dot indicators only
+══════════════════════════════════════════════════════ */
 const CarouselShell = ({
   count, idx, prev, next, go, children,
 }: {
   count: number; idx: number; prev: () => void; next: () => void;
   go: (i: number) => void; children: React.ReactNode;
-}) => (
-  <div>
-    <div style={{ overflow:"hidden" }}>
-      <div style={{ display:"flex", transition:"transform .45s cubic-bezier(.34,1.2,.64,1)",
-        transform:`translateX(-${idx * 100}%)` }}>
-        {children}
+}) => {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const startX   = useRef(0);
+  const dragging  = useRef(false);
+
+  /* ── pointer / touch handlers ── */
+  const onDragStart = (clientX: number) => {
+    startX.current  = clientX;
+    dragging.current = true;
+  };
+  const onDragEnd = (clientX: number) => {
+    if (!dragging.current) return;
+    dragging.current = false;
+    const delta = startX.current - clientX;
+    if (delta > 40)  next();
+    if (delta < -40) prev();
+  };
+
+  return (
+    <>
+      <style>{`
+        .car-track-wrap{
+          overflow:hidden;
+          cursor:grab;
+          user-select:none;
+          -webkit-user-select:none;
+          border-radius:10px;
+        }
+        .car-track-wrap:active{cursor:grabbing;}
+        .car-track{
+          display:flex;
+          will-change:transform;
+          transition:transform .42s cubic-bezier(.32,1,.36,1);
+        }
+        /* ── dots ── */
+        .car-dots{
+          display:flex;justify-content:center;align-items:center;
+          gap:.5rem;margin-top:1.6rem;
+        }
+        .car-dot{
+          height:8px;border-radius:99px;border:none;cursor:pointer;padding:0;
+          outline:none;
+          transition:
+            width  .38s cubic-bezier(.34,1.2,.64,1),
+            background .28s ease,
+            box-shadow .28s ease,
+            opacity .2s;
+        }
+        .car-dot.off{
+          width:8px;
+          background:rgba(139,92,246,.22);
+          opacity:.65;
+        }
+        .car-dot.off:hover{
+          background:rgba(139,92,246,.5);
+          box-shadow:0 0 8px rgba(139,92,246,.5);
+          opacity:1;
+        }
+        .car-dot.on{
+          width:30px;
+          background:linear-gradient(90deg,var(--p1),var(--p3));
+          box-shadow:
+            0 0 10px rgba(139,92,246,.75),
+            0 0 24px rgba(139,92,246,.4);
+          opacity:1;
+        }
+      `}</style>
+
+      <div>
+        {/* draggable track */}
+        <div
+          className="car-track-wrap"
+          ref={trackRef}
+          onMouseDown={e  => onDragStart(e.clientX)}
+          onMouseUp={e    => onDragEnd(e.clientX)}
+          onMouseLeave={e => { if (dragging.current) onDragEnd(e.clientX); }}
+          onTouchStart={e => onDragStart(e.touches[0].clientX)}
+          onTouchEnd={e   => onDragEnd(e.changedTouches[0].clientX)}
+        >
+          <div
+            className="car-track"
+            style={{ transform: `translateX(-${idx * 100}%)` }}
+          >
+            {children}
+          </div>
+        </div>
+
+        {/* glowing pill dots — no arrows */}
+        <div className="car-dots">
+          {Array.from({ length: count }).map((_, i) => (
+            <button
+              key={i}
+              className={`car-dot ${i === idx ? "on" : "off"}`}
+              onClick={() => go(i)}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
       </div>
-    </div>
-    <div style={{ display:"flex", justifyContent:"center", gap:".5rem", marginTop:"1.4rem" }}>
-      {Array.from({ length: count }).map((_, i) => (
-        <button key={i} onClick={() => go(i)} style={{
-          width:8,height:8,borderRadius:"50%",border:"1.5px solid var(--p2)",
-          background:i === idx ? "var(--p2)" : "transparent",cursor:"pointer",padding:0,
-          transition:"background .2s"}} aria-label={`Go to ${i+1}`} />
-      ))}
-    </div>
-    <div style={{ display:"flex",justifyContent:"center",gap:".75rem",marginTop:".8rem" }}>
-      {[{ label:"←", fn:prev }, { label:"→", fn:next }].map(({ label, fn }) => (
-        <button key={label} onClick={fn} style={{
-          width:40,height:40,borderRadius:"50%",background:"var(--card)",
-          border:"1.5px solid var(--border)",color:"var(--fg)",cursor:"pointer",
-          fontSize:"1rem",display:"flex",alignItems:"center",justifyContent:"center",
-          transition:"border-color .2s,color .2s"}}
-          onMouseEnter={e=>{(e.currentTarget as HTMLButtonElement).style.borderColor="var(--p2)";(e.currentTarget as HTMLButtonElement).style.color="var(--p2)";}}
-          onMouseLeave={e=>{(e.currentTarget as HTMLButtonElement).style.borderColor="var(--border)";(e.currentTarget as HTMLButtonElement).style.color="var(--fg)";}}>
-          {label}
-        </button>
-      ))}
-    </div>
-  </div>
-);
+    </>
+  );
+};
 
 /* ══════════════════════════════════════════════════════ NAVBAR */
 const NAV_LINKS = ["About","Services","Portfolio","Clients","Contact"];
@@ -343,13 +427,32 @@ const Hero = ({ t }: { t: Theme }) => {
         .bdg-lbl{font-size:.68rem;color:var(--fg2);font-weight:500;
           letter-spacing:.06em;text-transform:uppercase;margin-top:2px;}
         .bdg-stars{color:#a78bfa;font-size:.73rem;letter-spacing:1px;margin-bottom:3px;}
-        @media(max-width:860px){
-          .hero{padding:90px 1.5rem 4rem;}
-          .hero-in{grid-template-columns:1fr;gap:3rem;}
-          .img-stage{order:-1;}
-          .img-frame{width:240px;height:300px;}
-          .img-bdg{left:-.5rem;}
-          .img-bdg2{right:-.5rem;}
+        /* ── tablet: 641–860px — side-by-side but tighter ── */
+        @media(min-width:641px) and (max-width:860px){
+          .hero{padding:90px 2rem 4rem;}
+          .hero-in{grid-template-columns:1fr 1fr;gap:2rem;}
+          .img-frame{width:220px;height:280px;}
+          .img-bdg{left:-.25rem;min-width:130px;}
+          .img-bdg2{right:-.25rem;min-width:110px;}
+        }
+        /* ── mobile: ≤640px — single column, image BELOW text ── */
+        @media(max-width:640px){
+          .hero{padding:88px 1.25rem 4rem;}
+          .hero-in{
+            grid-template-columns:1fr;
+            gap:2.5rem;
+            justify-items:center;
+          }
+          /* text block stays at natural order (order:0) */
+          .hero-in > div:first-child{ order:1; width:100%; text-align:center; }
+          /* image comes AFTER text */
+          .img-stage{ order:2; }
+          .h-eyebrow{ justify-content:center; }
+          .h-rule{ margin-left:auto; margin-right:auto; }
+          .h-btns{ justify-content:center; }
+          .img-frame{width:220px;height:280px;}
+          .img-bdg{left:.25rem;min-width:130px;}
+          .img-bdg2{right:.25rem;min-width:110px;}
         }
       `}</style>
 
@@ -467,14 +570,12 @@ const MetricsSection = () => {
   },[]);
 
   return (
-    <section ref={ref} style={{borderTop:"1px solid var(--border)",padding:"5rem 0"}}>
-      <div style={{maxWidth:1100,margin:"0 auto",padding:"0 3rem"}}>
+    <section className="sec" ref={ref}>
+      <div className="sec-in">
         <motion.div initial={{opacity:0,y:20}} animate={inView?{opacity:1,y:0}:{}}
-          transition={{duration:.7}} style={{textAlign:"center",marginBottom:"3.5rem"}}>
-          <p style={{fontSize:".7rem",letterSpacing:".28em",textTransform:"uppercase",
-            color:"var(--p3)",fontWeight:500,marginBottom:".7rem"}}>By the Numbers</p>
-          <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(2rem,4vw,3rem)",
-            fontWeight:900,color:"var(--fg)",letterSpacing:"-.025em"}}>Results That Speak</h2>
+          transition={{duration:.7}} style={{textAlign:"center",marginBottom:"4rem"}}>
+          <p className="sec-label">By the Numbers</p>
+          <h2 className="sec-heading">Results That Speak</h2>
         </motion.div>
 
         {isMob ? (
@@ -486,12 +587,11 @@ const MetricsSection = () => {
             ))}
           </CarouselShell>
         ) : (
-          <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"1.2rem"}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"1.4rem"}}>
             {METRICS.map((m,i)=><MetricCard key={m.label} m={m} active={inView} idx={i}/>)}
           </div>
         )}
       </div>
-      <style>{`@media(max-width:640px){section > div{padding:0 1.5rem!important;}}`}</style>
     </section>
   );
 };
@@ -502,21 +602,18 @@ const About = () => {
   const inView = useInView(ref, { once:true, margin:"-80px" });
   const e = [.22,1,.36,1] as any;
   return (
-    <section id="about" style={{borderTop:"1px solid var(--border)"}}>
-      <div ref={ref} style={{maxWidth:1100,margin:"0 auto",padding:"7rem 3rem",
-        display:"grid",gridTemplateColumns:"1fr 1.6fr",gap:"5rem",alignItems:"start"}}>
+    <section id="about" className="sec">
+      <div className="sec-in" ref={ref} style={{display:"grid",gridTemplateColumns:"1fr 1.6fr",gap:"5.5rem",alignItems:"start"}}>
         <motion.div initial={{opacity:0,x:-28}} animate={inView?{opacity:1,x:0}:{}}
           transition={{duration:.75,ease:e}}>
-          <p style={{fontSize:".68rem",letterSpacing:".28em",textTransform:"uppercase",
-            color:"var(--p3)",fontWeight:500,marginBottom:"1rem"}}>Philosophy</p>
-          <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(2rem,4vw,3rem)",
-            fontWeight:900,lineHeight:1.1,letterSpacing:"-.025em",color:"var(--fg)"}}>
+          <p className="sec-label">Philosophy</p>
+          <h2 className="sec-heading">
             Strategy <em style={{fontStyle:"italic",
               background:"linear-gradient(135deg,var(--p2),var(--p3))",
               WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",
               backgroundClip:"text"}}>first.</em><br/>Always.
           </h2>
-          <div style={{display:"flex",gap:"2.2rem",marginTop:"2.5rem",flexWrap:"wrap"}}>
+          <div style={{display:"flex",gap:"2.2rem",marginTop:"2.8rem",flexWrap:"wrap"}}>
             {[["∞","Email Strategies"],["100%","Conversion Focus"],["0","Shortcuts"]].map(([n,l])=>(
               <div key={l}>
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:"2rem",fontWeight:900,
@@ -524,7 +621,7 @@ const About = () => {
                   WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",
                   backgroundClip:"text",lineHeight:1}}>{n}</div>
                 <div style={{fontSize:".7rem",letterSpacing:".1em",textTransform:"uppercase",
-                  color:"var(--fg3)",fontWeight:500,marginTop:3}}>{l}</div>
+                  color:"var(--fg3)",fontWeight:500,marginTop:4}}>{l}</div>
               </div>
             ))}
           </div>
@@ -536,14 +633,14 @@ const About = () => {
             `While I excel in designing <strong>visually appealing emails that are conversion, brand, and aesthetically focused</strong> — and writing copy that takes ten steps ahead of the prospect's objections — I've also built a deep database of strategies from the finest email agencies on LinkedIn.`,
             `These strategies put me in a position where I can see the <strong>behavioral tendencies and objections of prospects.</strong> Rooted in strategy first — all to the end that we <strong>slice through resistance and bring the prospect to conversion.</strong>`,
           ].map((txt,i)=>(
-            <p key={i} style={{fontSize:".94rem",lineHeight:1.88,color:"var(--fg2)",fontWeight:300,
-              marginBottom:i<2?"1.2rem":0}}
+            <p key={i} style={{fontSize:".95rem",lineHeight:1.9,color:"var(--fg2)",fontWeight:300,
+              marginBottom:i<2?"1.4rem":0}}
               dangerouslySetInnerHTML={{__html:txt.replace(/<strong>(.*?)<\/strong>/g,
                 `<strong style="color:var(--fg);font-weight:600">$1</strong>`)}}/>
           ))}
         </motion.div>
       </div>
-      <style>{`@media(max-width:780px){#about>div{grid-template-columns:1fr!important;gap:2rem!important;padding:5rem 1.5rem!important;}}`}</style>
+      <style>{`@media(max-width:780px){#about .sec-in{grid-template-columns:1fr!important;gap:3rem!important;}}`}</style>
     </section>
   );
 };
@@ -690,24 +787,19 @@ const Services = () => {
   return (
     <>
       <style>{`
-        #services{border-top:1px solid var(--border);}
-        .svc-in{max-width:1100px;margin:0 auto;padding:7rem 3rem;}
+        #services{ border-top:1px solid var(--border); }
         .svc-hdr{display:flex;align-items:flex-end;justify-content:space-between;
-          margin-bottom:3.5rem;flex-wrap:wrap;gap:1.2rem;}
-        .svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.4rem;}
-        @media(max-width:640px){.svc-in{padding:5rem 1.5rem;}}
+          margin-bottom:4rem;flex-wrap:wrap;gap:1.4rem;}
+        .svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.6rem;}
       `}</style>
 
-      <section id="services">
-        <div className="svc-in" ref={ref}>
+      <section id="services" className="sec">
+        <div className="sec-in" ref={ref}>
           <div className="svc-hdr">
             <div>
-              <motion.p style={{fontSize:".68rem",letterSpacing:".28em",textTransform:"uppercase",
-                color:"var(--p3)",fontWeight:500,marginBottom:".7rem"}}
+              <motion.p className="sec-label"
                 initial={{opacity:0}} animate={inView?{opacity:1}:{}}>What I Do</motion.p>
-              <motion.h2 style={{fontFamily:"'Playfair Display',serif",
-                fontSize:"clamp(2rem,4vw,3rem)",fontWeight:900,lineHeight:1.1,
-                letterSpacing:"-.025em",color:"var(--fg)"}}
+              <motion.h2 className="sec-heading"
                 initial={{opacity:0,y:20}} animate={inView?{opacity:1,y:0}:{}}
                 transition={{delay:.1}}>The Full Arsenal</motion.h2>
             </div>
@@ -825,9 +917,8 @@ const Portfolio = () => {
   return (
     <>
       <style>{`
-        #portfolio{border-top:1px solid var(--border);}
-        .pf-in{max-width:1100px;margin:0 auto;padding:7rem 3rem;}
-        .pf-filters{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:2.8rem;}
+        #portfolio{ border-top:1px solid var(--border); }
+        .pf-filters{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:3rem;}
         .pf-fb{padding:.3rem .85rem;border-radius:99px;font-size:.73rem;letter-spacing:.06em;
           text-transform:uppercase;font-weight:600;cursor:pointer;
           border:1.5px solid var(--border);background:transparent;color:var(--fg2);
@@ -835,18 +926,15 @@ const Portfolio = () => {
         .pf-fb:hover{border-color:var(--p2);color:var(--p2);}
         .pf-fb.on{background:linear-gradient(135deg,var(--p1),var(--p2));
           border-color:transparent;color:#fff;}
-        .pf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.4rem;}
-        @media(max-width:640px){.pf-in{padding:5rem 1.5rem;}}
+        .pf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.6rem;}
       `}</style>
 
-      <section id="portfolio">
-        <div className="pf-in" ref={ref}>
-          <motion.p style={{fontSize:".68rem",letterSpacing:".28em",textTransform:"uppercase",
-            color:"var(--p3)",fontWeight:500,marginBottom:".7rem"}}
+      <section id="portfolio" className="sec">
+        <div className="pf-in sec-in" ref={ref}>
+          <motion.p className="sec-label"
             initial={{opacity:0}} animate={inView?{opacity:1}:{}}>Selected Work</motion.p>
-          <motion.h2 style={{fontFamily:"'Playfair Display',serif",
-            fontSize:"clamp(2rem,4vw,3rem)",fontWeight:900,lineHeight:1.1,
-            letterSpacing:"-.025em",color:"var(--fg)",marginBottom:"2.2rem"}}
+          <motion.h2 className="sec-heading"
+            style={{marginBottom:"2.5rem"}}
             initial={{opacity:0,y:20}} animate={inView?{opacity:1,y:0}:{}} transition={{delay:.1}}>
             Portfolio
           </motion.h2>
@@ -982,25 +1070,21 @@ const Clients = () => {
   return (
     <>
       <style>{`
-        #clients{border-top:1px solid var(--border);}
-        .cl-in{max-width:1100px;margin:0 auto;padding:7rem 3rem;}
-        .cl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.3rem;}
-        @media(max-width:640px){.cl-in{padding:5rem 1.5rem;}}
+        #clients{ border-top:1px solid var(--border); }
+        .cl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.5rem;}
       `}</style>
 
-      <section id="clients">
-        <div className="cl-in" ref={ref}>
-          <motion.p style={{fontSize:".68rem",letterSpacing:".28em",textTransform:"uppercase",
-            color:"var(--p3)",fontWeight:500,marginBottom:".7rem"}}
+      <section id="clients" className="sec">
+        <div className="cl-in sec-in" ref={ref}>
+          <motion.p className="sec-label"
             initial={{opacity:0}} animate={inView?{opacity:1}:{}}>Previous Work</motion.p>
-          <motion.h2 style={{fontFamily:"'Playfair Display',serif",
-            fontSize:"clamp(2rem,4vw,3rem)",fontWeight:900,lineHeight:1.1,
-            letterSpacing:"-.025em",color:"var(--fg)",marginBottom:".6rem"}}
+          <motion.h2 className="sec-heading"
+            style={{marginBottom:".8rem"}}
             initial={{opacity:0,y:20}} animate={inView?{opacity:1,y:0}:{}} transition={{delay:.1}}>
             Clients & Jobs Done
           </motion.h2>
-          <motion.p style={{fontSize:".88rem",color:"var(--fg2)",fontWeight:300,
-            maxWidth:480,lineHeight:1.7,marginBottom:"2.5rem"}}
+          <motion.p style={{fontSize:".9rem",color:"var(--fg2)",fontWeight:300,
+            maxWidth:480,lineHeight:1.75,marginBottom:"3rem"}}
             initial={{opacity:0}} animate={inView?{opacity:1}:{}} transition={{delay:.2}}>
             Real work. Real clients. Real results. Click "Details" to see full scope.
           </motion.p>
@@ -1033,36 +1117,36 @@ const CTA = () => {
   return (
     <>
       <style>{`
-        #contact{border-top:1px solid var(--border);}
-        .cta-in{padding:8rem 3rem 6rem;text-align:center;
+        #contact{ border-top:1px solid var(--border); }
+        .cta-in{padding:9rem 3rem 7rem;text-align:center;
           position:relative;overflow:hidden;max-width:800px;margin:0 auto;}
         .cta-glow{position:absolute;width:600px;height:600px;border-radius:50%;
           background:radial-gradient(circle,rgba(139,92,246,.1),transparent 65%);
           top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
         .cta-h2{font-family:'Playfair Display',serif;
           font-size:clamp(2.4rem,6vw,5rem);font-weight:900;
-          line-height:1.02;letter-spacing:-.03em;color:var(--fg);margin-bottom:1.3rem;}
+          line-height:1.02;letter-spacing:-.03em;color:var(--fg);margin-bottom:1.4rem;}
         .cta-h2 em{font-style:italic;
           background:linear-gradient(135deg,var(--p2),var(--p3));
           -webkit-background-clip:text;-webkit-text-fill-color:transparent;
           background-clip:text;}
-        .cta-sub{font-size:1rem;line-height:1.78;color:var(--fg2);font-weight:300;
-          max-width:440px;margin:0 auto 3rem;}
+        .cta-sub{font-size:1rem;line-height:1.82;color:var(--fg2);font-weight:300;
+          max-width:440px;margin:0 auto 3.5rem;}
         .cta-row{display:flex;align-items:center;justify-content:center;
           gap:.75rem;flex-wrap:wrap;}
-        .cta-inp{padding:.85rem 1.4rem;border:1.5px solid var(--border);border-radius:4px;
+        .cta-inp{padding:.9rem 1.5rem;border:1.5px solid var(--border);border-radius:6px;
           background:var(--bg2);color:var(--fg);font-family:'DM Sans',sans-serif;
           font-size:.9rem;outline:none;width:280px;transition:border-color .2s;}
         .cta-inp::placeholder{color:var(--fg3);}
         .cta-inp:focus{border-color:var(--p2);}
-        .cta-btn{padding:.85rem 1.8rem;
+        .cta-btn{padding:.9rem 1.9rem;
           background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;
-          border:none;border-radius:4px;cursor:pointer;
+          border:none;border-radius:6px;cursor:pointer;
           font-size:.88rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
           box-shadow:0 4px 24px rgba(139,92,246,.35);
           transition:transform .2s,box-shadow .2s;}
         .cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(139,92,246,.5);}
-        .footer{border-top:1px solid var(--border);padding:2rem 3rem;
+        .footer{border-top:1px solid var(--border);padding:2.5rem 3.5rem;
           display:flex;align-items:center;justify-content:space-between;
           flex-wrap:wrap;gap:1rem;max-width:1100px;margin:0 auto;}
         .f-copy{font-size:.74rem;color:var(--fg3);letter-spacing:.05em;}
@@ -1072,8 +1156,8 @@ const CTA = () => {
           font-weight:500;transition:color .2s;}
         .f-lnk:hover{color:var(--p2);}
         @media(max-width:600px){
-          .cta-in{padding:5rem 1.5rem 4rem;}
-          .footer{flex-direction:column;align-items:flex-start;padding:2rem 1.5rem;}
+          .cta-in{padding:5.5rem 1.4rem 4rem;}
+          .footer{flex-direction:column;align-items:flex-start;padding:2rem 1.4rem;}
         }
       `}</style>
 
