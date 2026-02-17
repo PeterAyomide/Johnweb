@@ -6,7 +6,7 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 type Theme = "dark" | "light";
 
 /* ══════════════════════════════════════════════════════
-   GLOBAL STYLES — purple palette
+   GLOBAL STYLES — toned purple palette with whiter text
 ══════════════════════════════════════════════════════ */
 const G = ({ t }: { t: Theme }) => {
   const d = t === "dark";
@@ -15,23 +15,23 @@ const G = ({ t }: { t: Theme }) => {
       @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
       *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
       :root {
-        --p1:#7c3aed;   /* violet-600  */
-        --p2:#8b5cf6;   /* violet-500  */
-        --p3:#a78bfa;   /* violet-400  */
-        --p4:#c4b5fd;   /* violet-300  */
-        --p5:#ede9fe;   /* violet-100  */
+        --p1:#6b5ec7;   /* muted violet-600  */
+        --p2:#7d6fd0;   /* muted violet-500  */
+        --p3:#8f82d9;   /* muted violet-400  */
+        --p4:#a89fe2;   /* muted violet-300  */
+        --p5:#e8e4f9;   /* muted violet-100  */
 
         --bg:       ${d ? "#0b0813" : "#faf8ff"};
         --bg2:      ${d ? "#120e1f" : "#ffffff"};
         --bg3:      ${d ? "#1a1330" : "#f3eeff"};
-        --fg:       ${d ? "#ede9fe" : "#1e1033"};
-        --fg2:      ${d ? "rgba(237,233,254,0.58)" : "rgba(30,16,51,0.6)"};
-        --fg3:      ${d ? "rgba(237,233,254,0.3)"  : "rgba(30,16,51,0.32)"};
-        --border:   ${d ? "rgba(139,92,246,0.22)"  : "rgba(124,58,237,0.2)"};
-        --card:     ${d ? "rgba(255,255,255,0.04)"  : "rgba(255,255,255,0.9)"};
-        --card-sh:  ${d ? "0 8px 40px rgba(0,0,0,0.45)" : "0 8px 40px rgba(124,58,237,0.10)"};
+        --fg:       ${d ? "#f5f3ff" : "#1e1033"};
+        --fg2:      ${d ? "#e8e4f9" : "rgba(30,16,51,0.75)"};
+        --fg3:      ${d ? "#d0c9e8"  : "rgba(30,16,51,0.45)"};
+        --border:   ${d ? "rgba(125,111,208,0.2)"  : "rgba(107,94,199,0.18)"};
+        --card:     ${d ? "rgba(255,255,255,0.05)"  : "rgba(255,255,255,0.92)"};
+        --card-sh:  ${d ? "0 8px 40px rgba(0,0,0,0.35)" : "0 8px 40px rgba(107,94,199,0.08)"};
         --nav-bg:   ${d ? "rgba(11,8,19,0.92)"      : "rgba(250,248,255,0.92)"};
-        --glow:     ${d ? "rgba(139,92,246,0.18)"   : "rgba(139,92,246,0.12)"};
+        --glow:     ${d ? "rgba(125,111,208,0.12)"   : "rgba(125,111,208,0.08)"};
       }
       html{scroll-behavior:smooth;}
       body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--fg);overflow-x:hidden;transition:background .4s,color .4s;}
@@ -46,7 +46,7 @@ const G = ({ t }: { t: Theme }) => {
       .sec{ border-top:1px solid var(--border); padding:8rem 0; }
       .sec-in{ max-width:1100px; margin:0 auto; padding:0 3.5rem; }
       .sec-label{ font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;
-        color:var(--p3);font-weight:500;margin-bottom:.9rem; }
+        color:var(--p2);font-weight:500;margin-bottom:.9rem; }
       .sec-heading{ font-family:'Playfair Display',serif;
         font-size:clamp(2rem,4vw,3rem);font-weight:900;line-height:1.1;
         letter-spacing:-.025em;color:var(--fg); }
@@ -84,7 +84,7 @@ const ScrollTop = () => {
             background:"linear-gradient(135deg,var(--p1),var(--p2))",
             border:"none",cursor:"pointer",display:"flex",
             alignItems:"center",justifyContent:"center",
-            boxShadow:"0 4px 24px rgba(139,92,246,.5)",color:"#fff",fontSize:"1.1rem" }}
+            boxShadow:"0 4px 24px rgba(125,111,208,.4)",color:"#fff",fontSize:"1.1rem" }}
           aria-label="Scroll to top">↑</motion.button>
       )}
     </AnimatePresence>
@@ -158,20 +158,20 @@ const CarouselShell = ({
         }
         .car-dot.off{
           width:8px;
-          background:rgba(139,92,246,.22);
+          background:rgba(125,111,208,.18);
           opacity:.65;
         }
         .car-dot.off:hover{
-          background:rgba(139,92,246,.5);
-          box-shadow:0 0 8px rgba(139,92,246,.5);
+          background:rgba(125,111,208,.4);
+          box-shadow:0 0 8px rgba(125,111,208,.4);
           opacity:1;
         }
         .car-dot.on{
           width:30px;
           background:linear-gradient(90deg,var(--p1),var(--p3));
           box-shadow:
-            0 0 10px rgba(139,92,246,.75),
-            0 0 24px rgba(139,92,246,.4);
+            0 0 10px rgba(125,111,208,.6),
+            0 0 24px rgba(125,111,208,.3);
           opacity:1;
         }
       `}</style>
@@ -256,7 +256,7 @@ const Navbar = ({ t, toggle }: { t: Theme; toggle: () => void }) => {
         .nav-btn.act::after{content:'';display:block;height:2px;background:var(--p2);border-radius:1px;margin-top:2px;}
         .nav-right{display:flex;align-items:center;gap:.8rem;}
         .theme-tog{width:48px;height:26px;border-radius:99px;border:1.5px solid var(--border);
-          background:${d?"rgba(139,92,246,.2)":"rgba(139,92,246,.1)"};cursor:pointer;
+          background:${d?"rgba(125,111,208,.15)":"rgba(125,111,208,.1)"};cursor:pointer;
           position:relative;transition:background .35s;flex-shrink:0;}
         .theme-knob{position:absolute;top:3px;width:18px;height:18px;border-radius:50%;
           transition:left .3s cubic-bezier(.34,1.56,.64,1);
@@ -351,13 +351,13 @@ const Hero = ({ t }: { t: Theme }) => {
           background:radial-gradient(circle,var(--glow) 0%,transparent 65%);
           right:-120px;top:50%;transform:translateY(-50%);pointer-events:none;}
         .hero-glow2{position:absolute;width:420px;height:420px;border-radius:50%;
-          background:radial-gradient(circle,rgba(139,92,246,.06) 0%,transparent 65%);
+          background:radial-gradient(circle,rgba(125,111,208,.05) 0%,transparent 65%);
           left:-80px;bottom:10%;pointer-events:none;}
         .hero-in{max-width:1100px;width:100%;margin:0 auto;
           display:grid;grid-template-columns:1.1fr .9fr;gap:4rem;align-items:center;
           position:relative;z-index:1;}
         .h-eyebrow{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;
-          color:var(--p3);font-weight:500;margin-bottom:1.5rem;
+          color:var(--p2);font-weight:500;margin-bottom:1.5rem;
           display:flex;align-items:center;gap:.7rem;}
         .h-line{height:1px;width:40px;background:linear-gradient(90deg,var(--p2),var(--p3));}
         .h-rule{width:0;height:1px;
@@ -386,9 +386,9 @@ const Hero = ({ t }: { t: Theme }) => {
           background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;
           border:none;cursor:pointer;font-size:.88rem;font-weight:700;
           letter-spacing:.07em;text-transform:uppercase;
-          box-shadow:0 4px 28px rgba(139,92,246,.4);
+          box-shadow:0 4px 28px rgba(125,111,208,.3);
           transition:transform .2s,box-shadow .2s;}
-        .btn-vio:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(139,92,246,.55);}
+        .btn-vio:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(125,111,208,.4);}
         .btn-ghost{padding:.85rem 2rem;border-radius:4px;background:transparent;
           border:1.5px solid var(--border);color:var(--fg2);
           font-size:.88rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
@@ -397,7 +397,7 @@ const Hero = ({ t }: { t: Theme }) => {
         /* image stage */
         .img-stage{position:relative;display:flex;justify-content:center;align-items:flex-end;}
         .img-frame{width:320px;height:400px;border-radius:180px 180px 40px 40px;
-          background:${d?"linear-gradient(160deg,rgba(139,92,246,.15) 0%,rgba(11,8,19,.8) 100%)":"linear-gradient(160deg,rgba(196,181,253,.3) 0%,rgba(250,248,255,.6) 100%)"};
+          background:${d?"linear-gradient(160deg,rgba(125,111,208,.12) 0%,rgba(11,8,19,.8) 100%)":"linear-gradient(160deg,rgba(168,159,226,.25) 0%,rgba(250,248,255,.6) 100%)"};
           border:1.5px solid var(--border);position:relative;overflow:hidden;
           box-shadow:var(--card-sh);display:flex;align-items:center;justify-content:center;}
         .img-placeholder{display:flex;flex-direction:column;align-items:center;
@@ -405,7 +405,7 @@ const Hero = ({ t }: { t: Theme }) => {
         .ph-icon{width:88px;height:88px;border-radius:50%;
           background:linear-gradient(135deg,var(--p1),var(--p3));
           display:flex;align-items:center;justify-content:center;font-size:2.5rem;
-          box-shadow:0 8px 32px rgba(139,92,246,.4);}
+          box-shadow:0 8px 32px rgba(125,111,208,.3);}
         .ph-txt{font-size:.76rem;color:var(--fg3);letter-spacing:.08em;
           text-transform:uppercase;font-weight:500;line-height:1.6;}
         .img-bdg{position:absolute;bottom:1.5rem;left:-2rem;
@@ -426,7 +426,7 @@ const Hero = ({ t }: { t: Theme }) => {
           background-clip:text;line-height:1;}
         .bdg-lbl{font-size:.68rem;color:var(--fg2);font-weight:500;
           letter-spacing:.06em;text-transform:uppercase;margin-top:2px;}
-        .bdg-stars{color:#a78bfa;font-size:.73rem;letter-spacing:1px;margin-bottom:3px;}
+        .bdg-stars{color:#8f82d9;font-size:.73rem;letter-spacing:1px;margin-bottom:3px;}
         /* ── tablet: 641–860px — side-by-side but tighter ── */
         @media(min-width:641px) and (max-width:860px){
           .hero{padding:90px 2rem 4rem;}
@@ -537,8 +537,8 @@ const MetricCard = ({ m, active, idx }: { m:typeof METRICS[0]; active:boolean; i
       style={{padding:"2rem 1.5rem",border:"1px solid var(--border)",borderRadius:8,
         background:"var(--card)",backdropFilter:"blur(12px)",textAlign:"center",
         transition:"border-color .3s,box-shadow .3s,transform .3s",cursor:"default"}}
-      whileHover={{y:-6,boxShadow:"0 16px 40px rgba(139,92,246,.2)"}}
-      onMouseEnter={e=>{(e.currentTarget as HTMLDivElement).style.borderColor="rgba(139,92,246,.55)";}}
+      whileHover={{y:-6,boxShadow:"0 16px 40px rgba(125,111,208,.15)"}}
+      onMouseEnter={e=>{(e.currentTarget as HTMLDivElement).style.borderColor="rgba(125,111,208,.45)";}}
       onMouseLeave={e=>{(e.currentTarget as HTMLDivElement).style.borderColor="var(--border)";}}>
       <div style={{fontSize:"1.8rem",marginBottom:".6rem"}}>{m.icon}</div>
       <div style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(2.2rem,4vw,3rem)",
@@ -708,28 +708,28 @@ const FlipCard = ({ s, delay=0 }: { s:typeof SERVICES[0]; delay?:number }) => {
         .fc-face.back{transform:rotateY(180deg);
           background:linear-gradient(145deg,var(--bg3),var(--bg));}
         .fc-wrap:hover .fc-face,.fc-wrap:focus .fc-face{
-          border-color:rgba(139,92,246,.5);
-          box-shadow:0 12px 40px rgba(139,92,246,.18);}
+          border-color:rgba(125,111,208,.4);
+          box-shadow:0 12px 40px rgba(125,111,208,.15);}
         .fc-glow{position:absolute;inset:0;border-radius:10px;
-          background:radial-gradient(ellipse at 0% 0%,rgba(139,92,246,.08),transparent 60%);
+          background:radial-gradient(ellipse at 0% 0%,rgba(125,111,208,.06),transparent 60%);
           opacity:0;transition:opacity .4s;}
         .fc-wrap:hover .fc-glow{opacity:1;}
         .fc-num{font-family:'Playfair Display',serif;font-size:3.8rem;font-weight:900;
-          color:rgba(139,92,246,.1);line-height:1;position:absolute;
+          color:rgba(125,111,208,.08);line-height:1;position:absolute;
           top:1.2rem;right:1.8rem;pointer-events:none;}
         .fc-icon{font-size:1.5rem;margin-bottom:.7rem;}
         .fc-sub{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;
-          color:var(--p3);font-weight:500;margin-bottom:.45rem;}
+          color:var(--p2);font-weight:500;margin-bottom:.45rem;}
         .fc-title{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;
           color:var(--fg);line-height:1.2;margin-bottom:.9rem;}
         .fc-body{font-size:.87rem;line-height:1.8;color:var(--fg2);font-weight:300;flex:1;}
         .fc-tag{display:inline-block;padding:.22rem .65rem;margin-top:1rem;
-          border:1px solid rgba(139,92,246,.28);border-radius:3px;font-size:.63rem;
-          letter-spacing:.12em;text-transform:uppercase;color:var(--p3);font-weight:500;}
+          border:1px solid rgba(125,111,208,.22);border-radius:3px;font-size:.63rem;
+          letter-spacing:.12em;text-transform:uppercase;color:var(--p2);font-weight:500;}
         .fc-hint{font-size:.68rem;color:var(--fg3);margin-top:auto;padding-top:.9rem;
           letter-spacing:.04em;}
         .fc-back-lbl{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;
-          color:var(--p3);font-weight:500;margin-bottom:.9rem;}
+          color:var(--p2);font-weight:500;margin-bottom:.9rem;}
         /* purple top accent bar */
         .fc-accent{position:absolute;top:0;left:0;right:0;height:2px;
           background:linear-gradient(90deg,var(--p1),var(--p3),transparent);
@@ -860,26 +860,26 @@ const PortfolioCard = ({ p, idx }: { p:typeof PORTFOLIO[0]; idx:number }) => {
     <motion.div ref={ref}
       initial={{opacity:0,y:28}} animate={inView?{opacity:1,y:0}:{}}
       transition={{duration:.6,delay:idx*.08,ease:[.22,1,.36,1]}}
-      whileHover={{y:-6,boxShadow:"0 16px 48px rgba(139,92,246,.18)"}}
+      whileHover={{y:-6,boxShadow:"0 16px 48px rgba(125,111,208,.15)"}}
       style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",
         background:"var(--card)",backdropFilter:"blur(12px)",cursor:"pointer",
         transition:"border-color .3s"}}
-      onMouseEnter={e=>(e.currentTarget as HTMLDivElement).style.borderColor="rgba(139,92,246,.5)"}
+      onMouseEnter={e=>(e.currentTarget as HTMLDivElement).style.borderColor="rgba(125,111,208,.4)"}
       onMouseLeave={e=>(e.currentTarget as HTMLDivElement).style.borderColor="var(--border)"}>
       {/* Preview */}
-      <div style={{height:170,background:`linear-gradient(135deg,rgba(139,92,246,.12) 0%,var(--bg3) 100%)`,
+      <div style={{height:170,background:`linear-gradient(135deg,rgba(125,111,208,.1) 0%,var(--bg3) 100%)`,
         display:"flex",alignItems:"center",justifyContent:"center",
         borderBottom:"1px solid var(--border)",position:"relative"}}>
         <div style={{fontSize:"2.8rem",opacity:.75}}>{p.icon}</div>
         <div style={{position:"absolute",top:"1rem",left:"1rem",
           padding:".22rem .65rem",borderRadius:4,
-          background:"rgba(139,92,246,.15)",border:"1px solid rgba(139,92,246,.3)",
+          background:"rgba(125,111,208,.12)",border:"1px solid rgba(125,111,208,.25)",
           fontSize:".63rem",letterSpacing:".1em",textTransform:"uppercase",
-          color:"var(--p3)",fontWeight:600}}>{p.cat}</div>
+          color:"var(--p2)",fontWeight:600}}>{p.cat}</div>
         <div style={{position:"absolute",top:"1rem",right:"1rem",
           padding:".22rem .65rem",borderRadius:4,
-          background:"rgba(139,92,246,.2)",border:"1px solid rgba(139,92,246,.35)",
-          fontSize:".7rem",color:"var(--p4)",fontWeight:700}}>{p.result}</div>
+          background:"rgba(125,111,208,.16)",border:"1px solid rgba(125,111,208,.3)",
+          fontSize:".7rem",color:"var(--p3)",fontWeight:700}}>{p.result}</div>
       </div>
       <div style={{padding:"1.3rem"}}>
         <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:"1.05rem",fontWeight:700,
@@ -889,7 +889,7 @@ const PortfolioCard = ({ p, idx }: { p:typeof PORTFOLIO[0]; idx:number }) => {
         <div style={{display:"flex",gap:".4rem",flexWrap:"wrap"}}>
           {p.tags.map(tg=>(
             <span key={tg} style={{padding:".18rem .55rem",borderRadius:3,
-              background:"rgba(139,92,246,.08)",border:"1px solid rgba(139,92,246,.2)",
+              background:"rgba(125,111,208,.08)",border:"1px solid rgba(125,111,208,.15)",
               fontSize:".62rem",letterSpacing:".07em",textTransform:"uppercase",
               color:"var(--fg2)",fontWeight:500}}>{tg}</span>
           ))}
@@ -1003,13 +1003,13 @@ const ClientCard = ({ c, idx }: { c:typeof CLIENTS[0]; idx:number }) => {
       transition={{duration:.6,delay:idx*.08,ease:[.22,1,.36,1]}}
       style={{border:"1px solid var(--border)",borderRadius:10,background:"var(--card)",
         overflow:"hidden",transition:"border-color .3s"}}
-      onMouseEnter={e=>(e.currentTarget as HTMLDivElement).style.borderColor="rgba(139,92,246,.45)"}
+      onMouseEnter={e=>(e.currentTarget as HTMLDivElement).style.borderColor="rgba(125,111,208,.35)"}
       onMouseLeave={e=>(e.currentTarget as HTMLDivElement).style.borderColor="var(--border)"}>
       {/* Purple accent top bar */}
       <div style={{height:3,background:"linear-gradient(90deg,var(--p1),var(--p3),transparent)"}}/>
       <div style={{padding:"1.5rem 1.5rem 1rem",display:"flex",gap:"1rem",alignItems:"flex-start"}}>
         <div style={{width:46,height:46,borderRadius:10,flexShrink:0,
-          background:"linear-gradient(135deg,rgba(139,92,246,.2),rgba(139,92,246,.05))",
+          background:"linear-gradient(135deg,rgba(125,111,208,.15),rgba(125,111,208,.05))",
           border:"1px solid var(--border)",display:"flex",alignItems:"center",
           justifyContent:"center",fontSize:"1.3rem"}}>{c.icon}</div>
         <div style={{flex:1}}>
@@ -1017,11 +1017,11 @@ const ClientCard = ({ c, idx }: { c:typeof CLIENTS[0]; idx:number }) => {
             <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:"1rem",fontWeight:700,
               color:"var(--fg)"}}>{c.name}</h3>
             <span style={{padding:".16rem .5rem",borderRadius:3,
-              background:"rgba(139,92,246,.12)",border:"1px solid rgba(139,92,246,.25)",
+              background:"rgba(125,111,208,.1)",border:"1px solid rgba(125,111,208,.2)",
               fontSize:".61rem",letterSpacing:".1em",textTransform:"uppercase",
-              color:"var(--p3)",fontWeight:600}}>{c.type}</span>
+              color:"var(--p2)",fontWeight:600}}>{c.type}</span>
           </div>
-          <p style={{fontSize:".76rem",color:"var(--p3)",fontWeight:500}}>{c.role}</p>
+          <p style={{fontSize:".76rem",color:"var(--p2)",fontWeight:500}}>{c.role}</p>
         </div>
       </div>
 
@@ -1046,7 +1046,7 @@ const ClientCard = ({ c, idx }: { c:typeof CLIENTS[0]; idx:number }) => {
         </div>
         <button onClick={()=>setOpen(o=>!o)} style={{
           fontSize:".7rem",letterSpacing:".1em",textTransform:"uppercase",
-          color:"var(--p3)",background:"none",border:"none",cursor:"pointer",
+          color:"var(--p2)",background:"none",border:"none",cursor:"pointer",
           fontWeight:600,display:"flex",alignItems:"center",gap:".3rem",padding:0}}>
           {open?"Hide ↑":"Details ↓"}
         </button>
@@ -1121,7 +1121,7 @@ const CTA = () => {
         .cta-in{padding:9rem 3rem 7rem;text-align:center;
           position:relative;overflow:hidden;max-width:800px;margin:0 auto;}
         .cta-glow{position:absolute;width:600px;height:600px;border-radius:50%;
-          background:radial-gradient(circle,rgba(139,92,246,.1),transparent 65%);
+          background:radial-gradient(circle,rgba(125,111,208,.08),transparent 65%);
           top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
         .cta-h2{font-family:'Playfair Display',serif;
           font-size:clamp(2.4rem,6vw,5rem);font-weight:900;
@@ -1143,9 +1143,9 @@ const CTA = () => {
           background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;
           border:none;border-radius:6px;cursor:pointer;
           font-size:.88rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
-          box-shadow:0 4px 24px rgba(139,92,246,.35);
+          box-shadow:0 4px 24px rgba(125,111,208,.25);
           transition:transform .2s,box-shadow .2s;}
-        .cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(139,92,246,.5);}
+        .cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(125,111,208,.4);}
         .footer{border-top:1px solid var(--border);padding:2.5rem 3.5rem;
           display:flex;align-items:center;justify-content:space-between;
           flex-wrap:wrap;gap:1rem;max-width:1100px;margin:0 auto;}
@@ -1165,7 +1165,7 @@ const CTA = () => {
         <div className="cta-in" ref={ref}>
           <div className="cta-glow"/>
           <motion.p style={{fontSize:".68rem",letterSpacing:".28em",textTransform:"uppercase",
-            color:"var(--p3)",fontWeight:500,marginBottom:"1.3rem"}}
+            color:"var(--p2)",fontWeight:500,marginBottom:"1.3rem"}}
             initial={{opacity:0}} animate={inView?{opacity:1}:{}}>Ready to Convert</motion.p>
           <motion.h2 className="cta-h2"
             initial={{opacity:0,y:24}} animate={inView?{opacity:1,y:0}:{}}
