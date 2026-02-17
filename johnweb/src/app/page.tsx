@@ -212,7 +212,7 @@ const CarouselShell = ({
 };
 
 /* ══════════════════════════════════════════════════════ NAVBAR */
-const NAV_LINKS = ["About","Services","Portfolio","Clients","Contact"];
+const NAV_LINKS = ["Home", "About", "Services", "Portfolio"];
 
 const Navbar = ({ t, toggle }: { t: Theme; toggle: () => void }) => {
   const [scrolled, setScrolled] = useState(false);
@@ -228,8 +228,18 @@ const Navbar = ({ t, toggle }: { t: Theme; toggle: () => void }) => {
 
   const go = (l: string) => {
     setOpen(false); setActive(l);
-    if (l === "Home") { window.scrollTo({ top:0, behavior:"smooth" }); return; }
-    document.getElementById(l.toLowerCase())?.scrollIntoView({ behavior:"smooth" });
+    if (l === "Home") { 
+      window.scrollTo({ top:0, behavior:"smooth" }); 
+      return; 
+    }
+    const element = document.getElementById(l.toLowerCase());
+    if (element) {
+      element.scrollIntoView({ behavior:"smooth" });
+    }
+  };
+
+  const handleContactClick = () => {
+    window.open("https://wa.link/8qk7mn", "_blank");
   };
 
   return (
@@ -285,7 +295,7 @@ const Navbar = ({ t, toggle }: { t: Theme; toggle: () => void }) => {
           <span className="nav-pulse"/> John <em>Adegboye</em>
         </button>
         <ul className="nav-links">
-          {["Home",...NAV_LINKS].map(l => (
+          {NAV_LINKS.map(l => (
             <li key={l}><button className={`nav-btn ${active===l?"act":""}`} onClick={()=>go(l)}>{l}</button></li>
           ))}
         </ul>
@@ -293,7 +303,7 @@ const Navbar = ({ t, toggle }: { t: Theme; toggle: () => void }) => {
           <button className="theme-tog" onClick={toggle} aria-label="Toggle theme">
             <span className="theme-knob">{d?"🌙":"☀️"}</span>
           </button>
-          <button className="nav-cta">Work With Me</button>
+          <button className="nav-cta" onClick={handleContactClick}>Work With Me</button>
           <button className="ham" onClick={()=>setOpen(!open)}>
             <span className="ham-bar" style={{transform:open?"rotate(45deg) translateY(6.5px)":"none"}}/>
             <span className="ham-bar" style={{opacity:open?0:1}}/>
@@ -307,9 +317,10 @@ const Navbar = ({ t, toggle }: { t: Theme; toggle: () => void }) => {
           <motion.div className="mob-nav"
             initial={{opacity:0,y:-12}} animate={{opacity:1,y:0}}
             exit={{opacity:0,y:-12}} transition={{duration:.2}}>
-            {["Home",...NAV_LINKS].map(l => (
+            {NAV_LINKS.map(l => (
               <button key={l} className="mob-lnk" onClick={()=>go(l)}>{l}</button>
             ))}
+            <button className="mob-lnk" onClick={handleContactClick}>Contact</button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -341,6 +352,14 @@ const Hero = ({ t }: { t: Theme }) => {
   const role = useTypewriter(ROLES);
   const d = t === "dark";
   const e = [.22,1,.36,1] as any;
+
+  const handleSeeWorkClick = () => {
+    window.open("https://docs.google.com/document/d/1LNteSQdCO3uHBkmkBZG4Qui0aJvsuivDuIce11vDg5Y/edit?tab=t.0#heading=h.58wa1kvlp7yq", "_blank");
+  };
+
+  const handleContactClick = () => {
+    window.open("https://wa.link/8qk7mn", "_blank");
+  };
 
   return (
     <>
@@ -477,8 +496,8 @@ const Hero = ({ t }: { t: Theme }) => {
             </motion.div>
             <motion.div className="h-btns" initial={{opacity:0,y:18}} animate={{opacity:1,y:0}}
               transition={{duration:.65,delay:1.1,ease:e}}>
-              <button className="btn-vio">See My Work ↗</button>
-              <button className="btn-ghost">Let's Talk</button>
+              <button className="btn-vio" onClick={handleSeeWorkClick}>See My Work ↗</button>
+              <button className="btn-ghost" onClick={handleContactClick}>Let's Talk</button>
             </motion.div>
           </div>
 
@@ -693,6 +712,11 @@ const FlipCard = ({ s, delay=0 }: { s:typeof SERVICES[0]; delay?:number }) => {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once:true, margin:"-50px" });
 
+  const handleViewClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    window.open("https://docs.google.com/document/d/1LNteSQdCO3uHBkmkBZG4Qui0aJvsuivDuIce11vDg5Y/edit?tab=t.0#heading=h.58wa1kvlp7yq", "_blank");
+  };
+
   return (
     <>
       <style>{`
@@ -734,6 +758,18 @@ const FlipCard = ({ s, delay=0 }: { s:typeof SERVICES[0]; delay?:number }) => {
         .fc-accent{position:absolute;top:0;left:0;right:0;height:2px;
           background:linear-gradient(90deg,var(--p1),var(--p3),transparent);
           border-radius:10px 10px 0 0;}
+        /* view button overlay for back face */
+        .fc-view-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5);
+          backdrop-filter:blur(8px);display:flex;align-items:center;
+          justify-content:center;opacity:0;transition:opacity .3s;
+          border-radius:10px;}
+        .fc-view-btn{padding:.8rem 2rem;background:linear-gradient(135deg,var(--p1),var(--p2));
+          border:none;border-radius:4px;color:#fff;font-weight:700;
+          letter-spacing:.07em;text-transform:uppercase;font-size:.85rem;
+          cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.3);
+          transform:scale(0.95);transition:transform .2s;}
+        .fc-view-btn:hover{transform:scale(1);}
+        .fc-face.back:hover .fc-view-overlay{opacity:1;}
       `}</style>
 
       <motion.div className="fc-wrap" ref={ref}
@@ -765,6 +801,12 @@ const FlipCard = ({ s, delay=0 }: { s:typeof SERVICES[0]; delay?:number }) => {
             <h3 className="fc-title">{s.title}</h3>
             <p className="fc-body">{s.back}</p>
             <p className="fc-hint">↻ Hover away to flip back</p>
+            {/* Blurry overlay with view button */}
+            <div className="fc-view-overlay">
+              <button className="fc-view-btn" onClick={handleViewClick}>
+                View Work ↗
+              </button>
+            </div>
           </div>
         </div>
       </motion.div>
@@ -830,25 +872,27 @@ const Services = () => {
 };
 
 /* ══════════════════════════════════════════════════════ PORTFOLIO */
+const GAMMA_PORTFOLIO_LINK = "https://gamma.app/docs/John-Adegboye-Email-Designs-maijbq0d2ey17xp?mode=present#card-vets3tmnvfiv4jj";
+
 const PORTFOLIO = [
   { id:"p1", cat:"Email Design",    title:"Welcome Flow — Fashion Brand",
     desc:"3-email welcome series with 42% open rate and 18% CTR in the first 30 days.",
-    tags:["Welcome Flow","Fashion","Klaviyo"], result:"42% Open Rate", icon:"✉️" },
+    tags:["Welcome Flow","Fashion","Klaviyo"], result:"42% Open Rate", icon:"✉️", link:GAMMA_PORTFOLIO_LINK },
   { id:"p2", cat:"Ecommerce Copy",  title:"Cart Recovery Sequence",
     desc:"4-step abandoned cart flow with behavioural copy triggers. Recovered 28% of abandoned carts.",
-    tags:["Cart Recovery","Copy","A/B Tested"], result:"28% Recovery", icon:"🛒" },
+    tags:["Cart Recovery","Copy","A/B Tested"], result:"28% Recovery", icon:"🛒", link:GAMMA_PORTFOLIO_LINK },
   { id:"p3", cat:"Email Strategy",  title:"Cappuccino Commerce — Full Strategy",
     desc:"Led complete email strategy as lead strategist. Welcome, post-purchase, winback.",
-    tags:["Strategy","Agency","Full Funnel"], result:"Lead Strategist", icon:"☕" },
+    tags:["Strategy","Agency","Full Funnel"], result:"Lead Strategist", icon:"☕", link:GAMMA_PORTFOLIO_LINK },
   { id:"p4", cat:"Pop-Up Design",   title:"Exit-Intent Pop-Up Series",
     desc:"6 conversion-optimised pop-up forms across different niches. Avg 11% conv. rate.",
-    tags:["Pop-Up","Design","CRO"], result:"11% Conv. Rate", icon:"🪟" },
+    tags:["Pop-Up","Design","CRO"], result:"11% Conv. Rate", icon:"🪟", link:GAMMA_PORTFOLIO_LINK },
   { id:"p5", cat:"Email Templates", title:"Template Bank — 10 Designs",
     desc:"10 premium reusable templates: fashion, wellness, SaaS, coaching.",
-    tags:["Templates","Multi-niche","Reusable"], result:"10 Templates", icon:"📐" },
+    tags:["Templates","Multi-niche","Reusable"], result:"10 Templates", icon:"📐", link:GAMMA_PORTFOLIO_LINK },
   { id:"p6", cat:"Sales Copy",      title:"Launch Sequence — Info Product",
     desc:"7-email launch sequence for a digital product. Generated $14k in 5 days.",
-    tags:["Launch","Sales Copy","Info Product"], result:"$14k in 5 days", icon:"💰" },
+    tags:["Launch","Sales Copy","Info Product"], result:"$14k in 5 days", icon:"💰", link:GAMMA_PORTFOLIO_LINK },
 ];
 
 const PF_FILTERS = ["All","Email Design","Email Strategy","Ecommerce Copy","Pop-Up Design","Sales Copy","Email Templates"];
@@ -856,6 +900,11 @@ const PF_FILTERS = ["All","Email Design","Email Strategy","Ecommerce Copy","Pop-
 const PortfolioCard = ({ p, idx }: { p:typeof PORTFOLIO[0]; idx:number }) => {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once:true, margin:"-40px" });
+
+  const handleClick = () => {
+    window.open(p.link, "_blank");
+  };
+
   return (
     <motion.div ref={ref}
       initial={{opacity:0,y:28}} animate={inView?{opacity:1,y:0}:{}}
@@ -865,7 +914,8 @@ const PortfolioCard = ({ p, idx }: { p:typeof PORTFOLIO[0]; idx:number }) => {
         background:"var(--card)",backdropFilter:"blur(12px)",cursor:"pointer",
         transition:"border-color .3s"}}
       onMouseEnter={e=>(e.currentTarget as HTMLDivElement).style.borderColor="rgba(125,111,208,.4)"}
-      onMouseLeave={e=>(e.currentTarget as HTMLDivElement).style.borderColor="var(--border)"}>
+      onMouseLeave={e=>(e.currentTarget as HTMLDivElement).style.borderColor="var(--border)"}
+      onClick={handleClick}>
       {/* Preview */}
       <div style={{height:170,background:`linear-gradient(135deg,rgba(125,111,208,.1) 0%,var(--bg3) 100%)`,
         display:"flex",alignItems:"center",justifyContent:"center",
@@ -974,22 +1024,22 @@ const Portfolio = () => {
 const CLIENTS = [
   { name:"Cappuccino Commerce", role:"Lead Email Strategist", type:"Agency", icon:"☕",
     scope:"Set up the full email strategy and designed the welcome series for this email agency. Led strategy before any design or copy was written.",
-    result:"Full welcome flow with measurable lift in engagement" },
+    result:"Full welcome flow with measurable lift in engagement", link:GAMMA_PORTFOLIO_LINK },
   { name:"Ecommerce Fashion Client", role:"Email Designer & Copywriter", type:"Ecommerce", icon:"👗",
     scope:"Designed on-brand email sequences with conversion-focused copy. Ran feedback campaigns and A/B tests before writing a single word.",
-    result:"42% average open rate on welcome series" },
+    result:"42% average open rate on welcome series", link:GAMMA_PORTFOLIO_LINK },
   { name:"Info Product Creator", role:"Launch Copywriter", type:"Info Product", icon:"📚",
     scope:"Wrote the full 7-email launch sequence for a digital product. Research-first approach — understood audience belief barriers before writing word one.",
-    result:"$14,000 generated in 5 days" },
+    result:"$14,000 generated in 5 days", link:GAMMA_PORTFOLIO_LINK },
   { name:"Wellness Brand", role:"Email Strategist & Designer", type:"Wellness", icon:"🌿",
     scope:"Built the complete retention flow suite: post-purchase, winback, and VIP sequences. Designed all email templates with brand aesthetics.",
-    result:"28% cart recovery rate" },
+    result:"28% cart recovery rate", link:GAMMA_PORTFOLIO_LINK },
   { name:"One-Off Pop-Up Clients", role:"Pop-Up Form Designer", type:"CRO", icon:"🪟",
     scope:"Designed exit-intent and embedded pop-up forms for various clients across different niches. Each optimised for maximum conversion.",
-    result:"11% average conversion rate" },
+    result:"11% average conversion rate", link:GAMMA_PORTFOLIO_LINK },
   { name:"SaaS Client", role:"Onboarding Email Copywriter", type:"SaaS", icon:"💻",
     scope:"Wrote a 5-step onboarding sequence that guided new users to their 'aha moment' within the first 7 days.",
-    result:"35% improvement in feature adoption" },
+    result:"35% improvement in feature adoption", link:GAMMA_PORTFOLIO_LINK },
 ];
 
 const ClientCard = ({ c, idx }: { c:typeof CLIENTS[0]; idx:number }) => {
@@ -997,14 +1047,19 @@ const ClientCard = ({ c, idx }: { c:typeof CLIENTS[0]; idx:number }) => {
   const inView = useInView(ref, { once:true, margin:"-40px" });
   const [open, setOpen] = useState(false);
 
+  const handleCardClick = () => {
+    window.open(c.link, "_blank");
+  };
+
   return (
     <motion.div ref={ref}
       initial={{opacity:0,y:28}} animate={inView?{opacity:1,y:0}:{}}
       transition={{duration:.6,delay:idx*.08,ease:[.22,1,.36,1]}}
       style={{border:"1px solid var(--border)",borderRadius:10,background:"var(--card)",
-        overflow:"hidden",transition:"border-color .3s"}}
+        overflow:"hidden",transition:"border-color .3s",cursor:"pointer"}}
       onMouseEnter={e=>(e.currentTarget as HTMLDivElement).style.borderColor="rgba(125,111,208,.35)"}
-      onMouseLeave={e=>(e.currentTarget as HTMLDivElement).style.borderColor="var(--border)"}>
+      onMouseLeave={e=>(e.currentTarget as HTMLDivElement).style.borderColor="var(--border)"}
+      onClick={handleCardClick}>
       {/* Purple accent top bar */}
       <div style={{height:3,background:"linear-gradient(90deg,var(--p1),var(--p3),transparent)"}}/>
       <div style={{padding:"1.5rem 1.5rem 1rem",display:"flex",gap:"1rem",alignItems:"flex-start"}}>
@@ -1044,7 +1099,7 @@ const ClientCard = ({ c, idx }: { c:typeof CLIENTS[0]; idx:number }) => {
             background:"var(--p2)",boxShadow:"0 0 8px var(--p2)"}}/>
           <span style={{fontSize:".78rem",color:"var(--fg)",fontWeight:600}}>{c.result}</span>
         </div>
-        <button onClick={()=>setOpen(o=>!o)} style={{
+        <button onClick={(e) => { e.stopPropagation(); setOpen(o=>!o); }} style={{
           fontSize:".7rem",letterSpacing:".1em",textTransform:"uppercase",
           color:"var(--p2)",background:"none",border:"none",cursor:"pointer",
           fontWeight:600,display:"flex",alignItems:"center",gap:".3rem",padding:0}}>
@@ -1086,7 +1141,7 @@ const Clients = () => {
           <motion.p style={{fontSize:".9rem",color:"var(--fg2)",fontWeight:300,
             maxWidth:480,lineHeight:1.75,marginBottom:"3rem"}}
             initial={{opacity:0}} animate={inView?{opacity:1}:{}} transition={{delay:.2}}>
-            Real work. Real clients. Real results. Click "Details" to see full scope.
+            Real work. Real clients. Real results. Click anywhere to view portfolio or "Details" to see full scope.
           </motion.p>
 
           {isMob ? (
@@ -1113,6 +1168,15 @@ const CTA = () => {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once:true, margin:"-60px" });
   const e = [.22,1,.36,1] as any;
+
+  const handleContactClick = () => {
+    window.open("https://wa.link/8qk7mn", "_blank");
+  };
+
+  const handleEmailSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    window.open("https://wa.link/8qk7mn", "_blank");
+  };
 
   return (
     <>
@@ -1178,19 +1242,19 @@ const CTA = () => {
             If your brand is ready to stop leaving money in the inbox and start
             engineering real conversions — let's talk.
           </motion.p>
-          <motion.div className="cta-row"
+          <motion.form className="cta-row" onSubmit={handleEmailSubmit}
             initial={{opacity:0,y:18}} animate={inView?{opacity:1,y:0}:{}}
             transition={{duration:.65,delay:.3}}>
             <input className="cta-inp" type="email" placeholder="your@email.com"/>
-            <button className="cta-btn">Get in Touch</button>
-          </motion.div>
+            <button type="submit" className="cta-btn">Get in Touch</button>
+          </motion.form>
         </div>
         <footer>
           <div className="footer">
             <p className="f-copy">© 2025 John Adegboye. All rights reserved.</p>
             <div className="f-links">
               {["LinkedIn","Twitter / X","Email"].map(l=>(
-                <button key={l} className="f-lnk">{l}</button>
+                <button key={l} className="f-lnk" onClick={handleContactClick}>{l}</button>
               ))}
             </div>
           </div>
