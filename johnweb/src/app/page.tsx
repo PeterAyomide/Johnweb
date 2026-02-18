@@ -875,13 +875,36 @@ const Services = () => {
 const GAMMA_PORTFOLIO_LINK = "https://gamma.app/docs/John-Adegboye-Email-Designs-maijbq0d2ey17xp?mode=present#card-vets3tmnvfiv4jj";
 
 const PORTFOLIO = [
-  { id:"p1", cat:"Email Design",    title:"Welcome Flow — Fashion Brand",
-    desc:"3-email welcome series with 42% open rate and 18% CTR in the first 30 days.",
-    longDesc:"Designed a complete 3-email welcome series for a sustainable fashion brand. The strategy focused on brand storytelling in the first email, value demonstration in the second, and social proof in the third. Each email was A/B tested for subject lines and CTAs, resulting in industry-beating metrics.",
-    tags:["Welcome Flow","Fashion","Klaviyo"], result:"42% Open Rate", icon:"✉️", link:GAMMA_PORTFOLIO_LINK,
-    challenge:"The brand had a 15% open rate on their previous welcome series and wanted to improve engagement.",
-    solution:"Implemented a story-driven approach with personalized product recommendations based on browsing behavior.",
-    metrics:["42% open rate (+180% improvement)","18% CTR","23% conversion rate"] },
+  { id:"p1", cat:"Email Strategy & Copy", title:"Welcome Flow — Brandy Melville",
+    desc:"5-email objection-crushing welcome sequence that turned hesitant subscribers into buyers.",
+    longDesc:"John didn't just write emails; he figured out exactly why our customers were hesitating. He swapped our basic welcome series for a strategy that actually turned browsers into buyers. Seeing our engagement jump like it proved that John really understands how to drive conversions.",
+    tags:["Welcome Flow","Fashion","Klaviyo","Strategy"], result:"42% Open Rate", icon:"✉️", link:GAMMA_PORTFOLIO_LINK,
+    clientName:"Marketing Director, Brandy Melville",
+    clientQuote:"John didn't just write emails; he figured out exactly why our customers were hesitating. He swapped our basic welcome series for a strategy that actually turned browsers into buyers. Seeing our engagement jump like it did proves that John really understands how to drive conversions.",
+    rating:5,
+    challenge:"Brandy Melville had plenty of fans and a growing email list, but those subscribers weren't actually buying anything. People were signing up and opening the emails, but the generic 'welcome' messages didn't give them a real reason to take that first step. Potential sales were just sitting there, untouched.",
+    diagnosis:"John realized that people weren't bored—they were unsure. After looking at social media comments and customer service logs, he found five specific hang-ups:",
+    painPoints:[
+      "Value: Is the price worth it?",
+      "Quality: Will the clothes actually last?",
+      "Fit: The 'one-size' model made people nervous.",
+      "Returns: What happens if it doesn't work out?",
+      "Timing: 'I'll just buy it later' (and then forgetting)."
+    ],
+    solution:"John threw out the generic templates and built a 5-part flow that knocked down these barriers one by one:",
+    solutionSteps:[
+      "The Hook: A 20% VIP discount to settle the price debate immediately.",
+      "The Proof: A 'Behind the Seams' look at materials to prove the quality.",
+      "The Social Proof: Using real photos of customers to show how the 'one-size' items actually fit different people.",
+      "The Safety Net: Reassuring them with a clear 30-day return policy to remove the risk.",
+      "The Nudge: A final reminder with a countdown timer to get them to act now."
+    ],
+    results:[
+      "42% open rate (industry average: 25%)",
+      "28% click-through rate",
+      "23% conversion rate on welcome flow",
+      "$127k attributed revenue in first 30 days"
+    ] },
   { id:"p2", cat:"Ecommerce Copy",  title:"Cart Recovery Sequence",
     desc:"4-step abandoned cart flow with behavioural copy triggers. Recovered 28% of abandoned carts.",
     longDesc:"Created a 4-email abandoned cart sequence that combines urgency, social proof, and objection handling. Email 1: Gentle reminder with product benefits. Email 2: Customer reviews highlight. Email 3: Limited-time incentive. Email 4: 'Last chance' scarcity trigger.",
@@ -921,7 +944,7 @@ const PORTFOLIO = [
 
 const PF_FILTERS = ["All","Email Design","Email Strategy","Ecommerce Copy","Pop-Up Design","Sales Copy","Email Templates"];
 
-/* ── Portfolio Popup Component with Purple Theme ── */
+/* ── Portfolio Popup Component with Purple Theme and Enhanced Content ── */
 const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose: () => void }) => {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -949,6 +972,9 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
     window.open(p.link, "_blank");
     onClose();
   };
+
+  // Check if this is the Brandy Melville project (p1) to render enhanced content
+  const isBrandyMelville = p.id === "p1";
 
   return (
     <AnimatePresence>
@@ -988,7 +1014,7 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
                 background: 'var(--bg2)',
                 border: '1px solid var(--border)',
                 borderRadius: '20px',
-                maxWidth: '900px',
+                maxWidth: '1000px',
                 width: '100%',
                 maxHeight: isMobile ? 'calc(100vh - 2rem)' : 'calc(100vh - 4rem)',
                 overflow: 'auto',
@@ -1152,41 +1178,177 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
                         </div>
                       </div>
 
-                      {/* Challenge */}
-                      <div>
-                        <div style={{
-                          fontSize: '0.7rem',
-                          letterSpacing: '0.2em',
-                          textTransform: 'uppercase',
-                          color: 'var(--p2)',
-                          fontWeight: 600,
-                          marginBottom: '0.5rem'
-                        }}>Challenge</div>
-                        <p style={{
-                          fontSize: '0.95rem',
-                          lineHeight: 1.8,
-                          color: 'var(--fg2)',
-                          fontWeight: 300
-                        }}>{p.challenge}</p>
-                      </div>
+                      {/* Client Quote & Rating - Only for Brandy Melville */}
+                      {isBrandyMelville && (
+                        <>
+                          {/* 5-Star Rating */}
+                          <div style={{
+                            background: 'linear-gradient(135deg, rgba(125,111,208,0.1), rgba(125,111,208,0.05))',
+                            border: '1px solid var(--border)',
+                            borderRadius: '12px',
+                            padding: '1.5rem'
+                          }}>
+                            <div style={{
+                              display: 'flex',
+                              gap: '0.25rem',
+                              marginBottom: '1rem',
+                              justifyContent: 'center'
+                            }}>
+                              {[1,2,3,4,5].map(star => (
+                                <span key={star} style={{ fontSize: '1.5rem', color: '#FFD700' }}>★</span>
+                              ))}
+                            </div>
+                            <p style={{
+                              fontSize: '1rem',
+                              lineHeight: 1.8,
+                              color: 'var(--fg)',
+                              fontWeight: 500,
+                              fontStyle: 'italic',
+                              marginBottom: '1rem',
+                              textAlign: 'center'
+                            }}>
+                              "{p.clientQuote}"
+                            </p>
+                            <p style={{
+                              fontSize: '0.85rem',
+                              color: 'var(--p2)',
+                              fontWeight: 600,
+                              textAlign: 'center'
+                            }}>
+                              — {p.clientName}
+                            </p>
+                          </div>
 
-                      {/* Solution */}
-                      <div>
-                        <div style={{
-                          fontSize: '0.7rem',
-                          letterSpacing: '0.2em',
-                          textTransform: 'uppercase',
-                          color: 'var(--p2)',
-                          fontWeight: 600,
-                          marginBottom: '0.5rem'
-                        }}>Solution</div>
-                        <p style={{
-                          fontSize: '0.95rem',
-                          lineHeight: 1.8,
-                          color: 'var(--fg2)',
-                          fontWeight: 300
-                        }}>{p.solution}</p>
-                      </div>
+                          {/* The Problem */}
+                          <div>
+                            <div style={{
+                              fontSize: '0.7rem',
+                              letterSpacing: '0.2em',
+                              textTransform: 'uppercase',
+                              color: 'var(--p2)',
+                              fontWeight: 600,
+                              marginBottom: '0.5rem'
+                            }}>The Problem: The "Silent Drop-Off"</div>
+                            <p style={{
+                              fontSize: '0.95rem',
+                              lineHeight: 1.8,
+                              color: 'var(--fg2)',
+                              fontWeight: 300,
+                              marginBottom: '1rem'
+                            }}>{p.challenge}</p>
+                          </div>
+
+                          {/* Diagnosis */}
+                          <div>
+                            <div style={{
+                              fontSize: '0.7rem',
+                              letterSpacing: '0.2em',
+                              textTransform: 'uppercase',
+                              color: 'var(--p2)',
+                              fontWeight: 600,
+                              marginBottom: '0.5rem'
+                            }}>The Diagnosis: Five Real Reasons for Hesitation</div>
+                            <p style={{
+                              fontSize: '0.95rem',
+                              lineHeight: 1.8,
+                              color: 'var(--fg2)',
+                              fontWeight: 300,
+                              marginBottom: '0.75rem'
+                            }}>{p.diagnosis}</p>
+                            <ul style={{
+                              listStyle: 'none',
+                              padding: 0,
+                              margin: 0
+                            }}>
+                              {p.painPoints?.map((point, i) => (
+                                <li key={i} style={{
+                                  display: 'flex',
+                                  alignItems: 'flex-start',
+                                  gap: '0.5rem',
+                                  marginBottom: '0.5rem',
+                                  fontSize: '0.9rem',
+                                  color: 'var(--fg2)',
+                                  fontWeight: 300
+                                }}>
+                                  <span style={{ color: 'var(--p2)', fontSize: '1.2rem' }}>•</span>
+                                  {point}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          {/* Solution */}
+                          <div>
+                            <div style={{
+                              fontSize: '0.7rem',
+                              letterSpacing: '0.2em',
+                              textTransform: 'uppercase',
+                              color: 'var(--p2)',
+                              fontWeight: 600,
+                              marginBottom: '0.5rem'
+                            }}>The Solution: The "Objection-Crusher" Sequence</div>
+                            <p style={{
+                              fontSize: '0.95rem',
+                              lineHeight: 1.8,
+                              color: 'var(--fg2)',
+                              fontWeight: 300,
+                              marginBottom: '0.75rem'
+                            }}>{p.solution}</p>
+                            <ol style={{
+                              paddingLeft: '1.5rem',
+                              margin: 0
+                            }}>
+                              {p.solutionSteps?.map((step, i) => (
+                                <li key={i} style={{
+                                  marginBottom: '0.5rem',
+                                  fontSize: '0.9rem',
+                                  color: 'var(--fg2)',
+                                  fontWeight: 300
+                                }}>{step}</li>
+                              ))}
+                            </ol>
+                          </div>
+                        </>
+                      )}
+
+                      {/* Regular Challenge & Solution for other projects */}
+                      {!isBrandyMelville && (
+                        <>
+                          <div>
+                            <div style={{
+                              fontSize: '0.7rem',
+                              letterSpacing: '0.2em',
+                              textTransform: 'uppercase',
+                              color: 'var(--p2)',
+                              fontWeight: 600,
+                              marginBottom: '0.5rem'
+                            }}>Challenge</div>
+                            <p style={{
+                              fontSize: '0.95rem',
+                              lineHeight: 1.8,
+                              color: 'var(--fg2)',
+                              fontWeight: 300
+                            }}>{p.challenge}</p>
+                          </div>
+
+                          <div>
+                            <div style={{
+                              fontSize: '0.7rem',
+                              letterSpacing: '0.2em',
+                              textTransform: 'uppercase',
+                              color: 'var(--p2)',
+                              fontWeight: 600,
+                              marginBottom: '0.5rem'
+                            }}>Solution</div>
+                            <p style={{
+                              fontSize: '0.95rem',
+                              lineHeight: 1.8,
+                              color: 'var(--fg2)',
+                              fontWeight: 300
+                            }}>{p.solution}</p>
+                          </div>
+                        </>
+                      )}
 
                       {/* Metrics */}
                       <div style={{
@@ -1203,8 +1365,8 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
                           color: 'var(--p2)',
                           fontWeight: 600,
                           marginBottom: '1rem'
-                        }}>Key Results</div>
-                        {p.metrics.map((metric, i) => (
+                        }}>{isBrandyMelville ? "The Results" : "Key Results"}</div>
+                        {(isBrandyMelville ? p.results : p.metrics)?.map((metric, i) => (
                           <motion.div
                             key={i}
                             initial={{ x: -20, opacity: 0 }}
@@ -1263,6 +1425,7 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
                     }}>
                       {/* Left Column */}
                       <div>
+                        {/* Overview */}
                         <div style={{ marginBottom: '1.5rem' }}>
                           <div style={{
                             fontSize: '0.7rem',
@@ -1280,6 +1443,45 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
                           }}>{p.longDesc}</p>
                         </div>
 
+                        {/* Client Quote & Rating - Only for Brandy Melville */}
+                        {isBrandyMelville && (
+                          <div style={{
+                            background: 'linear-gradient(135deg, rgba(125,111,208,0.1), rgba(125,111,208,0.05))',
+                            border: '1px solid var(--border)',
+                            borderRadius: '12px',
+                            padding: '1.5rem',
+                            marginBottom: '1.5rem'
+                          }}>
+                            <div style={{
+                              display: 'flex',
+                              gap: '0.25rem',
+                              marginBottom: '1rem'
+                            }}>
+                              {[1,2,3,4,5].map(star => (
+                                <span key={star} style={{ fontSize: '1.5rem', color: '#FFD700' }}>★</span>
+                              ))}
+                            </div>
+                            <p style={{
+                              fontSize: '1rem',
+                              lineHeight: 1.8,
+                              color: 'var(--fg)',
+                              fontWeight: 500,
+                              fontStyle: 'italic',
+                              marginBottom: '1rem'
+                            }}>
+                              "{p.clientQuote}"
+                            </p>
+                            <p style={{
+                              fontSize: '0.85rem',
+                              color: 'var(--p2)',
+                              fontWeight: 600
+                            }}>
+                              — {p.clientName}
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Challenge/Problem */}
                         <div style={{ marginBottom: '1.5rem' }}>
                           <div style={{
                             fontSize: '0.7rem',
@@ -1288,15 +1490,61 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
                             color: 'var(--p2)',
                             fontWeight: 600,
                             marginBottom: '0.5rem'
-                          }}>Challenge</div>
+                          }}>
+                            {isBrandyMelville ? 'The Problem: The "Silent Drop-Off"' : 'Challenge'}
+                          </div>
                           <p style={{
                             fontSize: '0.95rem',
                             lineHeight: 1.8,
                             color: 'var(--fg2)',
-                            fontWeight: 300
-                          }}>{p.challenge}</p>
+                            fontWeight: 300,
+                            marginBottom: isBrandyMelville ? '1rem' : 0
+                          }}>{isBrandyMelville ? p.challenge : p.challenge}</p>
+                          
+                          {/* Diagnosis and Pain Points for Brandy Melville */}
+                          {isBrandyMelville && (
+                            <>
+                              <div style={{
+                                fontSize: '0.7rem',
+                                letterSpacing: '0.2em',
+                                textTransform: 'uppercase',
+                                color: 'var(--p2)',
+                                fontWeight: 600,
+                                marginBottom: '0.5rem',
+                                marginTop: '1rem'
+                              }}>The Diagnosis: Five Real Reasons for Hesitation</div>
+                              <p style={{
+                                fontSize: '0.95rem',
+                                lineHeight: 1.8,
+                                color: 'var(--fg2)',
+                                fontWeight: 300,
+                                marginBottom: '0.75rem'
+                              }}>{p.diagnosis}</p>
+                              <ul style={{
+                                listStyle: 'none',
+                                padding: 0,
+                                margin: 0
+                              }}>
+                                {p.painPoints?.map((point, i) => (
+                                  <li key={i} style={{
+                                    display: 'flex',
+                                    alignItems: 'flex-start',
+                                    gap: '0.5rem',
+                                    marginBottom: '0.5rem',
+                                    fontSize: '0.9rem',
+                                    color: 'var(--fg2)',
+                                    fontWeight: 300
+                                  }}>
+                                    <span style={{ color: 'var(--p2)', fontSize: '1.2rem' }}>•</span>
+                                    {point}
+                                  </li>
+                                ))}
+                              </ul>
+                            </>
+                          )}
                         </div>
 
+                        {/* Solution */}
                         <div>
                           <div style={{
                             fontSize: '0.7rem',
@@ -1305,13 +1553,33 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
                             color: 'var(--p2)',
                             fontWeight: 600,
                             marginBottom: '0.5rem'
-                          }}>Solution</div>
+                          }}>
+                            {isBrandyMelville ? 'The Solution: The "Objection-Crusher" Sequence' : 'Solution'}
+                          </div>
                           <p style={{
                             fontSize: '0.95rem',
                             lineHeight: 1.8,
                             color: 'var(--fg2)',
-                            fontWeight: 300
-                          }}>{p.solution}</p>
+                            fontWeight: 300,
+                            marginBottom: isBrandyMelville ? '0.75rem' : 0
+                          }}>{isBrandyMelville ? p.solution : p.solution}</p>
+                          
+                          {/* Solution Steps for Brandy Melville */}
+                          {isBrandyMelville && (
+                            <ol style={{
+                              paddingLeft: '1.5rem',
+                              margin: 0
+                            }}>
+                              {p.solutionSteps?.map((step, i) => (
+                                <li key={i} style={{
+                                  marginBottom: '0.5rem',
+                                  fontSize: '0.9rem',
+                                  color: 'var(--fg2)',
+                                  fontWeight: 300
+                                }}>{step}</li>
+                              ))}
+                            </ol>
+                          )}
                         </div>
                       </div>
 
@@ -1375,8 +1643,8 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
                             color: 'var(--p2)',
                             fontWeight: 600,
                             marginBottom: '1rem'
-                          }}>Key Results</div>
-                          {p.metrics.map((metric, i) => (
+                          }}>{isBrandyMelville ? "The Results" : "Key Results"}</div>
+                          {(isBrandyMelville ? p.results : p.metrics)?.map((metric, i) => (
                             <motion.div
                               key={i}
                               initial={{ x: -20, opacity: 0 }}
