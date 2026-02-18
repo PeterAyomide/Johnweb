@@ -871,39 +871,650 @@ const Services = () => {
   );
 };
 
-/* ══════════════════════════════════════════════════════ PORTFOLIO */
+/* ══════════════════════════════════════════════════════ PORTFOLIO WITH POPUP */
 const GAMMA_PORTFOLIO_LINK = "https://gamma.app/docs/John-Adegboye-Email-Designs-maijbq0d2ey17xp?mode=present#card-vets3tmnvfiv4jj";
 
 const PORTFOLIO = [
   { id:"p1", cat:"Email Design",    title:"Welcome Flow — Fashion Brand",
     desc:"3-email welcome series with 42% open rate and 18% CTR in the first 30 days.",
-    tags:["Welcome Flow","Fashion","Klaviyo"], result:"42% Open Rate", icon:"✉️", link:GAMMA_PORTFOLIO_LINK },
+    longDesc:"Designed a complete 3-email welcome series for a sustainable fashion brand. The strategy focused on brand storytelling in the first email, value demonstration in the second, and social proof in the third. Each email was A/B tested for subject lines and CTAs, resulting in industry-beating metrics.",
+    tags:["Welcome Flow","Fashion","Klaviyo"], result:"42% Open Rate", icon:"✉️", link:GAMMA_PORTFOLIO_LINK,
+    challenge:"The brand had a 15% open rate on their previous welcome series and wanted to improve engagement.",
+    solution:"Implemented a story-driven approach with personalized product recommendations based on browsing behavior.",
+    metrics:["42% open rate (+180% improvement)","18% CTR","23% conversion rate"] },
   { id:"p2", cat:"Ecommerce Copy",  title:"Cart Recovery Sequence",
     desc:"4-step abandoned cart flow with behavioural copy triggers. Recovered 28% of abandoned carts.",
-    tags:["Cart Recovery","Copy","A/B Tested"], result:"28% Recovery", icon:"🛒", link:GAMMA_PORTFOLIO_LINK },
+    longDesc:"Created a 4-email abandoned cart sequence that combines urgency, social proof, and objection handling. Email 1: Gentle reminder with product benefits. Email 2: Customer reviews highlight. Email 3: Limited-time incentive. Email 4: 'Last chance' scarcity trigger.",
+    tags:["Cart Recovery","Copy","A/B Tested"], result:"28% Recovery", icon:"🛒", link:GAMMA_PORTFOLIO_LINK,
+    challenge:"Client was losing $15k/month to abandoned carts with a 12% recovery rate.",
+    solution:"Behavioral psychology triggers timed at 1h, 6h, 24h, and 48h after abandonment.",
+    metrics:["28% cart recovery rate","134% increase in recovery","$22k recovered in first month"] },
   { id:"p3", cat:"Email Strategy",  title:"Cappuccino Commerce — Full Strategy",
     desc:"Led complete email strategy as lead strategist. Welcome, post-purchase, winback.",
-    tags:["Strategy","Agency","Full Funnel"], result:"Lead Strategist", icon:"☕", link:GAMMA_PORTFOLIO_LINK },
+    longDesc:"As lead email strategist, I architected the complete email marketing infrastructure including: welcome flow (5 emails), post-purchase sequence (3 emails), winback campaign (4 emails), and VIP loyalty program. Implemented Klaviyo flows with advanced segmentation.",
+    tags:["Strategy","Agency","Full Funnel"], result:"Lead Strategist", icon:"☕", link:GAMMA_PORTFOLIO_LINK,
+    challenge:"Agency needed a scalable email strategy framework for multiple ecommerce clients.",
+    solution:"Built modular flow templates with customization layers for different brand verticals.",
+    metrics:["38% avg open rate across all clients","$2.1M revenue attributed to email","45min flow setup time"] },
   { id:"p4", cat:"Pop-Up Design",   title:"Exit-Intent Pop-Up Series",
     desc:"6 conversion-optimised pop-up forms across different niches. Avg 11% conv. rate.",
-    tags:["Pop-Up","Design","CRO"], result:"11% Conv. Rate", icon:"🪟", link:GAMMA_PORTFOLIO_LINK },
+    longDesc:"Designed and optimized 6 exit-intent pop-ups for clients in fashion, wellness, SaaS, and ecommerce. Each pop-up features: attention-grabbing headlines, benefit-focused copy, friction-reducing form fields, and mobile-responsive layouts. A/B tested timing, offers, and designs.",
+    tags:["Pop-Up","Design","CRO"], result:"11% Conv. Rate", icon:"🪟", link:GAMMA_PORTFOLIO_LINK,
+    challenge:"Generic pop-ups were getting ignored with <3% conversion rates.",
+    solution:"Contextual pop-ups with behavior-triggered offers and minimalist design.",
+    metrics:["11% avg conversion rate","267% improvement","2.8s avg time to convert"] },
   { id:"p5", cat:"Email Templates", title:"Template Bank — 10 Designs",
     desc:"10 premium reusable templates: fashion, wellness, SaaS, coaching.",
-    tags:["Templates","Multi-niche","Reusable"], result:"10 Templates", icon:"📐", link:GAMMA_PORTFOLIO_LINK },
+    longDesc:"A comprehensive library of 10 email templates designed for speed and conversion. Each template includes: mobile-optimized layout, dark/light mode compatibility, accessible typography, strategic white space, and modular content blocks that can be mixed and matched.",
+    tags:["Templates","Multi-niche","Reusable"], result:"10 Templates", icon:"📐", link:GAMMA_PORTFOLIO_LINK,
+    challenge:"Clients needed professional emails fast without starting from scratch each time.",
+    solution:"Created a template system with 10 core designs that can be branded in under 15 minutes.",
+    metrics:["80% reduction in design time","Used by 23+ clients","98% open rate consistency"] },
   { id:"p6", cat:"Sales Copy",      title:"Launch Sequence — Info Product",
     desc:"7-email launch sequence for a digital product. Generated $14k in 5 days.",
-    tags:["Launch","Sales Copy","Info Product"], result:"$14k in 5 days", icon:"💰", link:GAMMA_PORTFOLIO_LINK },
+    longDesc:"A 7-email storytelling sequence for a high-ticket info product launch. The narrative arc: Problem aggravation → Hope → Solution introduction → Social proof → Objection handling → Scarcity → Close. Each email builds emotional tension while providing value, ending with a natural next step.",
+    tags:["Launch","Sales Copy","Info Product"], result:"$14k in 5 days", icon:"💰", link:GAMMA_PORTFOLIO_LINK,
+    challenge:"Creator's previous launches averaged $3k with standard 'buy now' emails.",
+    solution:"Story-driven sequence that built anticipation and overcame objections before they arose.",
+    metrics:["$14,203 in 5 days","373% increase","4.2:1 ROAS"] },
 ];
 
 const PF_FILTERS = ["All","Email Design","Email Strategy","Ecommerce Copy","Pop-Up Design","Sales Copy","Email Templates"];
 
-const PortfolioCard = ({ p, idx }: { p:typeof PORTFOLIO[0]; idx:number }) => {
+/* ── Portfolio Popup Component with Purple Theme ── */
+const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose: () => void }) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (p) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [p]);
+
+  if (!p) return null;
+
+  const handleViewFull = () => {
+    window.open(p.link, "_blank");
+    onClose();
+  };
+
+  return (
+    <AnimatePresence>
+      {p && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0,0,0,0.8)',
+              backdropFilter: 'blur(12px)',
+              zIndex: 1000,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: isMobile ? '1rem' : '2rem'
+            }}
+            onClick={onClose}
+          >
+            {/* Popup Content */}
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{
+                type: "spring",
+                damping: 25,
+                stiffness: 300,
+                duration: 0.3
+              }}
+              style={{
+                background: 'var(--bg2)',
+                border: '1px solid var(--border)',
+                borderRadius: '20px',
+                maxWidth: '900px',
+                width: '100%',
+                maxHeight: isMobile ? 'calc(100vh - 2rem)' : 'calc(100vh - 4rem)',
+                overflow: 'auto',
+                position: 'relative',
+                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={onClose}
+                style={{
+                  position: 'absolute',
+                  top: '1rem',
+                  right: '1rem',
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '50%',
+                  border: '1px solid var(--border)',
+                  background: 'var(--card)',
+                  color: 'var(--fg)',
+                  fontSize: '1.2rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  zIndex: 10,
+                  transition: 'all 0.2s',
+                  backdropFilter: 'blur(8px)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'var(--p2)';
+                  e.currentTarget.style.color = '#fff';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'var(--card)';
+                  e.currentTarget.style.color = 'var(--fg)';
+                }}
+              >
+                ✕
+              </button>
+
+              {/* Header with purple gradient */}
+              <div style={{
+                height: '200px',
+                background: `linear-gradient(135deg, var(--p1) 0%, var(--p2) 50%, var(--p3) 100%)`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative',
+                overflow: 'hidden'
+              }}>
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'radial-gradient(circle at 30% 50%, rgba(255,255,255,0.15) 0%, transparent 60%)',
+                }} />
+                <div style={{
+                  fontSize: '5rem',
+                  opacity: 0.4,
+                  transform: 'rotate(-5deg)',
+                  filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.3))'
+                }}>{p.icon}</div>
+                <div style={{
+                  position: 'absolute',
+                  bottom: '1.5rem',
+                  left: '2rem',
+                  background: 'rgba(125,111,208,0.25)',
+                  backdropFilter: 'blur(10px)',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '30px',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  fontSize: '0.85rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.1em',
+                  color: '#fff'
+                }}>
+                  {p.cat}
+                </div>
+              </div>
+
+              {/* Content */}
+              <div style={{ padding: '2rem' }}>
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.1 }}
+                >
+                  <h2 style={{
+                    fontFamily: "'Playfair Display', serif",
+                    fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+                    fontWeight: 900,
+                    color: 'var(--fg)',
+                    marginBottom: '1.5rem',
+                    lineHeight: 1.2
+                  }}>
+                    {p.title}
+                  </h2>
+
+                  {/* Mobile Layout */}
+                  {isMobile ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                      {/* Overview */}
+                      <div>
+                        <div style={{
+                          fontSize: '0.7rem',
+                          letterSpacing: '0.2em',
+                          textTransform: 'uppercase',
+                          color: 'var(--p2)',
+                          fontWeight: 600,
+                          marginBottom: '0.5rem'
+                        }}>Overview</div>
+                        <p style={{
+                          fontSize: '0.95rem',
+                          lineHeight: 1.8,
+                          color: 'var(--fg2)',
+                          fontWeight: 300
+                        }}>{p.longDesc}</p>
+                      </div>
+
+                      {/* Image Placeholder - immediately after overview on mobile with purple gradient */}
+                      <div style={{
+                        height: '180px',
+                        borderRadius: '12px',
+                        background: 'linear-gradient(135deg, var(--p1), var(--p2), var(--p3))',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
+                      }}>
+                        <div style={{
+                          position: 'absolute',
+                          inset: 0,
+                          background: 'radial-gradient(circle at 70% 30%, rgba(255,255,255,0.15) 0%, transparent 60%)',
+                        }} />
+                        <div style={{
+                          fontSize: '4rem',
+                          opacity: 0.3,
+                          transform: 'rotate(5deg)',
+                        }}>🖼️</div>
+                        <div style={{
+                          position: 'absolute',
+                          bottom: '1rem',
+                          left: '1rem',
+                          right: '1rem',
+                          textAlign: 'center',
+                          fontSize: '0.8rem',
+                          color: 'rgba(255,255,255,0.7)',
+                          fontWeight: 500,
+                          letterSpacing: '0.1em',
+                          textTransform: 'uppercase',
+                          background: 'rgba(0,0,0,0.3)',
+                          padding: '0.5rem',
+                          borderRadius: '30px',
+                          backdropFilter: 'blur(5px)'
+                        }}>
+                          Project Preview
+                        </div>
+                      </div>
+
+                      {/* Challenge */}
+                      <div>
+                        <div style={{
+                          fontSize: '0.7rem',
+                          letterSpacing: '0.2em',
+                          textTransform: 'uppercase',
+                          color: 'var(--p2)',
+                          fontWeight: 600,
+                          marginBottom: '0.5rem'
+                        }}>Challenge</div>
+                        <p style={{
+                          fontSize: '0.95rem',
+                          lineHeight: 1.8,
+                          color: 'var(--fg2)',
+                          fontWeight: 300
+                        }}>{p.challenge}</p>
+                      </div>
+
+                      {/* Solution */}
+                      <div>
+                        <div style={{
+                          fontSize: '0.7rem',
+                          letterSpacing: '0.2em',
+                          textTransform: 'uppercase',
+                          color: 'var(--p2)',
+                          fontWeight: 600,
+                          marginBottom: '0.5rem'
+                        }}>Solution</div>
+                        <p style={{
+                          fontSize: '0.95rem',
+                          lineHeight: 1.8,
+                          color: 'var(--fg2)',
+                          fontWeight: 300
+                        }}>{p.solution}</p>
+                      </div>
+
+                      {/* Metrics */}
+                      <div style={{
+                        background: 'var(--card)',
+                        border: '1px solid var(--border)',
+                        borderRadius: '12px',
+                        padding: '1.5rem',
+                        marginTop: '0.5rem'
+                      }}>
+                        <div style={{
+                          fontSize: '0.7rem',
+                          letterSpacing: '0.2em',
+                          textTransform: 'uppercase',
+                          color: 'var(--p2)',
+                          fontWeight: 600,
+                          marginBottom: '1rem'
+                        }}>Key Results</div>
+                        {p.metrics.map((metric, i) => (
+                          <motion.div
+                            key={i}
+                            initial={{ x: -20, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={{ delay: 0.2 + i * 0.1 }}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '0.75rem',
+                              marginBottom: '1rem'
+                            }}
+                          >
+                            <div style={{
+                              width: '8px',
+                              height: '8px',
+                              borderRadius: '50%',
+                              background: 'var(--p2)',
+                              boxShadow: '0 0 12px var(--p2)'
+                            }} />
+                            <span style={{
+                              fontSize: '0.9rem',
+                              color: 'var(--fg)',
+                              fontWeight: 500
+                            }}>{metric}</span>
+                          </motion.div>
+                        ))}
+                      </div>
+
+                      {/* Tags */}
+                      <div style={{
+                        display: 'flex',
+                        gap: '0.5rem',
+                        flexWrap: 'wrap',
+                        marginTop: '0.5rem'
+                      }}>
+                        {p.tags.map(tag => (
+                          <span key={tag} style={{
+                            padding: '0.3rem 0.8rem',
+                            background: 'rgba(125,111,208,0.1)',
+                            borderRadius: '20px',
+                            fontSize: '0.7rem',
+                            fontWeight: 500,
+                            color: 'var(--p2)',
+                            border: '1px solid rgba(125,111,208,0.2)'
+                          }}>{tag}</span>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    /* Desktop Layout */
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr',
+                      gap: '2rem',
+                      marginBottom: '2rem'
+                    }}>
+                      {/* Left Column */}
+                      <div>
+                        <div style={{ marginBottom: '1.5rem' }}>
+                          <div style={{
+                            fontSize: '0.7rem',
+                            letterSpacing: '0.2em',
+                            textTransform: 'uppercase',
+                            color: 'var(--p2)',
+                            fontWeight: 600,
+                            marginBottom: '0.5rem'
+                          }}>Overview</div>
+                          <p style={{
+                            fontSize: '0.95rem',
+                            lineHeight: 1.8,
+                            color: 'var(--fg2)',
+                            fontWeight: 300
+                          }}>{p.longDesc}</p>
+                        </div>
+
+                        <div style={{ marginBottom: '1.5rem' }}>
+                          <div style={{
+                            fontSize: '0.7rem',
+                            letterSpacing: '0.2em',
+                            textTransform: 'uppercase',
+                            color: 'var(--p2)',
+                            fontWeight: 600,
+                            marginBottom: '0.5rem'
+                          }}>Challenge</div>
+                          <p style={{
+                            fontSize: '0.95rem',
+                            lineHeight: 1.8,
+                            color: 'var(--fg2)',
+                            fontWeight: 300
+                          }}>{p.challenge}</p>
+                        </div>
+
+                        <div>
+                          <div style={{
+                            fontSize: '0.7rem',
+                            letterSpacing: '0.2em',
+                            textTransform: 'uppercase',
+                            color: 'var(--p2)',
+                            fontWeight: 600,
+                            marginBottom: '0.5rem'
+                          }}>Solution</div>
+                          <p style={{
+                            fontSize: '0.95rem',
+                            lineHeight: 1.8,
+                            color: 'var(--fg2)',
+                            fontWeight: 300
+                          }}>{p.solution}</p>
+                        </div>
+                      </div>
+
+                      {/* Right Column */}
+                      <div>
+                        {/* Image Placeholder with purple gradient */}
+                        <div style={{
+                          height: '200px',
+                          borderRadius: '12px',
+                          background: 'linear-gradient(135deg, var(--p1), var(--p2), var(--p3))',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          position: 'relative',
+                          overflow: 'hidden',
+                          marginBottom: '1.5rem',
+                          border: '1px solid rgba(255,255,255,0.1)',
+                          boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
+                        }}>
+                          <div style={{
+                            position: 'absolute',
+                            inset: 0,
+                            background: 'radial-gradient(circle at 70% 30%, rgba(255,255,255,0.15) 0%, transparent 60%)',
+                          }} />
+                          <div style={{
+                            fontSize: '4rem',
+                            opacity: 0.3,
+                            transform: 'rotate(5deg)',
+                          }}>🖼️</div>
+                          <div style={{
+                            position: 'absolute',
+                            bottom: '1rem',
+                            left: '1rem',
+                            right: '1rem',
+                            textAlign: 'center',
+                            fontSize: '0.8rem',
+                            color: 'rgba(255,255,255,0.7)',
+                            fontWeight: 500,
+                            letterSpacing: '0.1em',
+                            textTransform: 'uppercase',
+                            background: 'rgba(0,0,0,0.3)',
+                            padding: '0.5rem',
+                            borderRadius: '30px',
+                            backdropFilter: 'blur(5px)'
+                          }}>
+                            Project Preview
+                          </div>
+                        </div>
+
+                        {/* Metrics */}
+                        <div style={{
+                          background: 'var(--card)',
+                          border: '1px solid var(--border)',
+                          borderRadius: '12px',
+                          padding: '1.5rem'
+                        }}>
+                          <div style={{
+                            fontSize: '0.7rem',
+                            letterSpacing: '0.2em',
+                            textTransform: 'uppercase',
+                            color: 'var(--p2)',
+                            fontWeight: 600,
+                            marginBottom: '1rem'
+                          }}>Key Results</div>
+                          {p.metrics.map((metric, i) => (
+                            <motion.div
+                              key={i}
+                              initial={{ x: -20, opacity: 0 }}
+                              animate={{ x: 0, opacity: 1 }}
+                              transition={{ delay: 0.2 + i * 0.1 }}
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.75rem',
+                                marginBottom: '1rem'
+                              }}
+                            >
+                              <div style={{
+                                width: '8px',
+                                height: '8px',
+                                borderRadius: '50%',
+                                background: 'var(--p2)',
+                                boxShadow: '0 0 12px var(--p2)'
+                              }} />
+                              <span style={{
+                                fontSize: '0.9rem',
+                                color: 'var(--fg)',
+                                fontWeight: 500
+                              }}>{metric}</span>
+                            </motion.div>
+                          ))}
+                          
+                          {/* Tags inside metrics card */}
+                          <div style={{
+                            display: 'flex',
+                            gap: '0.5rem',
+                            flexWrap: 'wrap',
+                            marginTop: '1rem',
+                            borderTop: '1px solid var(--border)',
+                            paddingTop: '1rem'
+                          }}>
+                            {p.tags.map(tag => (
+                              <span key={tag} style={{
+                                padding: '0.25rem 0.75rem',
+                                background: 'rgba(125,111,208,0.1)',
+                                borderRadius: '20px',
+                                fontSize: '0.7rem',
+                                fontWeight: 500,
+                                color: 'var(--p2)',
+                                border: '1px solid rgba(125,111,208,0.2)'
+                              }}>{tag}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Actions */}
+                  <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    style={{
+                      display: 'flex',
+                      gap: '1rem',
+                      justifyContent: isMobile ? 'stretch' : 'flex-end',
+                      marginTop: '2rem',
+                      borderTop: '1px solid var(--border)',
+                      paddingTop: '2rem',
+                      flexDirection: isMobile ? 'column' : 'row'
+                    }}
+                  >
+                    <button
+                      onClick={onClose}
+                      style={{
+                        padding: '0.85rem 2rem',
+                        borderRadius: '8px',
+                        border: '1.5px solid var(--border)',
+                        background: 'transparent',
+                        color: 'var(--fg2)',
+                        fontSize: '0.85rem',
+                        fontWeight: 600,
+                        letterSpacing: '0.07em',
+                        textTransform: 'uppercase',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        flex: isMobile ? 1 : 'auto'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = 'var(--p2)';
+                        e.currentTarget.style.color = 'var(--p2)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = 'var(--border)';
+                        e.currentTarget.style.color = 'var(--fg2)';
+                      }}
+                    >
+                      Close
+                    </button>
+                    <button
+                      onClick={handleViewFull}
+                      style={{
+                        padding: '0.85rem 2rem',
+                        borderRadius: '8px',
+                        border: 'none',
+                        background: 'linear-gradient(135deg, var(--p1), var(--p2))',
+                        color: '#fff',
+                        fontSize: '0.85rem',
+                        fontWeight: 600,
+                        letterSpacing: '0.07em',
+                        textTransform: 'uppercase',
+                        cursor: 'pointer',
+                        boxShadow: '0 4px 24px rgba(125,111,208,0.3)',
+                        transition: 'all 0.2s',
+                        flex: isMobile ? 1 : 'auto'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = '0 8px 32px rgba(125,111,208,0.4)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 4px 24px rgba(125,111,208,0.3)';
+                      }}
+                    >
+                      View Full Project ↗
+                    </button>
+                  </motion.div>
+                </motion.div>
+              </div>
+            </motion.div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+};
+
+/* ── Updated Portfolio Card with Popup ── */
+const PortfolioCard = ({ p, idx, onClick }: { p:typeof PORTFOLIO[0]; idx:number; onClick: () => void }) => {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once:true, margin:"-40px" });
-
-  const handleClick = () => {
-    window.open(p.link, "_blank");
-  };
 
   return (
     <motion.div ref={ref}
@@ -912,10 +1523,10 @@ const PortfolioCard = ({ p, idx }: { p:typeof PORTFOLIO[0]; idx:number }) => {
       whileHover={{y:-6,boxShadow:"0 16px 48px rgba(125,111,208,.15)"}}
       style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",
         background:"var(--card)",backdropFilter:"blur(12px)",cursor:"pointer",
-        transition:"border-color .3s"}}
+        transition:"all 0.3s"}}
       onMouseEnter={e=>(e.currentTarget as HTMLDivElement).style.borderColor="rgba(125,111,208,.4)"}
       onMouseLeave={e=>(e.currentTarget as HTMLDivElement).style.borderColor="var(--border)"}
-      onClick={handleClick}>
+      onClick={onClick}>
       {/* Preview */}
       <div style={{height:170,background:`linear-gradient(135deg,rgba(125,111,208,.1) 0%,var(--bg3) 100%)`,
         display:"flex",alignItems:"center",justifyContent:"center",
@@ -944,16 +1555,35 @@ const PortfolioCard = ({ p, idx }: { p:typeof PORTFOLIO[0]; idx:number }) => {
               color:"var(--fg2)",fontWeight:500}}>{tg}</span>
           ))}
         </div>
+        {/* View Details Indicator */}
+        <div style={{
+          marginTop: '1rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          fontSize: '0.7rem',
+          color: 'var(--p2)',
+          fontWeight: 500,
+          letterSpacing: '0.05em',
+          textTransform: 'uppercase',
+          borderTop: '1px solid var(--border)',
+          paddingTop: '0.8rem'
+        }}>
+          <span style={{ opacity: 0.7 }}>Click to view details</span>
+          <span style={{ fontSize: '1rem' }}>→</span>
+        </div>
       </div>
     </motion.div>
   );
 };
 
+/* ── Portfolio Section ── */
 const Portfolio = () => {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once:true, margin:"-60px" });
   const [filter, setFilter] = useState("All");
   const [isMob, setIsMob] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<typeof PORTFOLIO[0] | null>(null);
   const car = useCarousel(PORTFOLIO.length);
 
   useEffect(()=>{
@@ -1001,7 +1631,7 @@ const Portfolio = () => {
               prev={car.prev} next={car.next} go={car.go}>
               {filtered.map(p=>(
                 <div key={p.id} style={{flex:"0 0 100%",paddingRight:".5rem"}}>
-                  <PortfolioCard p={p} idx={0}/>
+                  <PortfolioCard p={p} idx={0} onClick={() => setSelectedProject(p)}/>
                 </div>
               ))}
             </CarouselShell>
@@ -1010,12 +1640,22 @@ const Portfolio = () => {
               <motion.div key={filter} className="pf-grid"
                 initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}
                 transition={{duration:.28}}>
-                {filtered.map((p,i)=><PortfolioCard key={p.id} p={p} idx={i}/>)}
+                {filtered.map((p,i)=>(
+                  <PortfolioCard 
+                    key={p.id} 
+                    p={p} 
+                    idx={i} 
+                    onClick={() => setSelectedProject(p)}
+                  />
+                ))}
               </motion.div>
             </AnimatePresence>
           )}
         </div>
       </section>
+
+      {/* Popup */}
+      <PortfolioPopup p={selectedProject} onClose={() => setSelectedProject(null)} />
     </>
   );
 };
@@ -1061,7 +1701,7 @@ const ClientCard = ({ c, idx }: { c:typeof CLIENTS[0]; idx:number }) => {
       onMouseLeave={e=>(e.currentTarget as HTMLDivElement).style.borderColor="var(--border)"}
       onClick={handleCardClick}>
       {/* Purple accent top bar */}
-      <div style={{height:3,background:"linear-gradient(90deg,var(--p1),var(--p3),transparent)"}}/>
+      <div style={{height:3,background:"linear-gradient(90deg,var(--p1),var(--p2),var(--p3))"}}/>
       <div style={{padding:"1.5rem 1.5rem 1rem",display:"flex",gap:"1rem",alignItems:"flex-start"}}>
         <div style={{width:46,height:46,borderRadius:10,flexShrink:0,
           background:"linear-gradient(135deg,rgba(125,111,208,.15),rgba(125,111,208,.05))",
@@ -1215,7 +1855,7 @@ const CTA = () => {
           flex-wrap:wrap;gap:1rem;max-width:1100px;margin:0 auto;}
         .f-copy{font-size:.74rem;color:var(--fg3);letter-spacing:.05em;}
         .f-links{display:flex;gap:1.5rem;}
-        .f-lnk{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+        .f-lnk{font-size:.72rem;letterSpacing:.1em;textTransform:uppercase;
           color:var(--fg3);cursor:pointer;border:none;background:none;
           font-weight:500;transition:color .2s;}
         .f-lnk:hover{color:var(--p2);}

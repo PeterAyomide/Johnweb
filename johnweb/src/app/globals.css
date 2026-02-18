@@ -5,7 +5,10 @@
   --foreground: #ededed;
   --font-space-grotesk: var(--font-space-grotesk);
   --font-inter: var(--font-inter);
+  
 }
+
+
 
 @theme inline {
   --color-background: var(--background);
