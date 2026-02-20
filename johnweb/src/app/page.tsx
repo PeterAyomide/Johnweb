@@ -689,20 +689,20 @@ const Marquee = () => (
    FLIP CARD — hover triggers flip, click also toggles
 ══════════════════════════════════════════════════════ */
 const SERVICES = [
-  { num:"01", icon:"✍️", title:"Ecommerce Copy", sub:"The Persuasion",
-    front:"Copy that takes ten steps ahead of every objection. Research-first, conversion-last.",
+  { num:"01", icon:"✍️", title:"Ecommerce Copy ", sub:"The Persuasion",
+    front:"Email sequences that have converted using research using research and strategy.",
     back:"I run feedback campaigns and A/B testing before writing a word — mapping every block in the prospect's mental real estate. The result: copy loaded with converting power at every sentence.",
     tag:"Copy · Research · A/B Testing" },
-  { num:"02", icon:"⚔️", title:"Email Strategies", sub:"The Blade That Slices Through",
-    front:"Strategy is the core. Not discounts. Not guesswork.",
+  { num:"02", icon:"⚔️", title:"Email Strategy", sub:"The Blade That Slices Through",
+    front:"Here is hosted an email strategy that and a content calendar that converted for a client for  black friday sales.",
     back:"Welcome series, abandoned cart, post-purchase flows — built with an unapologetic focus on conversion. I've studied the finest email agencies and distilled their strategies into battle-tested playbooks.",
-    tag:"Flows · Welcome Series · Retention" },
-  { num:"03", icon:"🎨", title:"Email Design & Pop-Ups", sub:"Subconscious Cues",
-    front:"The right balance between visually appealing, on-brand, and high-converting.",
+    tag:"Email Strategy " },
+  { num:"03", icon:"🎨", title:"Email Design", sub:"Subconscious Cues",
+    front:"I have successfully designed emails for clients using Figma and priotizing visual appeal and a premium feel for the brands",
     back:"Legible text. Clear contrast. Bold CTAs. Sharp imagery. Logical product layouts. An optimised footer. Every pixel earns its place — because every element impacts conversion.",
     tag:"Design · UX · Conversion" },
   { num:"04", icon:"⚡", title:"Email Templates", sub:"The Speed",
-    front:"A curated bank of 10+ ready-to-deploy templates for fast turnarounds.",
+    front:"A curated bank of ready-to-deploy templates for fast turnarounds.",
     back:"Speed is a competitive advantage. I've built the infrastructure to move fast without moving careless — premium output in record time, every time.",
     tag:"Templates · Speed · Scale" },
 ];
@@ -843,13 +843,9 @@ const Services = () => {
                 initial={{opacity:0}} animate={inView?{opacity:1}:{}}>What I Do</motion.p>
               <motion.h2 className="sec-heading"
                 initial={{opacity:0,y:20}} animate={inView?{opacity:1,y:0}:{}}
-                transition={{delay:.1}}>The Full Arsenal</motion.h2>
+                transition={{delay:.1}}>Conversion Technique For Email Marketing </motion.h2>
             </div>
-            <motion.p style={{fontSize:".86rem",lineHeight:1.7,color:"var(--fg2)",
-              maxWidth:280,fontWeight:300}}
-              initial={{opacity:0}} animate={inView?{opacity:1}:{}} transition={{delay:.2}}>
-              Hover or tap each card to reveal the full story.
-            </motion.p>
+            
           </div>
 
           {isMob ? (
@@ -876,7 +872,7 @@ const GAMMA_PORTFOLIO_LINK = "https://gamma.app/docs/John-Adegboye-Email-Designs
 
 const PORTFOLIO = [
   { id:"p1", cat:"Email Strategy & Copy", title:"Welcome Flow — Brandy Melville",
-    desc:"5-email objection-crushing welcome sequence that turned hesitant subscribers into buyers.",
+    desc:" This was a sucessful objection crushing welcome sequence that turned hesitant subscribers into buyers.",
     longDesc:"John didn't just write emails; he figured out exactly why our customers were hesitating. He swapped our basic welcome series for a strategy that actually turned browsers into buyers. Seeing our engagement jump like it proved that John really understands how to drive conversions.",
     tags:["Welcome Flow","Fashion","Klaviyo","Strategy"], result:"42% Open Rate", icon:"✉️", link:GAMMA_PORTFOLIO_LINK,
     clientName:"Marketing Director, Brandy Melville",
@@ -1884,7 +1880,7 @@ const Portfolio = () => {
           <motion.h2 className="sec-heading"
             style={{marginBottom:"2.5rem"}}
             initial={{opacity:0,y:20}} animate={inView?{opacity:1,y:0}:{}} transition={{delay:.1}}>
-            Portfolio
+         Case Studies
           </motion.h2>
 
           <div className="pf-filters">
