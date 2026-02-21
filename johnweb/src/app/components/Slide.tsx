@@ -7,9 +7,9 @@ interface SlideProps {
   className?: string;
 }
 
-const Slide = ({ speed = 55, className = "" }: SlideProps) => {
+const Slide = ({ speed = 75, className = "" }: SlideProps) => {
  
-  const slides = [12, 8, 14, 13, 6, 9, 2, 15, 5, 13, 7, 10, 4, 1].map((n) => ({
+  const slides = [6, 8, 14, 13, 12, 9, 2, 15, 5, 13, 7, 10, 4, 1].map((n) => ({
     id: n,
     src: `/slide${n}.png`,
     alt: `Slide ${n}`,
@@ -262,11 +262,11 @@ const Slide = ({ speed = 55, className = "" }: SlideProps) => {
             <div className="title-line-bar" />
           </div>
 
-          <p className="speakers-desc">
+          {/* <p className="speakers-desc">
             A gathering of extraordinary minds — pastors, creatives,
             entrepreneurs, and coaches coming together to challenge,
             equip, and transform.
-          </p>
+          </p> */}
         </div>
 
         <div
