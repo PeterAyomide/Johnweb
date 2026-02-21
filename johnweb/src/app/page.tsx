@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
+import Slide from "./components/Slide";
 
 type Theme = "dark" | "light";
 
@@ -489,7 +490,7 @@ const Hero = ({ t }: { t: Theme }) => {
             </motion.h1>
             <motion.p className="h-tag" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}}
               transition={{duration:.7,delay:.65,ease:e}}>
-              Words that sell. Strategies that scale. Emails that convert.
+              Copies that sell. Strategies that scale. Emails that convert.
             </motion.p>
             <motion.div className="tw-wrap" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:.9}}>
               {role}<span className="tw-cur"/>
@@ -1976,12 +1977,8 @@ const CLIENTS = [
   { name:"Wellness Brand", role:"Email Strategist & Designer", type:"Wellness", icon:"🌿",
     scope:"Built the complete retention flow suite: post-purchase, winback, and VIP sequences. Designed all email templates with brand aesthetics.",
     result:"28% cart recovery rate", link:GAMMA_PORTFOLIO_LINK },
-  { name:"One-Off Pop-Up Clients", role:"Pop-Up Form Designer", type:"CRO", icon:"🪟",
-    scope:"Designed exit-intent and embedded pop-up forms for various clients across different niches. Each optimised for maximum conversion.",
-    result:"11% average conversion rate", link:GAMMA_PORTFOLIO_LINK },
-  { name:"SaaS Client", role:"Onboarding Email Copywriter", type:"SaaS", icon:"💻",
-    scope:"Wrote a 5-step onboarding sequence that guided new users to their 'aha moment' within the first 7 days.",
-    result:"35% improvement in feature adoption", link:GAMMA_PORTFOLIO_LINK },
+
+ 
 ];
 
 const ClientCard = ({ c, idx }: { c:typeof CLIENTS[0]; idx:number }) => {
@@ -2218,6 +2215,9 @@ export default function Home() {
       <Navbar t={theme} toggle={toggle}/>
       <main>
         <Hero t={theme}/>
+        <div style={{ width: '100%', maxWidth: '800px', margin: '0 auto' }}>
+  <Slide interval={4000} /> 
+</div>
         <MetricsSection/>
         <About/>
         <Marquee/>
