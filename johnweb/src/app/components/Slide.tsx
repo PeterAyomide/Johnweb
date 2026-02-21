@@ -207,7 +207,7 @@ const Slide = ({ speed = 55, className = "" }: SlideProps) => {
         .slide-card img {
           width: 100%;
           height: 100%;
-          object-fit: cover;
+          object-fit: fill;
           object-position: top center;
           display: block;
           transition: transform 0.6s ease;
