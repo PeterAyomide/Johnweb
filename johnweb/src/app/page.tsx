@@ -2216,7 +2216,7 @@ export default function Home() {
       <main>
         <Hero t={theme}/>
         <div style={{ width: '100%', maxWidth: '800px', margin: '0 auto' }}>
-  <Slide interval={4000} /> 
+  <Slide  /> 
 </div>
         <MetricsSection/>
         <About/>
