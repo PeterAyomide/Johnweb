@@ -8,10 +8,11 @@ interface SlideProps {
 }
 
 const Slide = ({ speed = 55, className = "" }: SlideProps) => {
-  const slides = Array.from({ length: 12 }, (_, i) => ({
-    id: i + 1,
-    src: `/slide${i + 1}.png`,
-    alt: `Slide ${i + 1}`,
+ 
+  const slides = [12, 8, 14, 13, 6, 9, 2, 15, 5, 13, 7, 10, 4, 1].map((n) => ({
+    id: n,
+    src: `/slide${n}.png`,
+    alt: `Slide ${n}`,
   }));
 
   const trackRef = useRef<HTMLDivElement>(null);
@@ -207,7 +208,7 @@ const Slide = ({ speed = 55, className = "" }: SlideProps) => {
         .slide-card img {
           width: 100%;
           height: 100%;
-          object-fit: fill;
+          object-fit: cover;
           object-position: top center;
           display: block;
           transition: transform 0.6s ease;
@@ -249,10 +250,10 @@ const Slide = ({ speed = 55, className = "" }: SlideProps) => {
       <section className={`speakers-section ${className}`}>
 
         <div className="speakers-header">
-          <div className="speakers-eyebrow">Meet Our Speakers</div>
+          <div className="speakers-eyebrow">My work</div>
 
           <h2 className="speakers-title">
-            Voices That <em>Inspire</em>
+            Copy Meets <em>Design</em>
           </h2>
 
           <div className="speakers-title-line">
@@ -296,9 +297,7 @@ const Slide = ({ speed = 55, className = "" }: SlideProps) => {
           </div>
         </div>
 
-        <div className="speakers-footer">
-          12 Featured Speakers &nbsp;·&nbsp; Scroll to explore
-        </div>
+       
 
       </section>
     </>
