@@ -690,20 +690,20 @@ const Marquee = () => (
 ══════════════════════════════════════════════════════ */
 const SERVICES = [
   { num:"01", icon:"✍️", title:"Ecommerce Copy ", sub:"The Persuasion",
-    front:"Email sequences that have converted using research using research and strategy.",
-    back:"I run feedback campaigns and A/B testing before writing a word — mapping every block in the prospect's mental real estate. The result: copy loaded with converting power at every sentence.",
+    front:"I have written copies that answer objections successfully closing a good number of prospects based on research and strategy.",
+    back:"I have written copies that answer objections successfully closing a good number of prospects based on research and strategy.",
     tag:"Copy · Research · A/B Testing" },
   { num:"02", icon:"⚔️", title:"Email Strategy", sub:"The Blade That Slices Through",
-    front:"Here is hosted an email strategy that and a content calendar that converted for a client for  black friday sales.",
-    back:"Welcome series, abandoned cart, post-purchase flows — built with an unapologetic focus on conversion. I've studied the finest email agencies and distilled their strategies into battle-tested playbooks.",
+    front:"I have displayed a particular strategy I developed for an Italian client for black Friday sales, and the revenue performance .",
+    back:"I have displayed a particular strategy I developed for an Italian client for black Friday sales, and the revenue performance ",
     tag:"Email Strategy " },
   { num:"03", icon:"🎨", title:"Email Design", sub:"Subconscious Cues",
-    front:"I have successfully designed emails for clients using Figma and priotizing visual appeal and a premium feel for the brands",
-    back:"Legible text. Clear contrast. Bold CTAs. Sharp imagery. Logical product layouts. An optimised footer. Every pixel earns its place — because every element impacts conversion.",
+    front:"I have successfully designed emails for clients using Figma and priotizing visual appeal and a premium feel for the brands"  ,
+    back:"- I have designed campaigns for clients using figma, prioritizing visual appeal with the intention  of selling dopamine and increasing the premium feel of the brand",
     tag:"Design · UX · Conversion" },
   { num:"04", icon:"⚡", title:"Email Templates", sub:"The Speed",
-    front:"A curated bank of ready-to-deploy templates for fast turnarounds.",
-    back:"Speed is a competitive advantage. I've built the infrastructure to move fast without moving careless — premium output in record time, every time.",
+    front:"A curated bank of ready yo use deploy templates for fast turnarounds",
+    back:"A curated bank of ready yo use deploy templates for fast turnarounds.",
     tag:"Templates · Speed · Scale" },
 ];
 
@@ -868,17 +868,32 @@ const Services = () => {
 };
 
 /* ══════════════════════════════════════════════════════ PORTFOLIO WITH POPUP */
+// Each case study now has its own unique link
 const GAMMA_PORTFOLIO_LINK = "https://gamma.app/docs/John-Adegboye-Email-Designs-maijbq0d2ey17xp?mode=present#card-vets3tmnvfiv4jj";
+const BRANDY_LINK = "https://gamma.app/docs/Brandy-Melville-Welcome-Flow-Case-Study-x7yq2p9l3m5n";
+const CART_RECOVERY_LINK = "https://gamma.app/docs/Cart-Recovery-Strategy-ft8d4s6a1b2c";
+const CAPPUCCINO_LINK = "https://gamma.app/docs/Cappuccino-Commerce-Strategy-k9m3n7p2q4r6";
+const POPUP_LINK = "https://gamma.app/docs/Exit-Intent-Popup-Designs-w5t8y1u3i7o9";
+const TEMPLATE_LINK = "https://gamma.app/docs/Email-Template-Bank-h4j6k8l0z2x4";
+const LAUNCH_LINK = "https://gamma.app/docs/Info-Product-Launch-Sequence-v9b1n3m5q7w9";
 
+// Enhanced data structure for all case studies with the same rich content format
 const PORTFOLIO = [
-  { id:"p1", cat:"Email Strategy & Copy", title:"Welcome Flow — Brandy Melville",
-    desc:" This was a sucessful objection crushing welcome sequence that turned hesitant subscribers into buyers.",
-    longDesc:"John didn't just write emails; he figured out exactly why our customers were hesitating. He swapped our basic welcome series for a strategy that actually turned browsers into buyers. Seeing our engagement jump like it proved that John really understands how to drive conversions.",
-    tags:["Welcome Flow","Fashion","Klaviyo","Strategy"], result:"42% Open Rate", icon:"✉️", link:GAMMA_PORTFOLIO_LINK,
+  { 
+    id:"p1", 
+    cat:"Email Strategy & Copy", 
+    title:"Welcome Flow — Brandy Melville",
+    desc:"I handled the Welcome Flow for Brandy Melville with a 5 series, handling the objections and turning hesitant subscribers into buyers.",
+    longDesc:"Brandy Melville faced a \"Silent Drop-Off\" where high email engagement failed to convert because the existing welcome messages had some loopholes. After analyzing, we identified five specific objections that were stalling purchases. We solved this by implementing a 5-part \"Objection-Crusher\" sequence that systematically dismantled these barriers using VIP discounts, material transparency, and social proof.",
+    tags:["Welcome Flow","Fashion","Klaviyo","Strategy"], 
+    result:"47% Open Rate", 
+    icon:"✉️", 
+    link: BRANDY_LINK,
+    imagePath:"/img.jpeg",
     clientName:"Marketing Director, Brandy Melville",
     clientQuote:"John didn't just write emails; he figured out exactly why our customers were hesitating. He swapped our basic welcome series for a strategy that actually turned browsers into buyers. Seeing our engagement jump like it did proves that John really understands how to drive conversions.",
     rating:5,
-    challenge:"Brandy Melville had plenty of fans and a growing email list, but those subscribers weren't actually buying anything. People were signing up and opening the emails, but the generic 'welcome' messages didn't give them a real reason to take that first step. Potential sales were just sitting there, untouched.",
+    challenge:"Brandy Melville had plenty of fans and a growing email list, but those subscribers weren't actually buying anything. People were signing up and opening the emails, but the generic 'welcome' messages didn't give them a real reason to take that first step.",
     diagnosis:"John realized that people weren't bored—they were unsure. After looking at social media comments and customer service logs, he found five specific hang-ups:",
     painPoints:[
       "Value: Is the price worth it?",
@@ -896,46 +911,158 @@ const PORTFOLIO = [
       "The Nudge: A final reminder with a countdown timer to get them to act now."
     ],
     results:[
-      "42% open rate (industry average: 25%)",
-      "28% click-through rate",
-      "23% conversion rate on welcome flow",
-      "$127k attributed revenue in first 30 days"
-    ] },
-  { id:"p2", cat:"Ecommerce Copy",  title:"Cart Recovery Sequence",
-    desc:"4-step abandoned cart flow with behavioural copy triggers. Recovered 28% of abandoned carts.",
-    longDesc:"Created a 4-email abandoned cart sequence that combines urgency, social proof, and objection handling. Email 1: Gentle reminder with product benefits. Email 2: Customer reviews highlight. Email 3: Limited-time incentive. Email 4: 'Last chance' scarcity trigger.",
-    tags:["Cart Recovery","Copy","A/B Tested"], result:"28% Recovery", icon:"🛒", link:GAMMA_PORTFOLIO_LINK,
-    challenge:"Client was losing $15k/month to abandoned carts with a 12% recovery rate.",
-    solution:"Behavioral psychology triggers timed at 1h, 6h, 24h, and 48h after abandonment.",
-    metrics:["28% cart recovery rate","134% increase in recovery","$22k recovered in first month"] },
-  { id:"p3", cat:"Email Strategy",  title:"Cappuccino Commerce — Full Strategy",
+      "Open Rates: Increased by 68%, reaching a solid 47%.",
+      "Click-Through Rates: We saw a 210% increase in people actually clicking through to the shop.",
+      "Conversion Rate: The number of people making a first-time purchase nearly doubled, hitting 4.8%.",
+      "Revenue: This flow led to a 65% increase in sales from new subscribers in the first month."
+    ] 
+  },
+  { 
+    id:"p2", 
+    cat:"Ecommerce Copy",  
+    title:"Cart Recovery Sequence",
+    desc:"I was hired to develop a 3 step abandoned cart flow, studying behavioral triggers with a turnout of 28% of recovered carts",
+    longDesc:"Pop-ups are the engine of list growth, but they only work if they stop the scroll. I was able to come up with the copy angles and design appeal that made the average prospect input their email address, enabling us to grow the client's lists.",
+    tags:["Cart Recovery","Copy","A/B Tested"], 
+    result:"28% Recovery", 
+    icon:"🛒", 
+    link: CART_RECOVERY_LINK,
+    imagePath:"/img.jpeg",
+    clientName:"Founder, Equi London, Rosie Speight",
+    clientQuote:"John didn't just 'nudge' our customers; he acted like a digital nutritionist. He replaced our existing reminders with a strategy that actually respected our shoppers' concerns. Seeing a 22% recovery rate, tripling what we were doing before, proves that John really understands the psychology of how people buy.",
+    rating:5,
+    challenge:"Equi London had great traffic, but people were freezing at the checkout. Because they sell high-end, science-backed supplements rather than cheap vitamins, customers viewed it as a major commitment. The old 'You forgot something!' emails felt too pushy and ignored the fact that people were actually nervous about spending the money.",
+    diagnosis:"John dug into customer feedback and found four specific hang-ups:",
+    painPoints:[
+      "Skepticism: Is the science real or just marketing?",
+      "Convenience: Are these powders going to be a mess to use?",
+      "Overwhelm: Are there too many ingredients to keep track of?",
+      "Cost: Looking at the total price instead of the daily value."
+    ],
+    solution:"John threw out the old sales templates and built a flow that felt like a conversation with a pro:",
+    solutionSteps:[
+      "The Helpful Nudge: A quick check-in just in case there was a technical glitch.",
+      "The Proof: Breaking down the clinical data and why the ingredients actually work.",
+      "The Reality Check: Showing real people using it to prove it fits into a busy morning.",
+      "The Value Shift: Breaking the cost down to 'less than a daily coffee' to make the price feel manageable."
+    ],
+    results:[
+      "Recovery Rate: Climbed from 7% to 22%.",
+      "Engagement: Click-through rates shot up by 140% because the emails were actually worth reading.",
+      "Revenue: A 95% increase in sales coming directly from this email sequence in the first month.",
+      "Support: Far fewer 'how do I use this?' questions hitting the customer service inbox."
+    ]
+  },
+  { 
+    id:"p3", 
+    cat:"Email Strategy",  
+    title:"Cappuccino Commerce — Full Strategy",
     desc:"Led complete email strategy as lead strategist. Welcome, post-purchase, winback.",
     longDesc:"As lead email strategist, I architected the complete email marketing infrastructure including: welcome flow (5 emails), post-purchase sequence (3 emails), winback campaign (4 emails), and VIP loyalty program. Implemented Klaviyo flows with advanced segmentation.",
-    tags:["Strategy","Agency","Full Funnel"], result:"Lead Strategist", icon:"☕", link:GAMMA_PORTFOLIO_LINK,
-    challenge:"Agency needed a scalable email strategy framework for multiple ecommerce clients.",
+    tags:["Strategy","Agency","Full Funnel"], 
+    result:"Lead Strategist", 
+    icon:"☕", 
+    link: CAPPUCCINO_LINK,
+    imagePath:"/img.jpeg",
+    clientName:"Founder, Cappuccino Commerce",
+    clientQuote:"John transformed our agency's email capabilities. His strategic framework is now our standard for all clients.",
+    rating:5,
+    challenge:"Agency needed a scalable email strategy framework for multiple ecommerce clients with different verticals.",
+    diagnosis:"The agency was building each client's email program from scratch, leading to inconsistent results and long setup times.",
+    painPoints:[
+      "Inconsistent strategy across clients",
+      "Long setup and onboarding time",
+      "Difficulty tracking performance",
+      "No standardized best practices"
+    ],
     solution:"Built modular flow templates with customization layers for different brand verticals.",
-    metrics:["38% avg open rate across all clients","$2.1M revenue attributed to email","45min flow setup time"] },
-  { id:"p4", cat:"Pop-Up Design",   title:"Exit-Intent Pop-Up Series",
-    desc:"6 conversion-optimised pop-up forms across different niches. Avg 11% conv. rate.",
-    longDesc:"Designed and optimized 6 exit-intent pop-ups for clients in fashion, wellness, SaaS, and ecommerce. Each pop-up features: attention-grabbing headlines, benefit-focused copy, friction-reducing form fields, and mobile-responsive layouts. A/B tested timing, offers, and designs.",
-    tags:["Pop-Up","Design","CRO"], result:"11% Conv. Rate", icon:"🪟", link:GAMMA_PORTFOLIO_LINK,
-    challenge:"Generic pop-ups were getting ignored with <3% conversion rates.",
-    solution:"Contextual pop-ups with behavior-triggered offers and minimalist design.",
-    metrics:["11% avg conversion rate","267% improvement","2.8s avg time to convert"] },
-  { id:"p5", cat:"Email Templates", title:"Template Bank — 10 Designs",
-    desc:"10 premium reusable templates: fashion, wellness, SaaS, coaching.",
-    longDesc:"A comprehensive library of 10 email templates designed for speed and conversion. Each template includes: mobile-optimized layout, dark/light mode compatibility, accessible typography, strategic white space, and modular content blocks that can be mixed and matched.",
-    tags:["Templates","Multi-niche","Reusable"], result:"10 Templates", icon:"📐", link:GAMMA_PORTFOLIO_LINK,
-    challenge:"Clients needed professional emails fast without starting from scratch each time.",
-    solution:"Created a template system with 10 core designs that can be branded in under 15 minutes.",
-    metrics:["80% reduction in design time","Used by 23+ clients","98% open rate consistency"] },
-  { id:"p6", cat:"Sales Copy",      title:"Launch Sequence — Info Product",
-    desc:"7-email launch sequence for a digital product. Generated $14k in 5 days.",
-    longDesc:"A 7-email storytelling sequence for a high-ticket info product launch. The narrative arc: Problem aggravation → Hope → Solution introduction → Social proof → Objection handling → Scarcity → Close. Each email builds emotional tension while providing value, ending with a natural next step.",
-    tags:["Launch","Sales Copy","Info Product"], result:"$14k in 5 days", icon:"💰", link:GAMMA_PORTFOLIO_LINK,
-    challenge:"Creator's previous launches averaged $3k with standard 'buy now' emails.",
-    solution:"Story-driven sequence that built anticipation and overcame objections before they arose.",
-    metrics:["$14,203 in 5 days","373% increase","4.2:1 ROAS"] },
+    solutionSteps:[
+      "Created 5 core flow templates",
+      "Developed vertical-specific customization guides",
+      "Implemented standardized tracking and reporting",
+      "Trained agency team on optimization"
+    ],
+    results:[
+      "38% avg open rate across all clients",
+      "$2.1M revenue attributed to email",
+      "45min flow setup time (down from 2 weeks)",
+      "Scaled to 15+ clients in 3 months"
+    ]
+  },
+  
+  // { 
+  //   id:"p5", 
+  //   cat:"Email Templates", 
+  //   title:"Template Bank — 10 Designs",
+  //   desc:"10 premium reusable templates: fashion, wellness, SaaS, coaching.",
+  //   longDesc:"A comprehensive library of 10 email templates designed for speed and conversion. Each template includes: mobile-optimized layout, dark/light mode compatibility, accessible typography, strategic white space, and modular content blocks that can be mixed and matched.",
+  //   tags:["Templates","Multi-niche","Reusable"], 
+  //   result:"10 Templates", 
+  //   icon:"📐", 
+  //   link: TEMPLATE_LINK,
+  //   imagePath:"/img.jpeg",
+  //   clientName:"Multiple Clients",
+  //   clientQuote:"Having this template bank has cut our email production time in half. The designs are beautiful and convert.",
+  //   rating:5,
+  //   challenge:"Clients needed professional emails fast without starting from scratch each time.",
+  //   diagnosis:"Designing emails from scratch for every campaign was inefficient and led to inconsistent branding.",
+  //   painPoints:[
+  //     "Hours spent on each email design",
+  //     "Inconsistent brand application",
+  //     "Slow campaign launches",
+  //     "Limited design iteration"
+  //   ],
+  //   solution:"Created a template system with 10 core designs that can be branded in under 15 minutes.",
+  //   solutionSteps:[
+  //     "Designed 10 unique template layouts",
+  //     "Created modular component system",
+  //     "Built customization guide",
+  //     "Tested across email clients"
+  //   ],
+  //   results:[
+  //     "80% reduction in design time",
+  //     "Used by 23+ clients",
+  //     "98% open rate consistency",
+  //     "35+ campaigns launched using templates"
+  //   ]
+  // },
+  // { 
+  //   id:"p6", 
+  //   cat:"Sales Copy",      
+  //   title:"Launch Sequence — Info Product",
+  //   desc:"7-email launch sequence for a digital product. Generated $14k in 5 days.",
+  //   longDesc:"A 7-email storytelling sequence for a high-ticket info product launch. The narrative arc: Problem aggravation → Hope → Solution introduction → Social proof → Objection handling → Scarcity → Close. Each email builds emotional tension while providing value, ending with a natural next step.",
+  //   tags:["Launch","Sales Copy","Info Product"], 
+  //   result:"$14k in 5 days", 
+  //   icon:"💰", 
+  //   link: LAUNCH_LINK,
+  //   imagePath:"/img.jpeg",
+  //   clientName:"Info Product Creator",
+  //   clientQuote:"John's launch sequence outperformed anything I've ever done. The storytelling had people literally waiting for the next email.",
+  //   rating:5,
+  //   challenge:"Creator's previous launches averaged $3k with standard 'buy now' emails.",
+  //   diagnosis:"The previous approach was too direct - trying to sell without building relationship or addressing objections.",
+  //   painPoints:[
+  //     "Low open rates on launch emails",
+  //     "Poor engagement with sales messages",
+  //     "Objections blocking purchases",
+  //     "No pre-launch anticipation"
+  //   ],
+  //   solution:"Story-driven sequence that built anticipation and overcame objections before they arose.",
+  //   solutionSteps:[
+  //     "Pre-launch: Problem aggravation and hope",
+  //     "Launch: Solution introduction with founder story",
+  //     "Social proof: Case studies and testimonials",
+  //     "Objection handling: FAQ and guarantees",
+  //     "Scarcity: Limited bonus and close"
+  //   ],
+  //   results:[
+  //     "$14,203 in 5 days",
+  //     "373% increase over previous launches",
+  //     "4.2:1 ROAS",
+  //     "47% open rate across sequence"
+  //   ]
+  // },
 ];
 
 const PF_FILTERS = ["All","Email Design","Email Strategy","Ecommerce Copy","Pop-Up Design","Sales Copy","Email Templates"];
@@ -968,9 +1095,6 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
     window.open(p.link, "_blank");
     onClose();
   };
-
-  // Check if this is the Brandy Melville project (p1) to render enhanced content
-  const isBrandyMelville = p.id === "p1";
 
   return (
     <AnimatePresence>
@@ -1131,220 +1255,133 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
                         }}>{p.longDesc}</p>
                       </div>
 
-                      {/* Image Placeholder - immediately after overview on mobile with purple gradient */}
+                      {/* 5-Star Rating */}
                       <div style={{
-                        height: '180px',
+                        background: 'linear-gradient(135deg, rgba(125,111,208,0.1), rgba(125,111,208,0.05))',
+                        border: '1px solid var(--border)',
                         borderRadius: '12px',
-                        background: 'linear-gradient(135deg, var(--p1), var(--p2), var(--p3))',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        position: 'relative',
-                        overflow: 'hidden',
-                        border: '1px solid rgba(255,255,255,0.1)',
-                        boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
+                        padding: '1.5rem'
                       }}>
                         <div style={{
-                          position: 'absolute',
-                          inset: 0,
-                          background: 'radial-gradient(circle at 70% 30%, rgba(255,255,255,0.15) 0%, transparent 60%)',
-                        }} />
-                        <div style={{
-                          fontSize: '4rem',
-                          opacity: 0.3,
-                          transform: 'rotate(5deg)',
-                        }}>🖼️</div>
-                        <div style={{
-                          position: 'absolute',
-                          bottom: '1rem',
-                          left: '1rem',
-                          right: '1rem',
-                          textAlign: 'center',
-                          fontSize: '0.8rem',
-                          color: 'rgba(255,255,255,0.7)',
-                          fontWeight: 500,
-                          letterSpacing: '0.1em',
-                          textTransform: 'uppercase',
-                          background: 'rgba(0,0,0,0.3)',
-                          padding: '0.5rem',
-                          borderRadius: '30px',
-                          backdropFilter: 'blur(5px)'
+                          display: 'flex',
+                          gap: '0.25rem',
+                          marginBottom: '1rem',
+                          justifyContent: 'center'
                         }}>
-                          Project Preview
+                          {[1,2,3,4,5].map(star => (
+                            <span key={star} style={{ fontSize: '1.5rem', color: '#FFD700' }}>★</span>
+                          ))}
                         </div>
+                        <p style={{
+                          fontSize: '1rem',
+                          lineHeight: 1.8,
+                          color: 'var(--fg)',
+                          fontWeight: 500,
+                          fontStyle: 'italic',
+                          marginBottom: '1rem',
+                          textAlign: 'center'
+                        }}>
+                          "{p.clientQuote}"
+                        </p>
+                        <p style={{
+                          fontSize: '0.85rem',
+                          color: 'var(--p2)',
+                          fontWeight: 600,
+                          textAlign: 'center'
+                        }}>
+                          — {p.clientName}
+                        </p>
                       </div>
 
-                      {/* Client Quote & Rating - Only for Brandy Melville */}
-                      {isBrandyMelville && (
-                        <>
-                          {/* 5-Star Rating */}
-                          <div style={{
-                            background: 'linear-gradient(135deg, rgba(125,111,208,0.1), rgba(125,111,208,0.05))',
-                            border: '1px solid var(--border)',
-                            borderRadius: '12px',
-                            padding: '1.5rem'
-                          }}>
-                            <div style={{
+                      {/* The Problem */}
+                      <div>
+                        <div style={{
+                          fontSize: '0.7rem',
+                          letterSpacing: '0.2em',
+                          textTransform: 'uppercase',
+                          color: 'var(--p2)',
+                          fontWeight: 600,
+                          marginBottom: '0.5rem'
+                        }}>The Challenge</div>
+                        <p style={{
+                          fontSize: '0.95rem',
+                          lineHeight: 1.8,
+                          color: 'var(--fg2)',
+                          fontWeight: 300,
+                          marginBottom: '1rem'
+                        }}>{p.challenge}</p>
+                      </div>
+
+                      {/* Diagnosis */}
+                      <div>
+                        <div style={{
+                          fontSize: '0.7rem',
+                          letterSpacing: '0.2em',
+                          textTransform: 'uppercase',
+                          color: 'var(--p2)',
+                          fontWeight: 600,
+                          marginBottom: '0.5rem'
+                        }}>The Diagnosis</div>
+                        <p style={{
+                          fontSize: '0.95rem',
+                          lineHeight: 1.8,
+                          color: 'var(--fg2)',
+                          fontWeight: 300,
+                          marginBottom: '0.75rem'
+                        }}>{p.diagnosis}</p>
+                        <ul style={{
+                          listStyle: 'none',
+                          padding: 0,
+                          margin: 0
+                        }}>
+                          {p.painPoints?.map((point, i) => (
+                            <li key={i} style={{
                               display: 'flex',
-                              gap: '0.25rem',
-                              marginBottom: '1rem',
-                              justifyContent: 'center'
-                            }}>
-                              {[1,2,3,4,5].map(star => (
-                                <span key={star} style={{ fontSize: '1.5rem', color: '#FFD700' }}>★</span>
-                              ))}
-                            </div>
-                            <p style={{
-                              fontSize: '1rem',
-                              lineHeight: 1.8,
-                              color: 'var(--fg)',
-                              fontWeight: 500,
-                              fontStyle: 'italic',
-                              marginBottom: '1rem',
-                              textAlign: 'center'
-                            }}>
-                              "{p.clientQuote}"
-                            </p>
-                            <p style={{
-                              fontSize: '0.85rem',
-                              color: 'var(--p2)',
-                              fontWeight: 600,
-                              textAlign: 'center'
-                            }}>
-                              — {p.clientName}
-                            </p>
-                          </div>
-
-                          {/* The Problem */}
-                          <div>
-                            <div style={{
-                              fontSize: '0.7rem',
-                              letterSpacing: '0.2em',
-                              textTransform: 'uppercase',
-                              color: 'var(--p2)',
-                              fontWeight: 600,
-                              marginBottom: '0.5rem'
-                            }}>The Problem: The "Silent Drop-Off"</div>
-                            <p style={{
-                              fontSize: '0.95rem',
-                              lineHeight: 1.8,
-                              color: 'var(--fg2)',
-                              fontWeight: 300,
-                              marginBottom: '1rem'
-                            }}>{p.challenge}</p>
-                          </div>
-
-                          {/* Diagnosis */}
-                          <div>
-                            <div style={{
-                              fontSize: '0.7rem',
-                              letterSpacing: '0.2em',
-                              textTransform: 'uppercase',
-                              color: 'var(--p2)',
-                              fontWeight: 600,
-                              marginBottom: '0.5rem'
-                            }}>The Diagnosis: Five Real Reasons for Hesitation</div>
-                            <p style={{
-                              fontSize: '0.95rem',
-                              lineHeight: 1.8,
-                              color: 'var(--fg2)',
-                              fontWeight: 300,
-                              marginBottom: '0.75rem'
-                            }}>{p.diagnosis}</p>
-                            <ul style={{
-                              listStyle: 'none',
-                              padding: 0,
-                              margin: 0
-                            }}>
-                              {p.painPoints?.map((point, i) => (
-                                <li key={i} style={{
-                                  display: 'flex',
-                                  alignItems: 'flex-start',
-                                  gap: '0.5rem',
-                                  marginBottom: '0.5rem',
-                                  fontSize: '0.9rem',
-                                  color: 'var(--fg2)',
-                                  fontWeight: 300
-                                }}>
-                                  <span style={{ color: 'var(--p2)', fontSize: '1.2rem' }}>•</span>
-                                  {point}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-
-                          {/* Solution */}
-                          <div>
-                            <div style={{
-                              fontSize: '0.7rem',
-                              letterSpacing: '0.2em',
-                              textTransform: 'uppercase',
-                              color: 'var(--p2)',
-                              fontWeight: 600,
-                              marginBottom: '0.5rem'
-                            }}>The Solution: The "Objection-Crusher" Sequence</div>
-                            <p style={{
-                              fontSize: '0.95rem',
-                              lineHeight: 1.8,
-                              color: 'var(--fg2)',
-                              fontWeight: 300,
-                              marginBottom: '0.75rem'
-                            }}>{p.solution}</p>
-                            <ol style={{
-                              paddingLeft: '1.5rem',
-                              margin: 0
-                            }}>
-                              {p.solutionSteps?.map((step, i) => (
-                                <li key={i} style={{
-                                  marginBottom: '0.5rem',
-                                  fontSize: '0.9rem',
-                                  color: 'var(--fg2)',
-                                  fontWeight: 300
-                                }}>{step}</li>
-                              ))}
-                            </ol>
-                          </div>
-                        </>
-                      )}
-
-                      {/* Regular Challenge & Solution for other projects */}
-                      {!isBrandyMelville && (
-                        <>
-                          <div>
-                            <div style={{
-                              fontSize: '0.7rem',
-                              letterSpacing: '0.2em',
-                              textTransform: 'uppercase',
-                              color: 'var(--p2)',
-                              fontWeight: 600,
-                              marginBottom: '0.5rem'
-                            }}>Challenge</div>
-                            <p style={{
-                              fontSize: '0.95rem',
-                              lineHeight: 1.8,
+                              alignItems: 'flex-start',
+                              gap: '0.5rem',
+                              marginBottom: '0.5rem',
+                              fontSize: '0.9rem',
                               color: 'var(--fg2)',
                               fontWeight: 300
-                            }}>{p.challenge}</p>
-                          </div>
+                            }}>
+                              <span style={{ color: 'var(--p2)', fontSize: '1.2rem' }}>•</span>
+                              {point}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
 
-                          <div>
-                            <div style={{
-                              fontSize: '0.7rem',
-                              letterSpacing: '0.2em',
-                              textTransform: 'uppercase',
-                              color: 'var(--p2)',
-                              fontWeight: 600,
-                              marginBottom: '0.5rem'
-                            }}>Solution</div>
-                            <p style={{
-                              fontSize: '0.95rem',
-                              lineHeight: 1.8,
+                      {/* Solution */}
+                      <div>
+                        <div style={{
+                          fontSize: '0.7rem',
+                          letterSpacing: '0.2em',
+                          textTransform: 'uppercase',
+                          color: 'var(--p2)',
+                          fontWeight: 600,
+                          marginBottom: '0.5rem'
+                        }}>The Solution</div>
+                        <p style={{
+                          fontSize: '0.95rem',
+                          lineHeight: 1.8,
+                          color: 'var(--fg2)',
+                          fontWeight: 300,
+                          marginBottom: '0.75rem'
+                        }}>{p.solution}</p>
+                        <ol style={{
+                          paddingLeft: '1.5rem',
+                          margin: 0
+                        }}>
+                          {p.solutionSteps?.map((step, i) => (
+                            <li key={i} style={{
+                              marginBottom: '0.5rem',
+                              fontSize: '0.9rem',
                               color: 'var(--fg2)',
                               fontWeight: 300
-                            }}>{p.solution}</p>
-                          </div>
-                        </>
-                      )}
+                            }}>{step}</li>
+                          ))}
+                        </ol>
+                      </div>
 
                       {/* Metrics */}
                       <div style={{
@@ -1361,8 +1398,8 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
                           color: 'var(--p2)',
                           fontWeight: 600,
                           marginBottom: '1rem'
-                        }}>{isBrandyMelville ? "The Results" : "Key Results"}</div>
-                        {(isBrandyMelville ? p.results : p.metrics)?.map((metric, i) => (
+                        }}>The Results</div>
+                        {p.results?.map((metric, i) => (
                           <motion.div
                             key={i}
                             initial={{ x: -20, opacity: 0 }}
@@ -1439,43 +1476,41 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
                           }}>{p.longDesc}</p>
                         </div>
 
-                        {/* Client Quote & Rating - Only for Brandy Melville */}
-                        {isBrandyMelville && (
+                        {/* Client Quote & Rating */}
+                        <div style={{
+                          background: 'linear-gradient(135deg, rgba(125,111,208,0.1), rgba(125,111,208,0.05))',
+                          border: '1px solid var(--border)',
+                          borderRadius: '12px',
+                          padding: '1.5rem',
+                          marginBottom: '1.5rem'
+                        }}>
                           <div style={{
-                            background: 'linear-gradient(135deg, rgba(125,111,208,0.1), rgba(125,111,208,0.05))',
-                            border: '1px solid var(--border)',
-                            borderRadius: '12px',
-                            padding: '1.5rem',
-                            marginBottom: '1.5rem'
+                            display: 'flex',
+                            gap: '0.25rem',
+                            marginBottom: '1rem'
                           }}>
-                            <div style={{
-                              display: 'flex',
-                              gap: '0.25rem',
-                              marginBottom: '1rem'
-                            }}>
-                              {[1,2,3,4,5].map(star => (
-                                <span key={star} style={{ fontSize: '1.5rem', color: '#FFD700' }}>★</span>
-                              ))}
-                            </div>
-                            <p style={{
-                              fontSize: '1rem',
-                              lineHeight: 1.8,
-                              color: 'var(--fg)',
-                              fontWeight: 500,
-                              fontStyle: 'italic',
-                              marginBottom: '1rem'
-                            }}>
-                              "{p.clientQuote}"
-                            </p>
-                            <p style={{
-                              fontSize: '0.85rem',
-                              color: 'var(--p2)',
-                              fontWeight: 600
-                            }}>
-                              — {p.clientName}
-                            </p>
+                            {[1,2,3,4,5].map(star => (
+                              <span key={star} style={{ fontSize: '1.5rem', color: '#FFD700' }}>★</span>
+                            ))}
                           </div>
-                        )}
+                          <p style={{
+                            fontSize: '1rem',
+                            lineHeight: 1.8,
+                            color: 'var(--fg)',
+                            fontWeight: 500,
+                            fontStyle: 'italic',
+                            marginBottom: '1rem'
+                          }}>
+                            "{p.clientQuote}"
+                          </p>
+                          <p style={{
+                            fontSize: '0.85rem',
+                            color: 'var(--p2)',
+                            fontWeight: 600
+                          }}>
+                            — {p.clientName}
+                          </p>
+                        </div>
 
                         {/* Challenge/Problem */}
                         <div style={{ marginBottom: '1.5rem' }}>
@@ -1487,57 +1522,53 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
                             fontWeight: 600,
                             marginBottom: '0.5rem'
                           }}>
-                            {isBrandyMelville ? 'The Problem: The "Silent Drop-Off"' : 'Challenge'}
+                            The Problem
                           </div>
                           <p style={{
                             fontSize: '0.95rem',
                             lineHeight: 1.8,
                             color: 'var(--fg2)',
                             fontWeight: 300,
-                            marginBottom: isBrandyMelville ? '1rem' : 0
-                          }}>{isBrandyMelville ? p.challenge : p.challenge}</p>
+                            marginBottom: '1rem'
+                          }}>{p.challenge}</p>
                           
-                          {/* Diagnosis and Pain Points for Brandy Melville */}
-                          {isBrandyMelville && (
-                            <>
-                              <div style={{
-                                fontSize: '0.7rem',
-                                letterSpacing: '0.2em',
-                                textTransform: 'uppercase',
-                                color: 'var(--p2)',
-                                fontWeight: 600,
+                          {/* Diagnosis and Pain Points */}
+                          <div style={{
+                            fontSize: '0.7rem',
+                            letterSpacing: '0.2em',
+                            textTransform: 'uppercase',
+                            color: 'var(--p2)',
+                            fontWeight: 600,
+                            marginBottom: '0.5rem',
+                            marginTop: '1rem'
+                          }}>The Diagnosis</div>
+                          <p style={{
+                            fontSize: '0.95rem',
+                            lineHeight: 1.8,
+                            color: 'var(--fg2)',
+                            fontWeight: 300,
+                            marginBottom: '0.75rem'
+                          }}>{p.diagnosis}</p>
+                          <ul style={{
+                            listStyle: 'none',
+                            padding: 0,
+                            margin: 0
+                          }}>
+                            {p.painPoints?.map((point, i) => (
+                              <li key={i} style={{
+                                display: 'flex',
+                                alignItems: 'flex-start',
+                                gap: '0.5rem',
                                 marginBottom: '0.5rem',
-                                marginTop: '1rem'
-                              }}>The Diagnosis: Five Real Reasons for Hesitation</div>
-                              <p style={{
-                                fontSize: '0.95rem',
-                                lineHeight: 1.8,
+                                fontSize: '0.9rem',
                                 color: 'var(--fg2)',
-                                fontWeight: 300,
-                                marginBottom: '0.75rem'
-                              }}>{p.diagnosis}</p>
-                              <ul style={{
-                                listStyle: 'none',
-                                padding: 0,
-                                margin: 0
+                                fontWeight: 300
                               }}>
-                                {p.painPoints?.map((point, i) => (
-                                  <li key={i} style={{
-                                    display: 'flex',
-                                    alignItems: 'flex-start',
-                                    gap: '0.5rem',
-                                    marginBottom: '0.5rem',
-                                    fontSize: '0.9rem',
-                                    color: 'var(--fg2)',
-                                    fontWeight: 300
-                                  }}>
-                                    <span style={{ color: 'var(--p2)', fontSize: '1.2rem' }}>•</span>
-                                    {point}
-                                  </li>
-                                ))}
-                              </ul>
-                            </>
-                          )}
+                                <span style={{ color: 'var(--p2)', fontSize: '1.2rem' }}>•</span>
+                                {point}
+                              </li>
+                            ))}
+                          </ul>
                         </div>
 
                         {/* Solution */}
@@ -1550,61 +1581,57 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
                             fontWeight: 600,
                             marginBottom: '0.5rem'
                           }}>
-                            {isBrandyMelville ? 'The Solution: The "Objection-Crusher" Sequence' : 'Solution'}
+                            The Solution
                           </div>
                           <p style={{
                             fontSize: '0.95rem',
                             lineHeight: 1.8,
                             color: 'var(--fg2)',
                             fontWeight: 300,
-                            marginBottom: isBrandyMelville ? '0.75rem' : 0
-                          }}>{isBrandyMelville ? p.solution : p.solution}</p>
+                            marginBottom: '0.75rem'
+                          }}>{p.solution}</p>
                           
-                          {/* Solution Steps for Brandy Melville */}
-                          {isBrandyMelville && (
-                            <ol style={{
-                              paddingLeft: '1.5rem',
-                              margin: 0
-                            }}>
-                              {p.solutionSteps?.map((step, i) => (
-                                <li key={i} style={{
-                                  marginBottom: '0.5rem',
-                                  fontSize: '0.9rem',
-                                  color: 'var(--fg2)',
-                                  fontWeight: 300
-                                }}>{step}</li>
-                              ))}
-                            </ol>
-                          )}
+                          <ol style={{
+                            paddingLeft: '1.5rem',
+                            margin: 0
+                          }}>
+                            {p.solutionSteps?.map((step, i) => (
+                              <li key={i} style={{
+                                marginBottom: '0.5rem',
+                                fontSize: '0.9rem',
+                                color: 'var(--fg2)',
+                                fontWeight: 300
+                              }}>{step}</li>
+                            ))}
+                          </ol>
                         </div>
                       </div>
 
                       {/* Right Column */}
                       <div>
-                        {/* Image Placeholder with purple gradient */}
+                        {/* Image without gradient overlay */}
                         <div style={{
                           height: '200px',
                           borderRadius: '12px',
-                          background: 'linear-gradient(135deg, var(--p1), var(--p2), var(--p3))',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
                           position: 'relative',
                           overflow: 'hidden',
                           marginBottom: '1.5rem',
-                          border: '1px solid rgba(255,255,255,0.1)',
+                          border: '1px solid var(--border)',
                           boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
                         }}>
-                          <div style={{
-                            position: 'absolute',
-                            inset: 0,
-                            background: 'radial-gradient(circle at 70% 30%, rgba(255,255,255,0.15) 0%, transparent 60%)',
-                          }} />
-                          <div style={{
-                            fontSize: '4rem',
-                            opacity: 0.3,
-                            transform: 'rotate(5deg)',
-                          }}>🖼️</div>
+                          <img 
+                            src={p.imagePath} 
+                            alt={p.title} 
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              objectPosition: 'center'
+                            }}
+                          />
                           <div style={{
                             position: 'absolute',
                             bottom: '1rem',
@@ -1612,16 +1639,17 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
                             right: '1rem',
                             textAlign: 'center',
                             fontSize: '0.8rem',
-                            color: 'rgba(255,255,255,0.7)',
-                            fontWeight: 500,
+                            color: '#fff',
+                            fontWeight: 600,
                             letterSpacing: '0.1em',
                             textTransform: 'uppercase',
-                            background: 'rgba(0,0,0,0.3)',
+                            background: 'rgba(125,111,208,0.7)',
                             padding: '0.5rem',
                             borderRadius: '30px',
-                            backdropFilter: 'blur(5px)'
+                            backdropFilter: 'blur(5px)',
+                            border: '1px solid rgba(255,255,255,0.2)'
                           }}>
-                            Project Preview
+                            {p.title} Preview
                           </div>
                         </div>
 
@@ -1639,8 +1667,8 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
                             color: 'var(--p2)',
                             fontWeight: 600,
                             marginBottom: '1rem'
-                          }}>{isBrandyMelville ? "The Results" : "Key Results"}</div>
-                          {(isBrandyMelville ? p.results : p.metrics)?.map((metric, i) => (
+                          }}>The Results</div>
+                          {p.results?.map((metric, i) => (
                             <motion.div
                               key={i}
                               initial={{ x: -20, opacity: 0 }}
@@ -1775,7 +1803,7 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
   );
 };
 
-/* ── Updated Portfolio Card with Popup ── */
+/* ── Portfolio Card (no image, just gradient and icon) ── */
 const PortfolioCard = ({ p, idx, onClick }: { p:typeof PORTFOLIO[0]; idx:number; onClick: () => void }) => {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once:true, margin:"-40px" });
@@ -1791,20 +1819,30 @@ const PortfolioCard = ({ p, idx, onClick }: { p:typeof PORTFOLIO[0]; idx:number;
       onMouseEnter={e=>(e.currentTarget as HTMLDivElement).style.borderColor="rgba(125,111,208,.4)"}
       onMouseLeave={e=>(e.currentTarget as HTMLDivElement).style.borderColor="var(--border)"}
       onClick={onClick}>
-      {/* Preview */}
-      <div style={{height:170,background:`linear-gradient(135deg,rgba(125,111,208,.1) 0%,var(--bg3) 100%)`,
-        display:"flex",alignItems:"center",justifyContent:"center",
-        borderBottom:"1px solid var(--border)",position:"relative"}}>
-        <div style={{fontSize:"2.8rem",opacity:.75}}>{p.icon}</div>
+      {/* Preview with gradient and icon only (no image) */}
+      <div style={{
+        height:170,
+        background: `linear-gradient(135deg, rgba(125,111,208,0.1) 0%, var(--bg3) 100%)`,
+        display:"flex",
+        alignItems:"center",
+        justifyContent:"center",
+        borderBottom:"1px solid var(--border)",
+        position:"relative"
+      }}>
+        <div style={{
+          fontSize:"2.8rem",
+          opacity:0.75,
+          zIndex: 2
+        }}>{p.icon}</div>
         <div style={{position:"absolute",top:"1rem",left:"1rem",
           padding:".22rem .65rem",borderRadius:4,
-          background:"rgba(125,111,208,.12)",border:"1px solid rgba(125,111,208,.25)",
+          background:"rgba(125,111,208,0.9)",border:"1px solid rgba(255,255,255,0.3)",
           fontSize:".63rem",letterSpacing:".1em",textTransform:"uppercase",
-          color:"var(--p2)",fontWeight:600}}>{p.cat}</div>
+          color:"#fff",fontWeight:600,zIndex:2}}>{p.cat}</div>
         <div style={{position:"absolute",top:"1rem",right:"1rem",
           padding:".22rem .65rem",borderRadius:4,
-          background:"rgba(125,111,208,.16)",border:"1px solid rgba(125,111,208,.3)",
-          fontSize:".7rem",color:"var(--p3)",fontWeight:700}}>{p.result}</div>
+          background:"rgba(125,111,208,0.9)",border:"1px solid rgba(255,255,255,0.3)",
+          fontSize:".7rem",color:"#fff",fontWeight:700,zIndex:2}}>{p.result}</div>
       </div>
       <div style={{padding:"1.3rem"}}>
         <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:"1.05rem",fontWeight:700,
