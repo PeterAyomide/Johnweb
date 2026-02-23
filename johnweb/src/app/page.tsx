@@ -649,9 +649,25 @@ const About = () => {
         <motion.div initial={{opacity:0,x:28}} animate={inView?{opacity:1,x:0}:{}}
           transition={{duration:.75,delay:.15,ease:e}}>
           {[
-            `In my experience with clients, I've seen how a brand <strong>literally doesn't just want an Email Designer, or just a copywriter.</strong> Visual appeal alone won't sponsor conversion.`,
-            `While I excel in designing <strong>visually appealing emails that are conversion, brand, and aesthetically focused</strong> — and writing copy that takes ten steps ahead of the prospect's objections — I've also built a deep database of strategies from the finest email agencies on LinkedIn.`,
-            `These strategies put me in a position where I can see the <strong>behavioral tendencies and objections of prospects.</strong> Rooted in strategy first — all to the end that we <strong>slice through resistance and bring the prospect to conversion.</strong>`,
+             `"John’s approach didn't just change our copy; he changed our conversion rate overnight. He found the gaps we didn't even know were there." — Sophia Lin`,
+
+    `Let me tell you how you make the angles sing. Most businesses don’t have a traffic problem; they have a “so what?” problem. Founders burn budgets on ads that produce nothing but expensive noise because the message fails to connect.`,
+
+    `As a copywriter, my job is to stop that bleed.`,
+
+    `The Proof: SaaS Case Study`,
+
+    `I recently partnered with a scaling SaaS brand facing high traffic but stagnant conversions. The diagnosis? Their message was buried in technical jargon.`,
+
+    `We re-engineered the narrative to focus on the user’s “future self” rather than just software features. By aligning the brand’s voice with the customer’s true desires, we achieved:`,
+
+    `• A 35% lift in trial sign-ups within the first month.
+     • A shift from “fingers-crossed” marketing to predictable results.`,
+
+    `My Philosophy: Conversion Nécessaire. Deep-end research. A/B testing. Shifting ad angles. Strategy uplift. What matters in the end is conversion. That's how you make the angels sing.`,
+
+    `The point is simple — we make every dollar of your ad spend work harder by turning your solution into the natural, inevitable next step for your prospect.`
+  
           ].map((txt,i)=>(
             <p key={i} style={{fontSize:".95rem",lineHeight:1.9,color:"var(--fg2)",fontWeight:300,
               marginBottom:i<2?"1.4rem":0}}
@@ -703,7 +719,7 @@ const SERVICES = [
     back:"- I have designed campaigns for clients using figma, prioritizing visual appeal with the intention  of selling dopamine and increasing the premium feel of the brand",
     tag:"Design · UX · Conversion" },
   { num:"04", icon:"⚡", title:"Email Templates", sub:"The Speed",
-    front:"A curated bank of ready yo use deploy templates for fast turnarounds",
+    front:"A curated bank of ready to use deploy templates for fast turnarounds",
     back:"A curated bank of ready yo use deploy templates for fast turnarounds.",
     tag:"Templates · Speed · Scale" },
 ];

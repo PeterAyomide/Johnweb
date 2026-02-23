@@ -262,11 +262,10 @@ const Slide = ({ speed = 75, className = "" }: SlideProps) => {
             <div className="title-line-bar" />
           </div>
 
-          {/* <p className="speakers-desc">
-            A gathering of extraordinary minds — pastors, creatives,
-            entrepreneurs, and coaches coming together to challenge,
-            equip, and transform.
-          </p> */}
+          <p className="speakers-desc">
+           My job as a Copywriter and a designer is to make sure the copy continues the conversation in their heads,
+            and the design gives the copy an impactful visual contex
+          </p>
         </div>
 
         <div
