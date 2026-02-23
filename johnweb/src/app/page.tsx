@@ -490,7 +490,7 @@ const Hero = ({ t }: { t: Theme }) => {
             </motion.h1>
             <motion.p className="h-tag" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}}
               transition={{duration:.7,delay:.65,ease:e}}>
-              Copies that sell. Strategies that scale. Emails that convert.
+              Copies that sell. Strategies that scale. Designs that engage.
             </motion.p>
             <motion.div className="tw-wrap" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:.9}}>
               {role}<span className="tw-cur"/>
@@ -628,13 +628,13 @@ const About = () => {
           transition={{duration:.75,ease:e}}>
           <p className="sec-label">Philosophy</p>
           <h2 className="sec-heading">
-            Strategy <em style={{fontStyle:"italic",
+            Conversion <em style={{fontStyle:"italic",
               background:"linear-gradient(135deg,var(--p2),var(--p3))",
               WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",
-              backgroundClip:"text"}}>first.</em><br/>Always.
+              backgroundClip:"text"}}>Necessaire.</em><br/>Always.
           </h2>
           <div style={{display:"flex",gap:"2.2rem",marginTop:"2.8rem",flexWrap:"wrap"}}>
-            {[["∞","Email Strategies"],["100%","Conversion Focus"],["0","Shortcuts"]].map(([n,l])=>(
+            {[["∞"," Strategies"],["100%","Conversion Focus"],["0","Shortcuts"]].map(([n,l])=>(
               <div key={l}>
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:"2rem",fontWeight:900,
                   background:"linear-gradient(135deg,var(--p2),var(--p3))",
@@ -1954,18 +1954,18 @@ const Portfolio = () => {
 
 /* ══════════════════════════════════════════════════════ CLIENTS */
 const CLIENTS = [
-  { name:"Cappuccino Commerce", role:"Lead Email Strategist", type:"Agency", icon:"☕",
+  { name:"Landing page", role:"Lead Email Strategist", type:"Agency", icon:"☕",
     scope:"Set up the full email strategy and designed the welcome series for this email agency. Led strategy before any design or copy was written.",
-    result:"Full welcome flow with measurable lift in engagement", link:GAMMA_PORTFOLIO_LINK },
-  { name:"Ecommerce Fashion Client", role:"Email Designer & Copywriter", type:"Ecommerce", icon:"👗",
-    scope:"Designed on-brand email sequences with conversion-focused copy. Ran feedback campaigns and A/B tests before writing a single word.",
-    result:"42% average open rate on welcome series", link:GAMMA_PORTFOLIO_LINK },
+    result:"Here I drafted a niche-specific landing page and VSL to help high-revenue showrooms stop wasting ad spend and scale profit", link:GAMMA_PORTFOLIO_LINK },
+  { name:"Meta Ad", role:"Email Designer & Copywriter", type:"Ecommerce", icon:"👗",
+    scope:"Here I scripted high-converting Meta ads for three brands, tackling skincare redness, nervous system burnout, and sophisticated non-alcoholic drinking",
+    result:"Here I scripted high-converting Meta ads for three brands, tackling skincare redness, nervous system burnout, and sophisticated non-alcoholic drinking", link:GAMMA_PORTFOLIO_LINK },
   { name:"Info Product Creator", role:"Launch Copywriter", type:"Info Product", icon:"📚",
     scope:"Wrote the full 7-email launch sequence for a digital product. Research-first approach — understood audience belief barriers before writing word one.",
     result:"$14,000 generated in 5 days", link:GAMMA_PORTFOLIO_LINK },
-  { name:"Wellness Brand", role:"Email Strategist & Designer", type:"Wellness", icon:"🌿",
+  { name:"Email popups", role:"Email Strategist & Designer", type:"Popups", icon:"🔔",
     scope:"Built the complete retention flow suite: post-purchase, winback, and VIP sequences. Designed all email templates with brand aesthetics.",
-    result:"28% cart recovery rate", link:GAMMA_PORTFOLIO_LINK },
+    result:"Here, I designed pop ups forms, and write the copies on them. These are a selected few of some email pop I did ( Design and Copy)", link:GAMMA_PORTFOLIO_LINK },
 
  
 ];
@@ -2069,7 +2069,8 @@ const Clients = () => {
           <motion.p style={{fontSize:".9rem",color:"var(--fg2)",fontWeight:300,
             maxWidth:480,lineHeight:1.75,marginBottom:"3rem"}}
             initial={{opacity:0}} animate={inView?{opacity:1}:{}} transition={{delay:.2}}>
-            Real work. Real clients. Real results. Click anywhere to view portfolio or "Details" to see full scope.
+           I have successfully collaborated with clients on vsls, landing page copies, meta, tik tok, and Instagram copies, product descriptions etc. Below are a few of them.
+
           </motion.p>
 
           {isMob ? (

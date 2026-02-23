@@ -263,8 +263,8 @@ const Slide = ({ speed = 75, className = "" }: SlideProps) => {
           </div>
 
           <p className="speakers-desc">
-           My job as a Copywriter and a designer is to make sure the copy continues the conversation in their heads,
-            and the design gives the copy an impactful visual contex
+           My job as a copywriter and a designer is to make sure the copy continues the conversation in their heads,
+            and the design gives the copy an impactful visual context
           </p>
         </div>
 
