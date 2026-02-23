@@ -1781,34 +1781,7 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
                     >
                       Close
                     </button>
-                    <button
-                      onClick={handleViewFull}
-                      style={{
-                        padding: '0.85rem 2rem',
-                        borderRadius: '8px',
-                        border: 'none',
-                        background: 'linear-gradient(135deg, var(--p1), var(--p2))',
-                        color: '#fff',
-                        fontSize: '0.85rem',
-                        fontWeight: 600,
-                        letterSpacing: '0.07em',
-                        textTransform: 'uppercase',
-                        cursor: 'pointer',
-                        boxShadow: '0 4px 24px rgba(125,111,208,0.3)',
-                        transition: 'all 0.2s',
-                        flex: isMobile ? 1 : 'auto'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'translateY(-2px)';
-                        e.currentTarget.style.boxShadow = '0 8px 32px rgba(125,111,208,0.4)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.boxShadow = '0 4px 24px rgba(125,111,208,0.3)';
-                      }}
-                    >
-                      View Full Project ↗
-                    </button>
+
                   </motion.div>
                 </motion.div>
               </div>
