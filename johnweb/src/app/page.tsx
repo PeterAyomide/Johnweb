@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import Slide from "./components/Slide";
+import Image from "next/image";
 
 type Theme = "dark" | "light";
 
@@ -416,7 +417,7 @@ const Hero = ({ t }: { t: Theme }) => {
         .btn-ghost:hover{border-color:var(--p2);color:var(--p2);}
         /* image stage */
         .img-stage{position:relative;display:flex;justify-content:center;align-items:flex-end;}
-        .img-frame{width:320px;height:400px;border-radius:180px 180px 40px 40px;
+        .img-frame{width:320px;height:300px;border-radius:180px 180px 40px 40px;
           background:${d?"linear-gradient(160deg,rgba(125,111,208,.12) 0%,rgba(11,8,19,.8) 100%)":"linear-gradient(160deg,rgba(168,159,226,.25) 0%,rgba(250,248,255,.6) 100%)"};
           border:1.5px solid var(--border);position:relative;overflow:hidden;
           box-shadow:var(--card-sh);display:flex;align-items:center;justify-content:center;}
@@ -502,24 +503,28 @@ const Hero = ({ t }: { t: Theme }) => {
             </motion.div>
           </div>
 
-          <motion.div className="img-stage" initial={{opacity:0,scale:.92}}
-            animate={{opacity:1,scale:1}} transition={{duration:.85,delay:.55,ease:e}}>
-            <div className="img-frame">
-              <div className="img-placeholder">
-                <div className="ph-icon">✍️</div>
-                <p className="ph-txt">Your photo<br/>goes here</p>
-              </div>
-            </div>
-            <div className="img-bdg">
-              <div className="bdg-stars">★★★★★</div>
-              <div className="bdg-num">100%</div>
-              <div className="bdg-lbl">Client Satisfaction</div>
-            </div>
-            <div className="img-bdg2">
-              <div className="bdg-num">50+</div>
-              <div className="bdg-lbl">Clients Served</div>
-            </div>
-          </motion.div>
+        <motion.div className="img-stage" initial={{opacity:0,scale:.92}}
+  animate={{opacity:1,scale:1}} transition={{duration:.85,delay:.55,ease:e}}>
+  <div className="img-frame">
+    <Image 
+      src="/main.png" 
+      alt="Main image"
+      width={500}  
+      height={300}
+      className="img-content"
+      priority
+    />
+  </div>
+  <div className="img-bdg">
+    <div className="bdg-stars">★★★★★</div>
+    <div className="bdg-num">100%</div>
+    <div className="bdg-lbl">Client Satisfaction</div>
+  </div>
+  <div className="img-bdg2">
+    <div className="bdg-num">50+</div>
+    <div className="bdg-lbl">Clients Served</div>
+  </div>
+</motion.div>
         </div>
       </section>
     </>
@@ -648,25 +653,25 @@ const About = () => {
         </motion.div>
         <motion.div initial={{opacity:0,x:28}} animate={inView?{opacity:1,x:0}:{}}
           transition={{duration:.75,delay:.15,ease:e}}>
-          {[
-             `"John’s approach didn't just change our copy; he changed our conversion rate overnight. He found the gaps we didn't even know were there." — Sophia Lin`,
+           {[
+            `"John's approach didn't just change our copy; he changed our conversion rate overnight. He found the gaps we didn't even know were there." — <strong>Sophia Lin</strong>`,
 
-    `Let me tell you how you make the angles sing. Most businesses don’t have a traffic problem; they have a “so what?” problem. Founders burn budgets on ads that produce nothing but expensive noise because the message fails to connect.`,
+            `Let me tell you how you make the angles sing. Most businesses don't have a traffic problem; they have a "so what?" problem. Founders burn budgets on ads that produce nothing but expensive noise because the message fails to connect.`,
 
-    `As a copywriter, my job is to stop that bleed.`,
+            `As a copywriter, my job is to stop that bleed.`,
 
-    `The Proof: SaaS Case Study`,
 
-    `I recently partnered with a scaling SaaS brand facing high traffic but stagnant conversions. The diagnosis? Their message was buried in technical jargon.`,
+            `<strong>The Proof: SaaS Case Study</strong>`,
 
-    `We re-engineered the narrative to focus on the user’s “future self” rather than just software features. By aligning the brand’s voice with the customer’s true desires, we achieved:`,
+            `I recently partnered with a scaling SaaS brand facing high traffic but stagnant conversions. The diagnosis? Their message was buried in technical jargon.`,
 
-    `• A 35% lift in trial sign-ups within the first month.
-     • A shift from “fingers-crossed” marketing to predictable results.`,
+            `We re-engineered the narrative to focus on the user's "future self" rather than just software features. By aligning the brand's voice with the customer's true desires, we achieved:`,
 
-    `My Philosophy: Conversion Nécessaire. Deep-end research. A/B testing. Shifting ad angles. Strategy uplift. What matters in the end is conversion. That's how you make the angels sing.`,
+            `<span style="display: block; margin-left: 1rem;">• A 35% lift in trial sign-ups within the first month.<br />• A shift from "fingers-crossed" marketing to predictable results.</span>`,
 
-    `The point is simple — we make every dollar of your ad spend work harder by turning your solution into the natural, inevitable next step for your prospect.`
+            `<strong>My Philosophy: Conversion Nécessaire.</strong> Deep-end research. A/B testing. Shifting ad angles. Strategy uplift. What matters in the end is conversion. That's how you make the angels sing.`,
+
+            `The point is simple — we make every dollar of your ad spend work harder by turning your solution into the natural, inevitable next step for your prospect.`
   
           ].map((txt,i)=>(
             <p key={i} style={{fontSize:".95rem",lineHeight:1.9,color:"var(--fg2)",fontWeight:300,
@@ -733,6 +738,18 @@ const FlipCard = ({ s, delay=0 }: { s:typeof SERVICES[0]; delay?:number }) => {
     e.stopPropagation();
     window.open("https://docs.google.com/document/d/1LNteSQdCO3uHBkmkBZG4Qui0aJvsuivDuIce11vDg5Y/edit?tab=t.0#heading=h.58wa1kvlp7yq", "_blank");
   };
+
+   const handleViewClick2 = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    window.open("https://gamma.app/docs/eklfqu4fne5ad28", "_blank");
+  };  
+
+  
+     const handleViewClick3 = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    window.open("https://www.figma.com/design/9UBYnLlmXHTYYeM1kKiNjP/Pop---Up-Designs?node-id=0-1&p=f&t=lsGXUonFPbrqc1mz-0", "_blank");
+  };
+  
 
   return (
     <>
@@ -886,6 +903,9 @@ const Services = () => {
 
 /* ══════════════════════════════════════════════════════ PORTFOLIO WITH POPUP */
 // Each case study now has its own unique link
+const META_ADS_LINK = "https://docs.google.com/document/d/1VP87DzCIX2LVlFfLz26oILpwntZWcz17v0KzyiM579w/edit?tab=t.0";
+const LANDING_PAGE= "https://docs.google.com/document/d/1Lhf8uTnO3v2VAlH0Gh_a5taiGlyIjI5BvJbyeBwqyBY/edit?tab=t.0"
+const STRATEGY= "https://docs.google.com/document/d/14yrggTg6QxNkb8ENwePzYN5qX6Axki-2S-RBfsD1UZg/edit?tab=t.0";
 const GAMMA_PORTFOLIO_LINK = "https://gamma.app/docs/John-Adegboye-Email-Designs-maijbq0d2ey17xp?mode=present#card-vets3tmnvfiv4jj";
 const BRANDY_LINK = "https://gamma.app/docs/Brandy-Melville-Welcome-Flow-Case-Study-x7yq2p9l3m5n";
 const CART_RECOVERY_LINK = "https://gamma.app/docs/Cart-Recovery-Strategy-ft8d4s6a1b2c";
@@ -1001,7 +1021,7 @@ const PORTFOLIO = [
     ],
     results:[
       "38% avg open rate across all clients",
-      "$2.1M revenue attributed to email",
+      "$100k revenue attributed to email",
       "45min flow setup time (down from 2 weeks)",
       "Scaled to 15+ clients in 3 months"
     ]
@@ -1954,18 +1974,25 @@ const Portfolio = () => {
 
 /* ══════════════════════════════════════════════════════ CLIENTS */
 const CLIENTS = [
-  { name:"Landing page", role:"Lead Email Strategist", type:"Agency", icon:"☕",
-    scope:"Set up the full email strategy and designed the welcome series for this email agency. Led strategy before any design or copy was written.",
-    result:"Here I drafted a niche-specific landing page and VSL to help high-revenue showrooms stop wasting ad spend and scale profit", link:GAMMA_PORTFOLIO_LINK },
-  { name:"Meta Ad", role:"Email Designer & Copywriter", type:"Ecommerce", icon:"👗",
-    scope:"Here I scripted high-converting Meta ads for three brands, tackling skincare redness, nervous system burnout, and sophisticated non-alcoholic drinking",
-    result:"Here I scripted high-converting Meta ads for three brands, tackling skincare redness, nervous system burnout, and sophisticated non-alcoholic drinking", link:GAMMA_PORTFOLIO_LINK },
-  { name:"Info Product Creator", role:"Launch Copywriter", type:"Info Product", icon:"📚",
-    scope:"Wrote the full 7-email launch sequence for a digital product. Research-first approach — understood audience belief barriers before writing word one.",
-    result:"$14,000 generated in 5 days", link:GAMMA_PORTFOLIO_LINK },
-  { name:"Email popups", role:"Email Strategist & Designer", type:"Popups", icon:"🔔",
-    scope:"Built the complete retention flow suite: post-purchase, winback, and VIP sequences. Designed all email templates with brand aesthetics.",
+  { name:"Landing page", role:"Copywriter", type:"Copywriter", icon:"☕",
+    scope:"Client Success Metrics San Diego Office & Modular Design: Tripled their Click-Through Rate (CTR) by 65% within 90 days. Monique’s Bath Showroom: Increased annual revenue by 26% Year-over-Year for 2 consecutive years. New England Shutter Mills: Secured project requests worth 5x more by adjusting campaign targeting. San Diego Office & Modular Design: Generated 65% more phone calls month-over-month in the first 90 days. Complete Commercial Finance: Consistently generates at least a 3:1 return on their monthly marketing investment.",
+    result:"Here I drafted a niche-specific landing page and VSL to help high-revenue showrooms stop wasting ad spend and scale profit", link:LANDING_PAGE },
+    
+  { name:"Meta Ad", role:"Email Designer & Copywriter", type:"Copywriter", icon:"👗",
+    scope:"Here I scripted high-converting Meta ads for three brands, tackling skincare redness, nervous system burnout, and sophisticated non-alcoholic drinking Details; 1. Earth Harbor (Skincare) Hook Rate: 15% – 20%. The Mirror Moment describes a relatable pain point that stops people mid-scroll. CTR: 1.2%. Curiosity about the missing link in cellular skin repair drives the click. 2. Needed (Supplements) Hook Rate: 18% – 22%. The Wired but Tired hook is a powerful psychological magnet for overstimulated women. CTR: 1.0%. A lower, higher-intent click from those seeking clinical-grade nervous system support. 3. Ghia (Non-Alcoholic) Hook Rate: 12% – 15%. Focuses on the specific awkward moment of holding an empty glass at a party. CTR: 0.9%. Targeted at people wanting a grown-up ritual without the sugary mocktail kids table feel.",
+    result:"Here I scripted high-converting Meta ads for three brands, tackling skincare redness, nervous system burnout, and sophisticated non-alcoholic drinking", link: META_ADS_LINK},
+    
+  { name:"VSL script", role:"Launch Copywriter", type:"Copywriter", icon:"📚",
+    scope:" expensive noise by Exposing the Cycle: I proved that €60 temporary treatments are designed to keep patients stuck and spending thousands.Neutralizing the Pressure: I shifted the focus to the 18kg of physical force causing the pain, not just the surface symptoms.Validating with Data: I backed the solution with a clinical study of 487 patients showing a 55% increase in blood flow. Guaranteeing Results: I promised a definitive aftyyyyyyer —98% relief within 14 days, or their money back.Simplifying the Math: I framed a €79 investment as the only logical way to end the cycle of recurring medical bills.",
+    result:"Here I wrote a VSL for Dr. Lucas Martin a physiotherapist with 20 years of experience on his  product called  the Nuqis Neck Massager", link:GAMMA_PORTFOLIO_LINK },
+  
+    { name:"Email popups", role:" ", type:"Copywriter and Designer", icon:"🔔",
+    scope:"Here, I designed pop ups forms, and wrote the copies too. Details; These are a selected few of some email pop I did (Design and Copy).",
     result:"Here, I designed pop ups forms, and write the copies on them. These are a selected few of some email pop I did ( Design and Copy)", link:GAMMA_PORTFOLIO_LINK },
+     
+    { name:"Email Flows", role:"", type:"Copywriter and Designer", icon:"📚",
+    scope:" This is the second time I am using John’s services. He’s just very good Antonio Bianc",
+    result:"I executed these flows, from the copy to the design", link:GAMMA_PORTFOLIO_LINK },
 
  
 ];
@@ -2163,13 +2190,12 @@ const CTA = () => {
           <motion.h2 className="cta-h2"
             initial={{opacity:0,y:24}} animate={inView?{opacity:1,y:0}:{}}
             transition={{duration:.75,delay:.1,ease:e}}>
-            Let's build something<br/><em>unstoppable.</em>
+            10x your business<br/><em>With the right conversation </em>
           </motion.h2>
           <motion.p className="cta-sub"
             initial={{opacity:0,y:18}} animate={inView?{opacity:1,y:0}:{}}
             transition={{duration:.65,delay:.2}}>
-            If your brand is ready to stop leaving money in the inbox and start
-            engineering real conversions — let's talk.
+            Send a message, and let’s begin.
           </motion.p>
           <motion.form className="cta-row" onSubmit={handleEmailSubmit}
             initial={{opacity:0,y:18}} animate={inView?{opacity:1,y:0}:{}}
@@ -2180,12 +2206,8 @@ const CTA = () => {
         </div>
         <footer>
           <div className="footer">
-            <p className="f-copy">© 2025 John Adegboye. All rights reserved.</p>
-            <div className="f-links">
-              {["LinkedIn","Twitter / X","Email"].map(l=>(
-                <button key={l} className="f-lnk" onClick={handleContactClick}>{l}</button>
-              ))}
-            </div>
+            <p className="f-copy">© 2026 John Adegboye. All rights reserved.</p>
+            
           </div>
         </footer>
       </section>
