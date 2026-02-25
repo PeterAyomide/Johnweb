@@ -264,7 +264,7 @@ const Slide = ({ speed = 75, className = "" }: SlideProps) => {
 
           <p className="speakers-desc">
            My job as a copywriter and a designer is to make sure the copy continues the conversation in their heads,
-            and while design gives the copy an impactful visual context
+            while design gives the copy an impactful visual context
           </p>
         </div>
 
