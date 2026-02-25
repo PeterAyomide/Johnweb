@@ -1974,25 +1974,25 @@ const Portfolio = () => {
 
 /* ══════════════════════════════════════════════════════ CLIENTS */
 const CLIENTS = [
-  { name:"Landing page", role:"Copywriter", type:"Copywriter", icon:"☕",
+  { name:"Landing page", role:"Copywriter", type:"Copywriter", icon:"📃",
     scope:"Client Success Metrics San Diego Office & Modular Design: Tripled their Click-Through Rate (CTR) by 65% within 90 days. Monique’s Bath Showroom: Increased annual revenue by 26% Year-over-Year for 2 consecutive years. New England Shutter Mills: Secured project requests worth 5x more by adjusting campaign targeting. San Diego Office & Modular Design: Generated 65% more phone calls month-over-month in the first 90 days. Complete Commercial Finance: Consistently generates at least a 3:1 return on their monthly marketing investment.",
     result:"Here I drafted a niche-specific landing page and VSL to help high-revenue showrooms stop wasting ad spend and scale profit", link:LANDING_PAGE },
     
-  { name:"Meta Ad", role:"Email Designer & Copywriter", type:"Copywriter", icon:"👗",
+  { name:"Meta Ad", role:"Copywriter", type:"Copywriter", icon:"👗",
     scope:"Here I scripted high-converting Meta ads for three brands, tackling skincare redness, nervous system burnout, and sophisticated non-alcoholic drinking Details; 1. Earth Harbor (Skincare) Hook Rate: 15% – 20%. The Mirror Moment describes a relatable pain point that stops people mid-scroll. CTR: 1.2%. Curiosity about the missing link in cellular skin repair drives the click. 2. Needed (Supplements) Hook Rate: 18% – 22%. The Wired but Tired hook is a powerful psychological magnet for overstimulated women. CTR: 1.0%. A lower, higher-intent click from those seeking clinical-grade nervous system support. 3. Ghia (Non-Alcoholic) Hook Rate: 12% – 15%. Focuses on the specific awkward moment of holding an empty glass at a party. CTR: 0.9%. Targeted at people wanting a grown-up ritual without the sugary mocktail kids table feel.",
     result:"Here I scripted high-converting Meta ads for three brands, tackling skincare redness, nervous system burnout, and sophisticated non-alcoholic drinking", link: META_ADS_LINK},
     
-  { name:"VSL script", role:"Launch Copywriter", type:"Copywriter", icon:"📚",
-    scope:" expensive noise by Exposing the Cycle: I proved that €60 temporary treatments are designed to keep patients stuck and spending thousands.Neutralizing the Pressure: I shifted the focus to the 18kg of physical force causing the pain, not just the surface symptoms.Validating with Data: I backed the solution with a clinical study of 487 patients showing a 55% increase in blood flow. Guaranteeing Results: I promised a definitive aftyyyyyyer —98% relief within 14 days, or their money back.Simplifying the Math: I framed a €79 investment as the only logical way to end the cycle of recurring medical bills.",
+  { name:"VSL script", role:"Launch Copywriter", type:"Copywriter", icon:"📜",
+    scope:"I proved that €60 temporary treatments are designed to keep patients stuck and spending thousands.Neutralizing the Pressure: I shifted the focus to the 18kg of physical force causing the pain, not just the surface symptoms.Validating with Data: I backed the solution with a clinical study of 487 patients showing a 55% increase in blood flow. Guaranteeing Results: I promised a definitive after —98% relief within 14 days, or their money back.Simplifying the Math: I framed a €79 investment as the only logical way to end the cycle of recurring medical bills.",
     result:"Here I wrote a VSL for Dr. Lucas Martin a physiotherapist with 20 years of experience on his  product called  the Nuqis Neck Massager", link:GAMMA_PORTFOLIO_LINK },
   
-    { name:"Email popups", role:" ", type:"Copywriter and Designer", icon:"🔔",
-    scope:"Here, I designed pop ups forms, and wrote the copies too. Details; These are a selected few of some email pop I did (Design and Copy).",
-    result:"Here, I designed pop ups forms, and write the copies on them. These are a selected few of some email pop I did ( Design and Copy)", link:GAMMA_PORTFOLIO_LINK },
+    { name:"Email popups", role:" ", type:"Copywriter and Designer", icon:"✉️",
+    scope:"Here, I designed pop ups forms, and wrote the copies too. These are a selected few of some email pop I did (Design and Copy).",
+    result:"Here, I designed pop ups forms, and wrote the copies on them. These are a selected few of some email pop I did ( Design and Copy)", link:"https://www.figma.com/design/9UBYnLlmXHTYYeM1kKiNjP/Pop---Up-Designs?node-id=0-1&p=f" },
      
-    { name:"Email Flows", role:"", type:"Copywriter and Designer", icon:"📚",
-    scope:" This is the second time I am using John’s services. He’s just very good Antonio Bianc",
-    result:"I executed these flows, from the copy to the design", link:GAMMA_PORTFOLIO_LINK },
+    { name:"Email Flows", role:"", type:"Copywriter and Designer", icon:"📄",
+    scope:" This is the second time I am using John’s services. He’s just very good Antonio Bianchi",
+    result:"I executed these flows, from the copy to the design", link:"https://www.figma.com/design/8U92roDS0oTb02uLBQc3Ad/FLOWS" },
 
  
 ];
