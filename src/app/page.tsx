@@ -240,10 +240,6 @@ const Navbar = ({ t, toggle }: { t: Theme; toggle: () => void }) => {
     }
   };
 
-  const handleContactClick = () => {
-    window.open("https://wa.link/8qk7mn", "_blank");
-  };
-
   return (
     <>
       <style>{`
@@ -305,7 +301,6 @@ const Navbar = ({ t, toggle }: { t: Theme; toggle: () => void }) => {
           <button className="theme-tog" onClick={toggle} aria-label="Toggle theme">
             <span className="theme-knob">{d?"🌙":"☀️"}</span>
           </button>
-          <button className="nav-cta" onClick={handleContactClick}>Work With Me</button>
           <button className="ham" onClick={()=>setOpen(!open)}>
             <span className="ham-bar" style={{transform:open?"rotate(45deg) translateY(6.5px)":"none"}}/>
             <span className="ham-bar" style={{opacity:open?0:1}}/>
@@ -322,7 +317,6 @@ const Navbar = ({ t, toggle }: { t: Theme; toggle: () => void }) => {
             {NAV_LINKS.map(l => (
               <button key={l} className="mob-lnk" onClick={()=>go(l)}>{l}</button>
             ))}
-            <button className="mob-lnk" onClick={handleContactClick}>Contact</button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -357,10 +351,6 @@ const Hero = ({ t }: { t: Theme }) => {
 
   const handleSeeWorkClick = () => {
     window.open("https://docs.google.com/document/d/1LNteSQdCO3uHBkmkBZG4Qui0aJvsuivDuIce11vDg5Y/edit?tab=t.0#heading=h.58wa1kvlp7yq", "_blank");
-  };
-
-  const handleContactClick = () => {
-    window.open("https://wa.link/8qk7mn", "_blank");
   };
 
   return (
@@ -499,7 +489,6 @@ const Hero = ({ t }: { t: Theme }) => {
             <motion.div className="h-btns" initial={{opacity:0,y:18}} animate={{opacity:1,y:0}}
               transition={{duration:.65,delay:1.1,ease:e}}>
               <button className="btn-vio" onClick={handleSeeWorkClick}>See My Work ↗</button>
-              <button className="btn-ghost" onClick={handleContactClick}>Let's Talk</button>
             </motion.div>
           </div>
 
@@ -2116,15 +2105,6 @@ const CTA = () => {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once:true, margin:"-60px" });
   const e = [.22,1,.36,1] as any;
-
-  const handleContactClick = () => {
-    window.open("https://wa.link/8qk7mn", "_blank");
-  };
-
-  const handleEmailSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    window.open("https://wa.link/8qk7mn", "_blank");
-  };
 
   return (
     <>
