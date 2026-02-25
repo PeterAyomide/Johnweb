@@ -714,19 +714,23 @@ const SERVICES = [
   { num:"01", icon:"✍️", title:"Ecommerce Copy ", sub:"The Persuasion",
     front:"I have written copies that answer objections successfully closing a good number of prospects based on research and strategy.",
     back:"I have written copies that answer objections successfully closing a good number of prospects based on research and strategy.",
-    tag:"Copy · Research · A/B Testing" },
+    tag:"Copy · Research · A/B Testing",
+    link:"https://docs.google.com/document/d/1LNteSQdCO3uHBkmkBZG4Qui0aJvsuivDuIce11vDg5Y/edit?tab=t.0#heading=h.58wa1kvlp7yq" },
   { num:"02", icon:"⚔️", title:"Email Strategy", sub:"The Blade That Slices Through",
     front:"I have displayed a particular strategy I developed for an Italian client for black Friday sales, and the revenue performance .",
     back:"I have displayed a particular strategy I developed for an Italian client for black Friday sales, and the revenue performance ",
-    tag:"Email Strategy " },
+    tag:"Email Strategy ",
+    link:"https://docs.google.com/document/d/14yrggTg6QxNkb8ENwePzYN5qX6Axki-2S-RBfsD1UZg/edit?tab=t.0" },
   { num:"03", icon:"🎨", title:"Email Design", sub:"Subconscious Cues",
     front:"I have successfully designed emails for clients using Figma and priotizing visual appeal and a premium feel for the brands"  ,
     back:"- I have designed campaigns for clients using figma, prioritizing visual appeal with the intention  of selling dopamine and increasing the premium feel of the brand",
-    tag:"Design · UX · Conversion" },
+    tag:"Design · UX · Conversion",
+    link:"https://gamma.app/docs/maijbq0d2ey17xp" },
   { num:"04", icon:"⚡", title:"Email Templates", sub:"The Speed",
     front:"A curated bank of ready to use deploy templates for fast turnarounds",
     back:"A curated bank of ready yo use deploy templates for fast turnarounds.",
-    tag:"Templates · Speed · Scale" },
+    tag:"Templates · Speed · Scale",
+    link:"https://gamma.app/docs/eklfqu4fne5ad28" },
 ];
 
 const FlipCard = ({ s, delay=0 }: { s:typeof SERVICES[0]; delay?:number }) => {
@@ -736,20 +740,8 @@ const FlipCard = ({ s, delay=0 }: { s:typeof SERVICES[0]; delay?:number }) => {
 
   const handleViewClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    window.open("https://docs.google.com/document/d/1LNteSQdCO3uHBkmkBZG4Qui0aJvsuivDuIce11vDg5Y/edit?tab=t.0#heading=h.58wa1kvlp7yq", "_blank");
+    window.open(s.link, "_blank");
   };
-
-   const handleViewClick2 = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    window.open("https://gamma.app/docs/eklfqu4fne5ad28", "_blank");
-  };  
-
-  
-     const handleViewClick3 = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    window.open("https://www.figma.com/design/9UBYnLlmXHTYYeM1kKiNjP/Pop---Up-Designs?node-id=0-1&p=f&t=lsGXUonFPbrqc1mz-0", "_blank");
-  };
-  
 
   return (
     <>
@@ -904,9 +896,9 @@ const Services = () => {
 /* ══════════════════════════════════════════════════════ PORTFOLIO WITH POPUP */
 // Each case study now has its own unique link
 const META_ADS_LINK = "https://docs.google.com/document/d/1VP87DzCIX2LVlFfLz26oILpwntZWcz17v0KzyiM579w/edit?tab=t.0";
-const LANDING_PAGE= "https://docs.google.com/document/d/1Lhf8uTnO3v2VAlH0Gh_a5taiGlyIjI5BvJbyeBwqyBY/edit?tab=t.0"
+const LANDING_PAGE= "https://docs.google.com/document/d/1OVCIbKh7FM5twxxYnQKQdRdmzezdnBpp/edit"
 const STRATEGY= "https://docs.google.com/document/d/14yrggTg6QxNkb8ENwePzYN5qX6Axki-2S-RBfsD1UZg/edit?tab=t.0";
-const GAMMA_PORTFOLIO_LINK = "https://gamma.app/docs/John-Adegboye-Email-Designs-maijbq0d2ey17xp?mode=present#card-vets3tmnvfiv4jj";
+const GAMMA_PORTFOLIO_LINK = "https://docs.google.com/document/d/1Lhf8uTnO3v2VAlH0Gh_a5taiGlyIjI5BvJbyeBwqyBY/edit?tab=t.0";
 const BRANDY_LINK = "https://gamma.app/docs/Brandy-Melville-Welcome-Flow-Case-Study-x7yq2p9l3m5n";
 const CART_RECOVERY_LINK = "https://gamma.app/docs/Cart-Recovery-Strategy-ft8d4s6a1b2c";
 const CAPPUCCINO_LINK = "https://gamma.app/docs/Cappuccino-Commerce-Strategy-k9m3n7p2q4r6";
@@ -1978,7 +1970,7 @@ const CLIENTS = [
     scope:"Client Success Metrics San Diego Office & Modular Design: Tripled their Click-Through Rate (CTR) by 65% within 90 days. Monique’s Bath Showroom: Increased annual revenue by 26% Year-over-Year for 2 consecutive years. New England Shutter Mills: Secured project requests worth 5x more by adjusting campaign targeting. San Diego Office & Modular Design: Generated 65% more phone calls month-over-month in the first 90 days. Complete Commercial Finance: Consistently generates at least a 3:1 return on their monthly marketing investment.",
     result:"Here I drafted a niche-specific landing page and VSL to help high-revenue showrooms stop wasting ad spend and scale profit", link:LANDING_PAGE },
     
-  { name:"Meta Ad", role:"Copywriter", type:"Copywriter", icon:"👗",
+  { name:"Meta Ad", role:"", type:"", icon:"📣",
     scope:"Here I scripted high-converting Meta ads for three brands, tackling skincare redness, nervous system burnout, and sophisticated non-alcoholic drinking Details; 1. Earth Harbor (Skincare) Hook Rate: 15% – 20%. The Mirror Moment describes a relatable pain point that stops people mid-scroll. CTR: 1.2%. Curiosity about the missing link in cellular skin repair drives the click. 2. Needed (Supplements) Hook Rate: 18% – 22%. The Wired but Tired hook is a powerful psychological magnet for overstimulated women. CTR: 1.0%. A lower, higher-intent click from those seeking clinical-grade nervous system support. 3. Ghia (Non-Alcoholic) Hook Rate: 12% – 15%. Focuses on the specific awkward moment of holding an empty glass at a party. CTR: 0.9%. Targeted at people wanting a grown-up ritual without the sugary mocktail kids table feel.",
     result:"Here I scripted high-converting Meta ads for three brands, tackling skincare redness, nervous system burnout, and sophisticated non-alcoholic drinking", link: META_ADS_LINK},
     
@@ -2197,12 +2189,6 @@ const CTA = () => {
             transition={{duration:.65,delay:.2}}>
             Send a message, and let’s begin.
           </motion.p>
-          <motion.form className="cta-row" onSubmit={handleEmailSubmit}
-            initial={{opacity:0,y:18}} animate={inView?{opacity:1,y:0}:{}}
-            transition={{duration:.65,delay:.3}}>
-            <input className="cta-inp" type="email" placeholder="your@email.com"/>
-            <button type="submit" className="cta-btn">Get in Touch</button>
-          </motion.form>
         </div>
         <footer>
           <div className="footer">
