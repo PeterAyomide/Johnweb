@@ -498,9 +498,9 @@ const Hero = ({ t }: { t: Theme }) => {
     <Image 
       src="/main.png" 
       alt="Main image"
-      width={500}  
-      height={300}
+      fill
       className="img-content"
+      style={{objectFit:"cover",objectPosition:"center top"}}
       priority
     />
   </div>
