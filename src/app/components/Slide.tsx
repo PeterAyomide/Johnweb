@@ -9,10 +9,26 @@ interface SlideProps {
 
 const Slide = ({ speed = 75, className = "" }: SlideProps) => {
  
-  const slides = [8, 12, 2, 7, 4, 1, 11, 3].map((n) => ({
-    id: n,
-    src: `/slide${n}.png`,
-    alt: `Slide ${n}`,
+  const slides = [
+    "/slide8.png",
+    "/slide12.png",
+    "/slide2.png",
+    "/slide7.png",
+    "/slide4.png",
+    "/slide1.png",
+    "/slide11.png",
+    "/slide3.png",
+    "/Slice 1 (8).png",
+    "/Slice 2 (1).png",
+    "/Slice 3 (4).png",
+    "/Slice 4 (1).png",
+    "/Slice 5.png",
+    "/Slice 6 (1).png",
+    "/Slice 7.png",
+  ].map((src, index) => ({
+    id: index + 1,
+    src,
+    alt: `Portfolio slide ${index + 1}`,
   }));
 
   const trackRef = useRef<HTMLDivElement>(null);
