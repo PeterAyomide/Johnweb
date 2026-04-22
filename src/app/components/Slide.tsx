@@ -9,7 +9,7 @@ interface SlideProps {
 
 const Slide = ({ speed = 75, className = "" }: SlideProps) => {
  
-  const slides = [6, 8, 14, 13, 12, 9, 2, 15, 5, 13, 7, 10, 4, 1].map((n) => ({
+  const slides = [8, 12, 2, 7, 4, 1, 11, 3].map((n) => ({
     id: n,
     src: `/slide${n}.png`,
     alt: `Slide ${n}`,
