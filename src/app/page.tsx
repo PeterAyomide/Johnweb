@@ -668,6 +668,54 @@ const About = () => {
               dangerouslySetInnerHTML={{__html:txt.replace(/<strong>(.*?)<\/strong>/g,
                 `<strong style="color:var(--fg);font-weight:600">$1</strong>`)}}/>
           ))}
+
+          <div
+            style={{
+              marginTop: "2rem",
+              padding: "1.4rem 1.2rem",
+              border: "1px solid var(--border)",
+              borderRadius: "8px",
+              background: "var(--card)",
+              boxShadow: "var(--card-sh)",
+            }}
+          >
+            <p
+              style={{
+                fontSize: ".68rem",
+                letterSpacing: ".2em",
+                textTransform: "uppercase",
+                color: "var(--p2)",
+                fontWeight: 500,
+                marginBottom: ".75rem",
+              }}
+            >
+              Email Design Philosophy
+            </p>
+            {[
+              `Effective email design is about more than just a clean layout.`,
+              `It is about engineering a visual path that mirrors the sales psychology of the copy.`,
+              `The focus is <strong>conversion architecture</strong> - making sure the visual hierarchy pulls the reader from the hook down to the CTA without friction.`,
+              `By translating the brand tone into a distinct visual context, every element - typography, color, spacing, and structure - builds trust and reinforces the message.`,
+              `The goal is to mirror brand voice in design and turn every email into a high-converting experience.`,
+            ].map((txt, i) => (
+              <p
+                key={i}
+                style={{
+                  fontSize: ".9rem",
+                  lineHeight: 1.8,
+                  color: "var(--fg2)",
+                  fontWeight: 300,
+                  marginBottom: i < 4 ? ".7rem" : 0,
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: txt.replace(
+                    /<strong>(.*?)<\/strong>/g,
+                    `<strong style="color:var(--fg);font-weight:600">$1</strong>`
+                  ),
+                }}
+              />
+            ))}
+          </div>
         </motion.div>
       </div>
       <style>{`@media(max-width:780px){#about .sec-in{grid-template-columns:1fr!important;gap:3rem!important;}}`}</style>
