@@ -13,7 +13,6 @@ const Slide = ({ speed = 75, className = "" }: SlideProps) => {
     "/slide8.png",
     "/slide12.png",
     "/slide2.png",
-    "/slide7.png",
     "/slide4.png",
     "/slide1.png",
     "/slide11.png",
