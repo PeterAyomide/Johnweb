@@ -943,6 +943,53 @@ const POPUP_LINK = "https://gamma.app/docs/Exit-Intent-Popup-Designs-w5t8y1u3i7o
 const TEMPLATE_LINK = "https://gamma.app/docs/Email-Template-Bank-h4j6k8l0z2x4";
 const LAUNCH_LINK = "https://gamma.app/docs/Info-Product-Launch-Sequence-v9b1n3m5q7w9";
 
+const PROJECT_LINKS = [
+  {
+    title: "ADS: Scripts + Briefs For DTC Brands Spending 6-figures/mo on Meta",
+    url: "https://docs.google.com/document/d/1myWLlkuFeB8oVBDeFSMUjyEtQzW4fvmxmeAXG4bTzrg/edit?tab=t.u9hn7udh1rra",
+  },
+  {
+    title: "Video Scripts for Info Offers",
+    url: "https://docs.google.com/document/d/1myWLlkuFeB8oVBDeFSMUjyEtQzW4fvmxmeAXG4bTzrg/edit?tab=t.0",
+  },
+  {
+    title: "Static ads for DTC E-com brands",
+    url: "https://docs.google.com/document/d/1myWLlkuFeB8oVBDeFSMUjyEtQzW4fvmxmeAXG4bTzrg/edit?tab=t.tjaz6jlzv7rd",
+  },
+  {
+    title: "FUNNEL: DTC Funnel E-com Supplement Brand Scaling Past 8-Figures",
+    url: "https://docs.google.com/document/d/1myWLlkuFeB8oVBDeFSMUjyEtQzW4fvmxmeAXG4bTzrg/edit?tab=t.vgn9dydxlvud",
+  },
+  {
+    title: "FUNNEL: Advertorial For Blue Light Blocking Glasses",
+    url: "https://docs.google.com/document/d/1myWLlkuFeB8oVBDeFSMUjyEtQzW4fvmxmeAXG4bTzrg/edit?tab=t.j7465jf934v0",
+  },
+  {
+    title: "FUNNEL: VSLs for 6-figure Marketing Agency",
+    url: "https://docs.google.com/document/d/1myWLlkuFeB8oVBDeFSMUjyEtQzW4fvmxmeAXG4bTzrg/edit?tab=t.jbjpa6a2wdyl",
+  },
+  {
+    title: "Sales Page for 7-figures Coaching Offer",
+    url: "https://docs.google.com/document/d/1myWLlkuFeB8oVBDeFSMUjyEtQzW4fvmxmeAXG4bTzrg/edit?tab=t.uh85wh7hoqun",
+  },
+  {
+    title: "EMAILS: Emails for 5-7-figure Personal Brands",
+    url: "https://docs.google.com/document/d/1myWLlkuFeB8oVBDeFSMUjyEtQzW4fvmxmeAXG4bTzrg/edit?tab=t.7j2ruk6oi5c9",
+  },
+  {
+    title: "ORGANIC CONTENT: Content Strategist Project - Reels - Captions - Stories",
+    url: "https://docs.google.com/document/d/1myWLlkuFeB8oVBDeFSMUjyEtQzW4fvmxmeAXG4bTzrg/edit?tab=t.f57qi1gzznvs",
+  },
+  {
+    title: "LONG FORM COPY: Long Form Copy - no DR",
+    url: "https://docs.google.com/document/d/1myWLlkuFeB8oVBDeFSMUjyEtQzW4fvmxmeAXG4bTzrg/edit?tab=t.m9q44bvqn62t",
+  },
+  {
+    title: "CASE STUDY FOR ON A 3.5xRoas - Link To Case Study",
+    url: "https://docs.google.com/document/d/1R_D7kARiAczlY_5dDDRyKVAowdTlnGyRK-WgAhH37oM/edit?tab=t.0",
+  },
+];
+
 // Enhanced data structure for all case studies with the same rich content format
 const PORTFOLIO = [
   { 
@@ -1939,6 +1986,16 @@ const Portfolio = () => {
     <>
       <style>{`
         #portfolio{ border-top:1px solid var(--border); }
+        .pf-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin-bottom:3rem;}
+        .pf-link-card{display:flex;flex-direction:column;gap:.75rem;padding:1.4rem 1.5rem;
+          border:1px solid var(--border);border-radius:10px;background:var(--card);
+          text-decoration:none;transition:transform .2s,box-shadow .2s,border-color .2s;}
+        .pf-link-card:hover{transform:translateY(-4px);border-color:rgba(125,111,208,.4);
+          box-shadow:0 12px 36px rgba(125,111,208,.18);}
+        .pf-link-title{font-family:'Playfair Display',serif;font-size:1.02rem;font-weight:700;
+          color:var(--fg);line-height:1.35;}
+        .pf-link-meta{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
+          color:var(--p2);font-weight:600;}
         .pf-filters{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:3rem;}
         .pf-fb{padding:.3rem .85rem;border-radius:99px;font-size:.73rem;letter-spacing:.06em;
           text-transform:uppercase;font-weight:600;cursor:pointer;
@@ -1959,6 +2016,24 @@ const Portfolio = () => {
             initial={{opacity:0,y:20}} animate={inView?{opacity:1,y:0}:{}} transition={{delay:.1}}>
          Case Studies
           </motion.h2>
+
+          <div className="pf-links">
+            {PROJECT_LINKS.map((project) => (
+              <motion.a
+                key={project.title}
+                href={project.url}
+                target="_blank"
+                rel="noreferrer"
+                className="pf-link-card"
+                initial={{ opacity: 0, y: 18 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5 }}
+              >
+                <span className="pf-link-meta">Project Link</span>
+                <span className="pf-link-title">{project.title}</span>
+              </motion.a>
+            ))}
+          </div>
 
           <div className="pf-filters">
             {PF_FILTERS.map(f=>(
