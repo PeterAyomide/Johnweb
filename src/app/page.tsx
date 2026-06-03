@@ -1889,7 +1889,7 @@ const PortfolioPopup = ({ p, onClose }: { p: typeof PORTFOLIO[0] | null; onClose
   );
 };
 
-/* ── Portfolio Card (no image, just gradient and icon) ── */
+/* ── Portfolio Card (case study layout) ── */
 const PortfolioCard = ({ p, idx, onClick }: { p:typeof PORTFOLIO[0]; idx:number; onClick: () => void }) => {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once:true, margin:"-40px" });
@@ -1898,68 +1898,32 @@ const PortfolioCard = ({ p, idx, onClick }: { p:typeof PORTFOLIO[0]; idx:number;
     <motion.div ref={ref}
       initial={{opacity:0,y:28}} animate={inView?{opacity:1,y:0}:{}}
       transition={{duration:.6,delay:idx*.08,ease:[.22,1,.36,1]}}
-      whileHover={{y:-6,boxShadow:"0 16px 48px rgba(125,111,208,.15)"}}
-      style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",
-        background:"var(--card)",backdropFilter:"blur(12px)",cursor:"pointer",
-        transition:"all 0.3s"}}
-      onMouseEnter={e=>(e.currentTarget as HTMLDivElement).style.borderColor="rgba(125,111,208,.4)"}
-      onMouseLeave={e=>(e.currentTarget as HTMLDivElement).style.borderColor="var(--border)"}
+      whileHover={{y:-8,boxShadow:"0 18px 52px rgba(125,111,208,.2)"}}
+      className="pf-card"
       onClick={onClick}>
-      {/* Preview with gradient and icon only (no image) */}
-      <div style={{
-        height:170,
-        background: `linear-gradient(135deg, rgba(125,111,208,0.1) 0%, var(--bg3) 100%)`,
-        display:"flex",
-        alignItems:"center",
-        justifyContent:"center",
-        borderBottom:"1px solid var(--border)",
-        position:"relative"
-      }}>
-        <div style={{
-          fontSize:"2.8rem",
-          opacity:0.75,
-          zIndex: 2
-        }}>{p.icon}</div>
-        <div style={{position:"absolute",top:"1rem",left:"1rem",
-          padding:".22rem .65rem",borderRadius:4,
-          background:"rgba(125,111,208,0.9)",border:"1px solid rgba(255,255,255,0.3)",
-          fontSize:".63rem",letterSpacing:".1em",textTransform:"uppercase",
-          color:"#fff",fontWeight:600,zIndex:2}}>{p.cat}</div>
-        <div style={{position:"absolute",top:"1rem",right:"1rem",
-          padding:".22rem .65rem",borderRadius:4,
-          background:"rgba(125,111,208,0.9)",border:"1px solid rgba(255,255,255,0.3)",
-          fontSize:".7rem",color:"#fff",fontWeight:700,zIndex:2}}>{p.result}</div>
+      <div
+        className="pf-media"
+        style={{ backgroundImage: `url(${p.imagePath})` }}
+      >
+        <div className="pf-badges">
+          <span className="pf-pill">{p.cat}</span>
+          <span className="pf-pill pf-pill-strong">{p.result}</span>
+        </div>
+        <div className="pf-icon">{p.icon}</div>
       </div>
-      <div style={{padding:"1.3rem"}}>
-        <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:"1.05rem",fontWeight:700,
-          color:"var(--fg)",marginBottom:".55rem",lineHeight:1.3}}>{p.title}</h3>
-        <p style={{fontSize:".83rem",lineHeight:1.72,color:"var(--fg2)",fontWeight:300,
-          marginBottom:".9rem"}}>{p.desc}</p>
-        <div style={{display:"flex",gap:".4rem",flexWrap:"wrap"}}>
-          {p.tags.map(tg=>(
-            <span key={tg} style={{padding:".18rem .55rem",borderRadius:3,
-              background:"rgba(125,111,208,.08)",border:"1px solid rgba(125,111,208,.15)",
-              fontSize:".62rem",letterSpacing:".07em",textTransform:"uppercase",
-              color:"var(--fg2)",fontWeight:500}}>{tg}</span>
+      <div className="pf-body">
+        <div className="pf-title-row">
+          <h3 className="pf-title">{p.title}</h3>
+          <span className="pf-rating">★ {p.rating}.0</span>
+        </div>
+        <p className="pf-desc">{p.desc}</p>
+        <p className="pf-client">{p.clientName}</p>
+        <div className="pf-tags">
+          {p.tags.map(tg => (
+            <span key={tg} className="pf-tag">{tg}</span>
           ))}
         </div>
-        {/* View Details Indicator */}
-        <div style={{
-          marginTop: '1rem',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          fontSize: '0.7rem',
-          color: 'var(--p2)',
-          fontWeight: 500,
-          letterSpacing: '0.05em',
-          textTransform: 'uppercase',
-          borderTop: '1px solid var(--border)',
-          paddingTop: '0.8rem'
-        }}>
-          <span style={{ opacity: 0.7 }}>Click to view details</span>
-          <span style={{ fontSize: '1rem' }}>→</span>
-        </div>
+        <div className="pf-cta">View case study →</div>
       </div>
     </motion.div>
   );
@@ -1981,15 +1945,20 @@ const Portfolio = () => {
   },[]);
 
   const filtered = filter==="All" ? PORTFOLIO : PORTFOLIO.filter(p=>p.cat===filter);
+  const featured = filtered[0];
+  const rest = filtered.slice(1);
 
   return (
     <>
       <style>{`
-        #portfolio{ border-top:1px solid var(--border); }
+        #portfolio{ border-top:1px solid var(--border); background:linear-gradient(180deg,var(--bg) 0%,var(--bg3) 100%); }
+        .pf-sub{font-size:.95rem;color:var(--fg2);font-weight:300;max-width:560px;line-height:1.8;margin:-1rem 0 2.5rem;}
         .pf-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin-bottom:3rem;}
         .pf-link-card{display:flex;flex-direction:column;gap:.75rem;padding:1.4rem 1.5rem;
-          border:1px solid var(--border);border-radius:10px;background:var(--card);
-          text-decoration:none;transition:transform .2s,box-shadow .2s,border-color .2s;}
+          border:1px solid var(--border);border-radius:14px;background:var(--card);
+          text-decoration:none;transition:transform .2s,box-shadow .2s,border-color .2s;position:relative;overflow:hidden;}
+        .pf-link-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;
+          background:linear-gradient(90deg,var(--p1),var(--p3),transparent);} 
         .pf-link-card:hover{transform:translateY(-4px);border-color:rgba(125,111,208,.4);
           box-shadow:0 12px 36px rgba(125,111,208,.18);}
         .pf-link-title{font-family:'Playfair Display',serif;font-size:1.02rem;font-weight:700;
@@ -2004,7 +1973,64 @@ const Portfolio = () => {
         .pf-fb:hover{border-color:var(--p2);color:var(--p2);}
         .pf-fb.on{background:linear-gradient(135deg,var(--p1),var(--p2));
           border-color:transparent;color:#fff;}
-        .pf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.6rem;}
+        .pf-stage{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:2rem;align-items:stretch;margin-bottom:3rem;}
+        .pf-featured{position:relative;border-radius:22px;overflow:hidden;min-height:460px;
+          border:1px solid var(--border);background:var(--card);cursor:pointer;
+          box-shadow:0 20px 60px rgba(9,7,18,.35);display:flex;align-items:flex-end;}
+        .pf-featured-media{position:absolute;inset:0;background-size:cover;background-position:center;
+          filter:saturate(1.05) contrast(1.05);transform:scale(1.02);transition:transform .6s ease;}
+        .pf-featured:hover .pf-featured-media{transform:scale(1.08);} 
+        .pf-featured-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,10,24,.1) 0%,rgba(12,10,24,.75) 65%,rgba(12,10,24,.92) 100%);} 
+        .pf-featured-content{position:relative;z-index:1;padding:2.2rem;display:flex;flex-direction:column;gap:.85rem;max-width:560px;}
+        .pf-featured-top{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;}
+        .pf-featured-title{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.35rem);font-weight:800;line-height:1.15;color:#fff;}
+        .pf-featured-desc{font-size:.95rem;line-height:1.75;color:rgba(255,255,255,.82);font-weight:300;}
+        .pf-featured-cta{margin-top:.4rem;font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:#fff;font-weight:700;display:flex;align-items:center;gap:.5rem;}
+        .pf-featured-tags{display:flex;gap:.5rem;flex-wrap:wrap;}
+        .pf-featured-tags .pf-tag{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;}
+        .pf-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.4rem;}
+        .pf-grid-full{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));}
+        .pf-card{border:1px solid var(--border);border-radius:16px;overflow:hidden;
+          background:linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.01));
+          cursor:pointer;transition:transform .3s,box-shadow .3s,border-color .3s;
+          backdrop-filter:blur(12px);}
+        .pf-card:hover{border-color:rgba(125,111,208,.45);}
+        .pf-media{height:190px;position:relative;background-size:cover;background-position:center;
+          border-bottom:1px solid var(--border);}
+        .pf-media::before{content:"";position:absolute;inset:0;
+          background:linear-gradient(180deg,rgba(0,0,0,.05) 0%,rgba(0,0,0,.55) 100%);} 
+        .pf-media::after{content:"";position:absolute;inset:0;
+          background:radial-gradient(circle at 20% 10%,rgba(125,111,208,.35),transparent 60%);} 
+        .pf-badges{position:absolute;top:1rem;left:1rem;display:flex;gap:.45rem;z-index:2;flex-wrap:wrap;}
+        .pf-pill{padding:.2rem .6rem;border-radius:999px;font-size:.6rem;letter-spacing:.12em;
+          text-transform:uppercase;font-weight:700;color:#fff;background:rgba(20,16,40,.6);
+          border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(10px);} 
+        .pf-pill-strong{background:linear-gradient(135deg,var(--p1),var(--p3));}
+        .pf-icon{position:absolute;right:1rem;bottom:1rem;z-index:2;font-size:2.2rem;
+          background:rgba(12,9,24,.7);border:1px solid rgba(255,255,255,.2);
+          width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+          box-shadow:0 10px 20px rgba(0,0,0,.35);} 
+        .pf-body{padding:1.4rem 1.5rem 1.6rem;display:flex;flex-direction:column;gap:.6rem;}
+        .pf-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:.6rem;}
+        .pf-title{font-family:'Playfair Display',serif;font-size:1.12rem;font-weight:700;line-height:1.3;color:var(--fg);} 
+        .pf-rating{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--p2);font-weight:600;white-space:nowrap;} 
+        .pf-desc{font-size:.84rem;line-height:1.7;color:var(--fg2);font-weight:300;} 
+        .pf-client{font-size:.74rem;color:var(--fg3);letter-spacing:.04em;} 
+        .pf-tags{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.2rem;} 
+        .pf-tag{padding:.18rem .6rem;border-radius:6px;background:rgba(125,111,208,.08);
+          border:1px solid rgba(125,111,208,.18);font-size:.6rem;letter-spacing:.08em;
+          text-transform:uppercase;color:var(--fg2);font-weight:600;} 
+        .pf-cta{margin-top:.2rem;border-top:1px solid var(--border);padding-top:.9rem;
+          font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--p2);font-weight:700;} 
+        @media(max-width:640px){
+          .pf-media{height:180px;}
+          .pf-body{padding:1.2rem 1.2rem 1.4rem;}
+        }
+        @media(max-width:960px){
+          .pf-stage{grid-template-columns:1fr;}
+          .pf-featured{min-height:380px;}
+          .pf-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}
+        }
       `}</style>
 
       <section id="portfolio" className="sec">
@@ -2016,6 +2042,12 @@ const Portfolio = () => {
             initial={{opacity:0,y:20}} animate={inView?{opacity:1,y:0}:{}} transition={{delay:.1}}>
          Case Studies
           </motion.h2>
+
+          <motion.p className="pf-sub"
+            initial={{opacity:0,y:12}} animate={inView?{opacity:1,y:0}:{}}
+            transition={{duration:.5,delay:.15}}>
+            Deep dives, conversion narratives, and design-forward campaigns that turn intent into action.
+          </motion.p>
 
           <div className="pf-links">
             {PROJECT_LINKS.map((project) => (
@@ -2052,20 +2084,51 @@ const Portfolio = () => {
               ))}
             </CarouselShell>
           ) : (
-            <AnimatePresence mode="wait">
-              <motion.div key={filter} className="pf-grid"
-                initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}
-                transition={{duration:.28}}>
-                {filtered.map((p,i)=>(
-                  <PortfolioCard 
-                    key={p.id} 
-                    p={p} 
-                    idx={i} 
-                    onClick={() => setSelectedProject(p)}
-                  />
-                ))}
-              </motion.div>
-            </AnimatePresence>
+            <div className="pf-stage">
+              {featured && (
+                <motion.div
+                  className="pf-featured"
+                  initial={{opacity:0,y:24}}
+                  animate={inView?{opacity:1,y:0}:{}}
+                  transition={{duration:.6}}
+                  onClick={() => setSelectedProject(featured)}
+                >
+                  <div className="pf-featured-media" style={{ backgroundImage: `url(${featured.imagePath})` }} />
+                  <div className="pf-featured-overlay" />
+                  <div className="pf-featured-content">
+                    <div className="pf-featured-top">
+                      <span className="pf-pill pf-pill-strong">Featured</span>
+                      <span className="pf-pill">{featured.cat}</span>
+                      <span className="pf-pill">{featured.result}</span>
+                    </div>
+                    <h3 className="pf-featured-title">{featured.title}</h3>
+                    <p className="pf-featured-desc">{featured.longDesc}</p>
+                    <div className="pf-featured-tags">
+                      {featured.tags.map(tag => (
+                        <span key={tag} className="pf-tag">{tag}</span>
+                      ))}
+                    </div>
+                    <div className="pf-featured-cta">View case study →</div>
+                  </div>
+                </motion.div>
+              )}
+
+              <AnimatePresence mode="wait">
+                <motion.div key={filter}
+                  className={`pf-grid ${featured ? "" : "pf-grid-full"}`}
+                  initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}
+                  transition={{duration:.28}}>
+                  {(featured ? rest : filtered).map((p,i)=>(
+                    <PortfolioCard
+                      key={p.id}
+                      p={p}
+                      idx={i}
+                      onClick={() => setSelectedProject(p)}
+                    />
+                  ))}
+                </motion.div>
+              </AnimatePresence>
+            </div>
           )}
         </div>
       </section>
@@ -2316,9 +2379,7 @@ export default function Home() {
       <Navbar t={theme} toggle={toggle}/>
       <main>
         <Hero t={theme}/>
-        <div style={{ width: '100%', maxWidth: '800px', margin: '0 auto' }}>
-  <Slide  /> 
-</div>
+        <Slide />
         <MetricsSection/>
         <About/>
         <Marquee/>
