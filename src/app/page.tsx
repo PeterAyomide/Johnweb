@@ -2379,12 +2379,12 @@ export default function Home() {
       <Navbar t={theme} toggle={toggle}/>
       <main>
         <Hero t={theme}/>
-        <Slide />
+        <Portfolio/>
         <MetricsSection/>
         <About/>
         <Marquee/>
         <Services/>
-        <Portfolio/>
+        <Slide />
         <Clients/>
         <CTA/>
       </main>
