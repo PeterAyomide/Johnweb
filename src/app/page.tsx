@@ -610,7 +610,184 @@ const MetricsSection = () => {
   );
 };
 
-/* About section removed per request */
+const SERVICES = [
+  { num:"01", icon:"✍️", title:"Ecommerce Copy ", sub:"The Persuasion",
+    front:"I have written copies that answer objections successfully closing a good number of prospects based on research and strategy.",
+    back:"I have written copies that answer objections successfully closing a good number of prospects based on research and strategy.",
+    tag:"Copy · Research · A/B Testing",
+    link:"https://docs.google.com/document/d/1LNteSQdCO3uHBkmkBZG4Qui0aJvsuivDuIce11vDg5Y/edit?tab=t.0#heading=h.58wa1kvlp7yq" },
+  { num:"02", icon:"⚔️", title:"Email Strategy", sub:"The Blade That Slices Through",
+    front:"I have displayed a particular strategy I developed for an Italian client for black Friday sales, and the revenue performance .",
+    back:"I have displayed a particular strategy I developed for an Italian client for black Friday sales, and the revenue performance ",
+    tag:"Email Strategy ",
+    link:"https://docs.google.com/document/d/14yrggTg6QxNkb8ENwePzYN5qX6Axki-2S-RBfsD1UZg/edit?tab=t.0" },
+  { num:"03", icon:"🎨", title:"Email Design", sub:"Subconscious Cues",
+    front:"I have successfully designed emails for clients using Figma and priotizing visual appeal and a premium feel for the brands",
+    back:"- I have designed campaigns for clients using figma, prioritizing visual appeal with the intention of selling dopamine and increasing the premium feel of the brand",
+    tag:"Design · UX · Conversion",
+    link:"https://gamma.app/docs/maijbq0d2ey17xp" },
+  { num:"04", icon:"⚡", title:"Email Templates", sub:"The Speed",
+    front:"A curated bank of ready to use deploy templates for fast turnarounds",
+    back:"A curated bank of ready to use deploy templates for fast turnarounds.",
+    tag:"Templates · Speed · Scale",
+    link:"https://gamma.app/docs/eklfqu4fne5ad28" },
+];
+
+const FlipCard = ({ s, delay=0 }: { s:typeof SERVICES[0]; delay?:number }) => {
+  const [flipped, setFlipped] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once:true, margin:"-50px" });
+
+  const handleViewClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    window.open(s.link, "_blank");
+  };
+
+  return (
+    <>
+      <style>{`
+        .fc-wrap{perspective:1000px;cursor:pointer;min-height:290px;}
+        .fc-inner{width:100%;min-height:290px;position:relative;transform-style:preserve-3d;
+          transition:transform .7s cubic-bezier(.34,1.1,.64,1);}
+        .fc-inner.flipped{transform:rotateY(180deg);}
+        .fc-face{position:absolute;inset:0;backface-visibility:hidden;
+          -webkit-backface-visibility:hidden;border:1px solid var(--border);
+          border-radius:10px;background:var(--card);backdrop-filter:blur(12px);
+          padding:2.2rem;display:flex;flex-direction:column;
+          transition:border-color .3s,box-shadow .3s;overflow:hidden;}
+        .fc-face.back{transform:rotateY(180deg);
+          background:linear-gradient(145deg,var(--bg3),var(--bg));}
+        .fc-wrap:hover .fc-face,.fc-wrap:focus .fc-face{
+          border-color:rgba(125,111,208,.4);
+          box-shadow:0 12px 40px rgba(125,111,208,.15);}
+        .fc-glow{position:absolute;inset:0;border-radius:10px;
+          background:radial-gradient(ellipse at 0% 0%,rgba(125,111,208,.06),transparent 60%);
+          opacity:0;transition:opacity .4s;}
+        .fc-wrap:hover .fc-glow{opacity:1;}
+        .fc-num{font-family:'Playfair Display',serif;font-size:3.8rem;font-weight:900;
+          color:rgba(125,111,208,.08);line-height:1;position:absolute;
+          top:1.2rem;right:1.8rem;pointer-events:none;}
+        .fc-icon{font-size:1.5rem;margin-bottom:.7rem;}
+        .fc-sub{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;
+          color:var(--p2);font-weight:500;margin-bottom:.45rem;}
+        .fc-title{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;
+          color:var(--fg);line-height:1.2;margin-bottom:.9rem;}
+        .fc-body{font-size:.87rem;line-height:1.8;color:var(--fg2);font-weight:300;flex:1;}
+        .fc-tag{display:inline-block;padding:.22rem .65rem;margin-top:1rem;
+          border:1px solid rgba(125,111,208,.22);border-radius:3px;font-size:.63rem;
+          letter-spacing:.12em;text-transform:uppercase;color:var(--p2);font-weight:500;}
+        .fc-hint{font-size:.68rem;color:var(--fg3);margin-top:auto;padding-top:.9rem;
+          letter-spacing:.04em;}
+        .fc-back-lbl{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;
+          color:var(--p2);font-weight:500;margin-bottom:.9rem;}
+        .fc-accent{position:absolute;top:0;left:0;right:0;height:2px;
+          background:linear-gradient(90deg,var(--p1),var(--p3),transparent);
+          border-radius:10px 10px 0 0;}
+        .fc-view-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5);
+          backdrop-filter:blur(8px);display:flex;align-items:center;
+          justify-content:center;opacity:0;transition:opacity .3s;
+          border-radius:10px;}
+        .fc-view-btn{padding:.8rem 2rem;background:linear-gradient(135deg,var(--p1),var(--p2));
+          border:none;border-radius:4px;color:#fff;font-weight:700;
+          letter-spacing:.07em;text-transform:uppercase;font-size:.85rem;
+          cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.3);
+          transform:scale(0.95);transition:transform .2s;}
+        .fc-view-btn:hover{transform:scale(1);}
+        .fc-face.back:hover .fc-view-overlay{opacity:1;}
+      `}</style>
+
+      <motion.div className="fc-wrap" ref={ref}
+        initial={{opacity:0,y:32}}
+        animate={inView?{opacity:1,y:0}:{}}
+        transition={{duration:.6,delay,ease:[.22,1,.36,1]}}
+        onHoverStart={()=>setFlipped(true)}
+        onHoverEnd={()=>setFlipped(false)}
+        onClick={()=>setFlipped(f=>!f)}
+        role="button" tabIndex={0}
+        onKeyDown={e=>e.key==="Enter"&&setFlipped(f=>!f)}>
+        <div className={`fc-inner ${flipped?"flipped":""}`}>
+          {/* FRONT */}
+          <div className="fc-face front">
+            <div className="fc-accent"/>
+            <div className="fc-glow"/>
+            <span className="fc-num">{s.num}</span>
+            <div className="fc-icon">{s.icon}</div>
+            <p className="fc-sub">{s.sub}</p>
+            <h3 className="fc-title">{s.title}</h3>
+            <p className="fc-body">{s.front}</p>
+            <span className="fc-tag">{s.tag}</span>
+            <p className="fc-hint">↻ Hover or tap to reveal</p>
+          </div>
+          {/* BACK */}
+          <div className="fc-face back">
+            <div className="fc-accent"/>
+            <p className="fc-back-lbl">The Full Story</p>
+            <h3 className="fc-title">{s.title}</h3>
+            <p className="fc-body">{s.back}</p>
+            <p className="fc-hint">↻ Hover away to flip back</p>
+            <div className="fc-view-overlay">
+              <button className="fc-view-btn" onClick={handleViewClick}>
+                View Work ↗
+              </button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </>
+  );
+};
+
+const Services = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once:true, margin:"-60px" });
+  const [isMob, setIsMob] = useState(false);
+  const car = useCarousel(SERVICES.length);
+
+  useEffect(()=>{
+    const fn=()=>setIsMob(window.innerWidth<640);
+    fn(); window.addEventListener("resize",fn);
+    return ()=>window.removeEventListener("resize",fn);
+  },[]);
+
+  return (
+    <>
+      <style>{`
+        #services{ border-top:1px solid var(--border); }
+        .svc-hdr{display:flex;align-items:flex-end;justify-content:space-between;
+          margin-bottom:4rem;flex-wrap:wrap;gap:1.4rem;}
+        .svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.6rem;}
+      `}</style>
+
+      <section id="services" className="sec">
+        <div className="sec-in" ref={ref}>
+          <div className="svc-hdr">
+            <div>
+              <motion.p className="sec-label"
+                initial={{opacity:0}} animate={inView?{opacity:1}:{}}>What I Do</motion.p>
+              <motion.h2 className="sec-heading"
+                initial={{opacity:0,y:20}} animate={inView?{opacity:1,y:0}:{}}
+                transition={{delay:.1}}>Email Marketing</motion.h2>
+            </div>
+          </div>
+
+          {isMob ? (
+            <CarouselShell count={SERVICES.length} idx={car.idx} prev={car.prev} next={car.next} go={car.go}>
+              {SERVICES.map(s=>(
+                <div key={s.num} style={{flex:"0 0 100%",paddingRight:".5rem"}}>
+                  <FlipCard s={s} delay={0}/>
+                </div>
+              ))}
+            </CarouselShell>
+          ) : (
+            <div className="svc-grid">
+              {SERVICES.map((s,i)=><FlipCard key={s.num} s={s} delay={i*.08}/>)}
+            </div>
+          )}
+        </div>
+      </section>
+    </>
+  );
+};
 
 /* ══════════════════════════════════════════════════════ MARQUEE */
 const TICKER=["Creative Strategy","Research","PainPoints","Persona","Angles","Hooks","Format","UGC","Production","Testing Hierarchy","Iteration"];
@@ -1776,8 +1953,8 @@ export default function Home() {
         <Hero t={theme}/>
         <Portfolio/>
         <MetricsSection/>
-        {/* About section removed */}
         <Marquee/>
+        <Services/>
         <Slide />
         <CTA/>
       </main>
