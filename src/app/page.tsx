@@ -481,7 +481,7 @@ const Hero = ({ t }: { t: Theme }) => {
             </motion.h1>
             <motion.p className="h-tag" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}}
               transition={{duration:.7,delay:.65,ease:e}}>
-              Copies that sell. Strategies that scale. Designs that engage.
+              Creative St
             </motion.p>
             <motion.div className="tw-wrap" initial={{opacity:0}} animate={{opacity:1}} transition={{delay:.9}}>
               {role}<span className="tw-cur"/>
