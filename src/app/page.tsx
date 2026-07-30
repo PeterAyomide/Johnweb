@@ -1972,7 +1972,7 @@ const BrandsCard = () => {
             transition={{duration:.6,ease:e}}
             onClick={() => window.open(BRANDS_LINK, "_blank")}>
             <div className="bw-glow"/>
-            <h3 className="bw-title">Brands I have worked with</h3>
+            <h3 className="bw-title">Brands I've worked with</h3>
             <button className="bw-cta" onClick={(ev) => { ev.stopPropagation(); window.open(BRANDS_LINK, "_blank"); }}>
               View ↗
             </button>
