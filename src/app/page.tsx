@@ -350,7 +350,7 @@ const Hero = ({ t }: { t: Theme }) => {
   const e = [.22,1,.36,1] as any;
 
   const handleSeeWorkClick = () => {
-    window.open("https://docs.google.com/document/d/1LNteSQdCO3uHBkmkBZG4Qui0aJvsuivDuIce11vDg5Y/edit?tab=t.0#heading=h.58wa1kvlp7yq", "_blank");
+    window.open("https://app.notion.com/p/John-Adegboye-Creative-Strategy-3a777445e9cf800cb0fec71c78bf3f21?v=3a777445e9cf803eb68d000c7c2b49ef", "_blank");
   };
 
   return (
@@ -822,7 +822,7 @@ const GAMMA_PORTFOLIO_LINK = "https://docs.google.com/document/d/1Lhf8uTnO3v2VAl
 const PROJECT_LINKS = [
   {
     title: "ADS: Scripts + Briefs For DTC Brands Spending 6-figures/mo on Meta",
-    url: "https://docs.google.com/document/d/1myWLlkuFeB8oVBDeFSMUjyEtQzW4fvmxmeAXG4bTzrg/edit?tab=t.u9hn7udh1rra",
+    url: "https://docs.google.com/document/u/0/d/1myWLlkuFeB8oVBDeFSMUjyEtQzW4fvmxmeAXG4bTzrg/mobilebasic",
   },
   {
     title: "Video Scripts for Info Offers",
@@ -1756,12 +1756,6 @@ const Portfolio = () => {
          Creative Strategist
           </motion.h2>
 
-          <motion.p className="pf-sub"
-            initial={{opacity:0,y:12}} animate={inView?{opacity:1,y:0}:{}}
-            transition={{duration:.5,delay:.15}}>
-            I have ran campaigns with $150k - $200k in monthly ad spend.
-          </motion.p>
-
           <div className="pf-links">
             {PROJECT_LINKS.map((project) => (
               <motion.a
@@ -1939,6 +1933,56 @@ const CTA = () => {
   );
 };
 
+/* ══════════════════════════════════════════════════════ BRANDS WORKED WITH CARD */
+const BRANDS_LINK = "https://app.notion.com/p/John-Adegboye-Creative-Strategy-3a777445e9cf800cb0fec71c78bf3f21?v=3a777445e9cf803eb68d000c7c2b49ef";
+
+const BrandsCard = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once:true, margin:"-60px" });
+  const e = [.22,1,.36,1] as any;
+
+  return (
+    <>
+      <style>{`
+        .bw-card{
+          position:relative;overflow:hidden;border-radius:22px;cursor:pointer;
+          border:1px solid var(--border);background:linear-gradient(145deg,var(--bg3),var(--bg2));
+          padding:3rem 2.5rem;display:flex;align-items:center;justify-content:space-between;
+          gap:2rem;flex-wrap:wrap;transition:border-color .3s,box-shadow .3s,transform .3s;
+        }
+        .bw-card:hover{border-color:rgba(125,111,208,.45);transform:translateY(-4px);
+          box-shadow:0 18px 52px rgba(125,111,208,.18);}
+        .bw-glow{position:absolute;width:480px;height:480px;border-radius:50%;
+          background:radial-gradient(circle,rgba(125,111,208,.1),transparent 65%);
+          top:50%;left:0;transform:translate(-30%,-50%);pointer-events:none;}
+        .bw-title{font-family:'Playfair Display',serif;font-weight:900;
+          font-size:clamp(1.6rem,3.4vw,2.4rem);letter-spacing:-.025em;color:var(--fg);
+          position:relative;z-index:1;}
+        .bw-cta{position:relative;z-index:1;flex-shrink:0;padding:.85rem 2rem;border-radius:4px;
+          background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;border:none;
+          cursor:pointer;font-size:.85rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+          box-shadow:0 4px 28px rgba(125,111,208,.3);transition:transform .2s,box-shadow .2s;}
+        .bw-cta:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(125,111,208,.4);}
+        @media(max-width:640px){ .bw-card{padding:2.2rem 1.5rem;text-align:center;justify-content:center;} }
+      `}</style>
+      <section className="sec">
+        <div className="sec-in" ref={ref}>
+          <motion.div className="bw-card"
+            initial={{opacity:0,y:24}} animate={inView?{opacity:1,y:0}:{}}
+            transition={{duration:.6,ease:e}}
+            onClick={() => window.open(BRANDS_LINK, "_blank")}>
+            <div className="bw-glow"/>
+            <h3 className="bw-title">Brands I have worked with</h3>
+            <button className="bw-cta" onClick={(ev) => { ev.stopPropagation(); window.open(BRANDS_LINK, "_blank"); }}>
+              View ↗
+            </button>
+          </motion.div>
+        </div>
+      </section>
+    </>
+  );
+};
+
 /* ══════════════════════════════════════════════════════ ROOT */
 export default function Home() {
   const [theme, setTheme] = useState<Theme>("dark");
@@ -1951,6 +1995,7 @@ export default function Home() {
       <Navbar t={theme} toggle={toggle}/>
       <main>
         <Hero t={theme}/>
+        <BrandsCard/>
         <Portfolio/>
         <MetricsSection/>
         <Marquee/>
